@@ -1,0 +1,165 @@
+<?xml version='1.0' encoding='UTF-8'?><definitions name="DepotDataService" targetNamespace="http://dpd.com/common/service/DepotDataService/1.0" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://dpd.com/common/service/DepotDataService/1.0" xmlns:types="http://dpd.com/common/service/types/DepotDataService/1.0" xmlns:types_authentication="http://dpd.com/common/service/types/Authentication/2.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <types>
+<xsd:schema targetNamespace="http://dpd.com/common/service/DepotDataService/1.0" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://dpd.com/common/service/DepotDataService/1.0" xmlns:types="http://dpd.com/common/service/types/DepotDataService/1.0" xmlns:types_authentication="http://dpd.com/common/service/types/Authentication/2.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<xsd:import namespace="http://dpd.com/common/service/types/DepotDataService/1.0" schemaLocation="https://public-ws.dpd.com/services/DepotDataService/V1_0/?xsd=DepotDataService-Public_1_0.xsd">
+			</xsd:import>
+			<xsd:import namespace="http://dpd.com/common/service/types/Authentication/2.0" schemaLocation="https://public-ws.dpd.com/services/DepotDataService/V1_0/?xsd=Authentication_2_0.xsd">
+         </xsd:import>
+		</xsd:schema>
+  </types>
+  <message name="getDepotData">
+    <part element="types:getDepotData" name="parameters">
+    </part>
+  </message>
+  <message name="AuthenticationFaultMsg">
+    <part element="types_authentication:authenticationFault" name="authenticationFault">
+    </part>
+  </message>
+  <message name="SystemFaultMsg">
+    <part element="types:systemFault" name="systemFault">
+<wsdl:documentation>Possible error codes:
+SYSTEM_ERROR - System error
+</wsdl:documentation>
+    </part>
+  </message>
+  <message name="getDepotDataHeader">
+    <part element="types_authentication:authentication" name="authentication">
+    </part>
+  </message>
+  <message name="getDepotDataResponse">
+    <part element="types:getDepotDataResponse" name="parameters">
+    </part>
+  </message>
+  <message name="getDepotData_faultMsg">
+    <part element="types:dataFault" name="dataFault">
+<wsdl:documentation>Possible error codes:
+DEPOTDATA_MISSING_ZIP_CODE_AND_DEPOT - At least ZIP code or depot number must be filled
+DEPOTDATA_DEPOT_BY_ZIP_CODE_NOT_FOUND - The responsible depot could not be determined by zip code
+DEPOTDATA_MISMATCH_DEPOT_FOR_ZIP_CODE - Depot number determined by zip code and input parameter are not equal
+</wsdl:documentation>
+    </part>
+  </message>
+  <portType name="DepotDataService">
+    <operation name="getDepotData">
+<wsdl:documentation>
+Get the depot data for a country and a zip code or a depot number.
+
+Sample request:
+
+SOAP:
+
+&lt;soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:ns="http://dpd.com/common/service/types/Authentication/2.0" 
+xmlns:ns1="http://dpd.com/common/service/types/DepotDataService/1.0">
+   &lt;soapenv:Header>
+      &lt;ns:authentication>
+         &lt;delisId>your delisId&lt;/delisId>
+         &lt;authToken>your authToken&lt;/authToken>
+         &lt;messageLanguage>en_EN&lt;/messageLanguage>
+      &lt;/ns:authentication>
+   &lt;/soapenv:Header>
+   &lt;soapenv:Body>
+      &lt;ns1:getDepotData>
+         &lt;country>DE&lt;/country>
+         &lt;depot>0163&lt;/depot>
+         &lt;zipCode>63741&lt;/zipCode>
+      &lt;/ns1:getDepotData>
+   &lt;/soapenv:Body>
+&lt;/soapenv:Envelope>
+
+REST:
+
+URL: &lt;server:port>&lt;path>/DepotDataService/V1_0/getDepotData
+JSON data for POST request (for GET request data has to be sent with parameter "request" and for
+JSONP with parameter "jsonpcallback" to obtain a padding function name):
+
+{  "authentication" : {
+    "delisId" : "&lt;your delisId>",
+    "authToken" : "&lt;your authToken>",
+    "messageLanguage" : "en_EN" 
+   },
+   "getDepotData" : {
+     "country" : "DE",
+     "depot" : "0163"
+   }
+}
+
+REST result without error:
+
+{
+   "getDepotDataResponse": {"DepotData":    {
+      "depot": "0163",
+      "name": "DPD GeoPost (Deutschland) GmbH u. Co. KG",
+      "street": "Auhofstr. 25",
+      "country": "DE",
+      "zipCode": "63741",
+      "city": "Aschaffenburg",
+      "phone": "1805 373 200",
+      "fax": "",
+      "email": "Zentrale@depot163.dpd.de"
+   }},
+   "status":    {
+      "type": "OK",
+      "code": "200",
+      "message": "valid"
+   }
+}
+
+REST result if an error occurred:
+
+{"status": {
+   "type": "DataFault",
+   "code": "&lt;Error code, e.g.DEPOTDATA_MISMATCH_DEPOT_FOR_ZIP_CODE>",
+   "message": "&lt;Error message, e.g. Depot number determined by zip code and input parameter are not equal>"
+}}
+
+Additional REST state on system error:
+
+Error-Code: 100
+Error-Type: SystemFault
+Error-Message: &lt;Message describing the error>
+</wsdl:documentation>
+      <input message="tns:getDepotData">
+    </input>
+      <output message="tns:getDepotDataResponse">
+    </output>
+      <fault message="tns:AuthenticationFaultMsg" name="authenticationFault">
+    </fault>
+      <fault message="tns:SystemFaultMsg" name="systemFault">
+    </fault>
+      <fault message="tns:getDepotData_faultMsg" name="dataFault">
+    </fault>
+    </operation>
+  </portType>
+  <binding name="DepotDataService_1_0_SOAP" type="tns:DepotDataService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="getDepotData">
+      <soap:operation soapAction="http://dpd.com/common/service/DepotDataService/1.0/getDepotData"/>
+      <input>
+        <soap:header message="tns:getDepotDataHeader" part="authentication" use="literal">
+        </soap:header>
+        <soap:body parts="parameters" use="literal"/>
+      </input>
+      <output>
+        <soap:body use="literal"/>
+      </output>
+      <fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </fault>
+      <fault name="systemFault">
+        <soap:fault name="systemFault" use="literal"/>
+      </fault>
+      <fault name="dataFault">
+        <soap:fault name="dataFault" use="literal"/>
+      </fault>
+    </operation>
+  </binding>
+  <service name="DepotDataService-Public_1_0">
+    <port binding="tns:DepotDataService_1_0_SOAP" name="DepotDataService_1_0_SOAP">
+      <soap:address location="https://public-ws.dpd.com/services/DepotDataService/V1_0/"/>
+    </port>
+  </service>
+    <jaxws:bindings>
+      <jaxws:package name="com.dpd.common.ws_public.depotdataservice.v1_0"/>
+   </jaxws:bindings>
+</definitions>

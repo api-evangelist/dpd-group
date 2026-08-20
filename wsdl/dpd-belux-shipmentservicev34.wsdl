@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:tns="http://dpd.com/common/service/types/ShipmentService/3.4"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:s1="http://dpd.com/common/service/types/Authentication/2.0"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+      <s:element name="storeOrders" type="tns:storeOrders" />
+      <s:complexType name="storeOrders">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="printOptions" type="tns:printOptions" />
+          <s:element minOccurs="1" maxOccurs="30" form="unqualified" name="order" type="tns:order" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="isLastRequest" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="printOptions">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="printerLanguage" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="paperFormat" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="printer" type="tns:printer" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="startPosition" type="tns:StartPositionEnum" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="printerResolution" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="isELabel" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="printer">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="manufacturer" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="model" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="revision" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="offsetX" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="offsetY" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="connectionType" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="barcodeCapable2D" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="StartPositionEnum">
+        <s:restriction base="s:string">
+          <s:enumeration value="UPPER_LEFT" />
+          <s:enumeration value="UPPER_RIGHT" />
+          <s:enumeration value="LOWER_LEFT" />
+          <s:enumeration value="LOWER_RIGHT" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="order">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="generalShipmentData" type="tns:generalShipmentData" />
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="parcels" type="tns:parcels" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="productAndServiceData" type="tns:productAndServiceData" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="generalShipmentData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="cUser" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCustomerReferenceNumber1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCustomerReferenceNumber2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCustomerReferenceNumber3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCustomerReferenceNumber4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="identificationNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="sendingDepot" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="product" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCompleteDelivery" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsCompleteDeliveryLabel" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsVolume" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsWeight" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsExpectedSendingDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="mpsExpectedSendingTime" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="sender" type="tns:address" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="senderMaskingAddress" type="tns:address" />          
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="recipient" type="tns:address" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="address">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="name1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="name2" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="street" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="houseNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="street2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="state" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="country" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="zipCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="city" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="gln" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customerNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="type" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="contact" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="comment" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="iaccount" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="eoriNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="vatNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="idDocType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="idDocNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="webSite" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="referenceNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="destinationCountryRegistration" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="parcels">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="parcelLabelNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customerReferenceNumber1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customerReferenceNumber2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customerReferenceNumber3" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customerReferenceNumber4" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="swap" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="volume" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="weight" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="hazardousLimitedQuantities" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="higherInsurance" type="tns:higherInsurance" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="content" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="addService" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="messageNumber" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="function" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="parameter" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="cod" type="tns:cod" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="international" type="tns:international" />
+          <s:element minOccurs="0" maxOccurs="4" form="unqualified" name="hazardous" type="tns:hazardous" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="printInfo1OnParcelLabel" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="info1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="info2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="returns" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsTransportCost" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsTransportCostCurrency" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="goodsExpirationDate" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="goodsMinimumStorageTemperature" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="goodsMaximumStorageTemperature" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="goodsDescription" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="higherInsurance">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="amount" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="currency" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="cod">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="amount" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="currency" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="inkasso" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="purpose" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bankCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bankName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bankAccountNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bankAccountHolder" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="iban" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="bic" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="international">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="parcelType" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsAmount" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsCurrency" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsAmountEx" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsCurrencyEx" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="clearanceCleared" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="prealertStatus" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="exportReason" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsTerms" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsContent" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsPaper" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsEnclosure" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsInvoice" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsInvoiceDate" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsAmountParcel" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="linehaul" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="shipMrn" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="collectiveCustomsClearance" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="comment1" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="comment2" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="commercialInvoiceConsigneeVatNumber" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="commercialInvoiceConsignee" type="tns:address" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="commercialInvoiceConsignor" type="tns:address" />
+          <s:element minOccurs="1" maxOccurs="unbounded" form="unqualified" name="commercialInvoiceLine" type="tns:internationalLine" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="internationalLine">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="customsTarif" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="receiverCustomsTarif" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="productCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="content" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="grossWeight" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="itemsNumber" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="amountLine" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="customsOrigin" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="invoicePosition" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="hazardous">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="identificationUnNo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="identificationClass" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="classificationCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="packingGroup" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="packingCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="subsidiaryRisk" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="tunnelRestrictionCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="hazardousWeight" type="s:decimal" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="netWeight" type="s:decimal" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="factor" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="notOtherwiseSpecified" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="productAndServiceData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="orderType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="saturdayDelivery" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="exWorksDelivery" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="guarantee" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="tyres" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="personalDelivery" type="tns:personalDelivery" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="pickup" type="tns:pickup" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="parcelShopDelivery" type="tns:parcelShopDelivery" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="predict" type="tns:notification" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="personalDeliveryNotification" type="tns:notification" />
+          <s:element minOccurs="0" maxOccurs="5" form="unqualified" name="proactiveNotification" type="tns:proactiveNotification" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="delivery" type="tns:delivery" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="invoiceAddress" type="tns:address" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="countrySpecificService" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="ageCheck" type="s:boolean" />
+		  <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="returnAddress" type="tns:address" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="personalDelivery">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="type" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="floor" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="building" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="department" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="personId" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="pickup">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="tour" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="quantity" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="date" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="day" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="fromTime1" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="toTime1" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="fromTime2" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="toTime2" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="extraPickup" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="collectionRequestAddress" type="tns:address" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="parcelShopDelivery">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="parcelShopId" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="parcelShopNotification" type="tns:notification" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="notification">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="channel" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="value" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="language" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="proactiveNotification">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="channel" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="value" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="rule" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="language" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="delivery">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="day" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="dateFrom" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="dateTo" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="timeFrom" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="timeTo" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="storeOrdersResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="orderResult" type="tns:StoreOrdersResponseDto34" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="StoreOrdersResponseDto34">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:storeOrdersResponseType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="storeOrdersResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="parcellabelsPDF" type="s:base64Binary" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="shipmentResponses" type="tns:shipmentResponses" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="shipmentResponses">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="identificationNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="mpsId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="parcelInformation" type="tns:parcelInformation" />
+          <s:element minOccurs="0" maxOccurs="3" name="faults" type="tns:faults" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="parcelInformation">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="parcelLabelNumber" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="dpdReference" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="faults" type="tns:faults" />
+      <s:complexType name="faults">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="message" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="unqualified" targetNamespace="http://dpd.com/common/service/types/Authentication/2.0">
+      <s:element name="authentication" type="s1:authentication"/>
+      <s:complexType name="authentication">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="delisId" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="authToken" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="messageLanguage" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="authenticationFault" type="s1:authenticationFault" />
+      <s:complexType name="authenticationFault">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="errorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+      <s:element name="getAvailableProductsAndServices" type="tns:getAvailableProductsAndServices" />
+      <s:complexType name="getAvailableProductsAndServices" />
+      <s:element name="getAvailableProductsAndServicesResponse" type="tns:GetAvailableProductsAndServicesResponseDto34" />
+      <s:complexType name="GetAvailableProductsAndServicesResponseDto34">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:getAvailableProductsAndServicesResponseType" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="getAvailableProductsAndServicesResponseType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="products" type="tns:product" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="additionalServices" type="tns:product" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="product">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="code" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+      <s:element name="exportOrders" type="tns:exportOrders" />
+      <s:element name="exportOrdersResponse" type="tns:exportOrdersResponse" />
+      <s:complexType name="exportOrders">
+        <s:sequence>
+          <s:element type="s:string" name="parcelLabelNumber" minOccurs="1" maxOccurs="unbounded" form="unqualified" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="exportOrdersResponse">
+        <s:sequence>
+          <s:element type="s:boolean" name="success" />
+          <s:sequence>
+            <s:element name="orderResult" type="tns:exportOrdersResponseType" minOccurs ="0" maxOccurs ="unbounded" />
+          </s:sequence>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="exportOrdersResponseType">
+        <s:sequence>
+          <s:element type="s:boolean" name="success" minOccurs="1" />
+          <s:element type="s:string" name="message" minOccurs="1" />
+          <s:sequence>
+            <s:element type="s:string" name="parcelLabelNumber" minOccurs="1" maxOccurs="unbounded" />
+          </s:sequence>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+        <s:element name="startOrdersConsolidation" type="tns:startOrdersConsolidation" />
+        <s:element name="startOrdersConsolidationResponse" type="tns:startOrdersConsolidationResponse" />
+        <s:complexType name="startOrdersConsolidation">
+            <s:sequence>
+                <s:element type="s:int" name="consolidationDate" minOccurs="1" maxOccurs="1" form="unqualified" />
+            </s:sequence>
+        </s:complexType>
+        <s:complexType name="startOrdersConsolidationResponse">
+            <s:sequence>
+                <s:element type="s:boolean" name="success" minOccurs="1" />
+            </s:sequence>
+        </s:complexType>
+    </s:schema>    
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ShipmentService/3.4">
+      <s:element name="deleteOrders" type="tns:deleteOrders" />
+      <s:element name="deleteOrdersResponse" type="tns:deleteOrdersResponse" />
+      <s:complexType name="deleteOrders">
+        <s:sequence>
+          <s:element type="s:string" name="parcelLabelNumber" minOccurs="1" maxOccurs="unbounded" form="unqualified" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="deleteOrdersResponse">
+        <s:sequence>
+          <s:element type="s:boolean" name="success" />
+          <s:sequence>
+            <s:element name="orderResult" type="tns:deleteOrdersResponseType" minOccurs ="0" maxOccurs ="unbounded" />
+          </s:sequence>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="deleteOrdersResponseType">
+        <s:sequence>
+          <s:element type="s:boolean" name="success" minOccurs="1" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="storeOrdersSoapIn">
+    <wsdl:part name="parameters" element="tns:storeOrders" />
+  </wsdl:message>
+  <wsdl:message name="storeOrdersSoapOut">
+    <wsdl:part name="parameters" element="tns:storeOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="storeOrdersauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="storeOrdersFaultsMsg">
+    <wsdl:part name="faults" element="tns:faults" />
+  </wsdl:message>
+  <wsdl:message name="authenticationFaultMsg">
+    <wsdl:part name="faults" element="s1:authenticationFault" />
+  </wsdl:message>
+  <wsdl:portType name="ShipmentServiceSoap34Soap">
+    <wsdl:operation name="storeOrders">
+      <wsdl:input message="tns:storeOrdersSoapIn" />
+      <wsdl:output message="tns:storeOrdersSoapOut" />
+      <wsdl:fault message="tns:storeOrdersFaultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableProductsAndServices">
+      <wsdl:input message="tns:getAvailableProductsAndServicesSoapIn" />
+      <wsdl:output message="tns:getAvailableProductsAndServicesSoapOut" />
+      <wsdl:fault message="tns:storeOrdersFaultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="exportOrders">
+      <wsdl:input message="tns:exportOrdersSoapIn" />
+      <wsdl:output message="tns:exportOrdersSoapOut" />
+      <wsdl:fault message="tns:storeOrdersFaultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="deleteOrders">
+      <wsdl:input message="tns:deleteOrdersSoapIn" />
+      <wsdl:output message="tns:deleteOrdersSoapOut" />
+      <wsdl:fault message="tns:storeOrdersFaultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="startOrdersConsolidation">
+      <wsdl:input message="tns:startOrdersConsolidationSoapIn" />
+      <wsdl:output message="tns:startOrdersConsolidationSoapOut" />
+      <wsdl:fault message="tns:storeOrdersFaultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>  
+  </wsdl:portType>
+  <wsdl:binding name="ShipmentServiceSoap34Soap" type="tns:ShipmentServiceSoap34Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="storeOrders">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ShipmentService/3.4/storeOrders" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:storeOrdersauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getAvailableProductsAndServices">
+      <soap:operation
+        soapAction="http://dpd.com/common/service/types/ShipmentService/3.4/getAvailableProductsAndServices"
+        style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:getAvailableProductsAndServicesauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="exportOrders">
+      <soap:operation
+        soapAction="http://dpd.com/common/service/types/ShipmentService/3.4/exportOrders"
+        style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:exportOrdersauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="deleteOrders">
+      <soap:operation
+        soapAction="http://dpd.com/common/service/types/ShipmentService/3.4/deleteOrders"
+        style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:deleteOrdersauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="startOrdersConsolidation">
+        <soap:operation
+        soapAction="http://dpd.com/common/service/types/ShipmentService/3.4/startOrdersConsolidation"
+        style="document" />
+        <wsdl:input>
+            <soap:body use="literal" />
+            <soap:header message="tns:startOrdersConsolidationauthentication" part="authentication" use="literal" />
+        </wsdl:input>
+        <wsdl:output>
+            <soap:body use="literal" />
+        </wsdl:output>
+        <wsdl:fault name="faults">
+            <soap:fault name="faults" use="literal"/>
+        </wsdl:fault>
+        <wsdl:fault name="authenticationFault">
+            <soap:fault name="authenticationFault" use="literal"/>
+        </wsdl:fault>
+    </wsdl:operation>  
+  </wsdl:binding>
+  <wsdl:service name="ShipmentServiceSoap34">
+    <wsdl:port name="ShipmentServiceSoap34Soap" binding="tns:ShipmentServiceSoap34Soap">
+      <soap:address location="https://wsshipper.dpd.be/soap/services/ShipmentService/V3_4/" />
+    </wsdl:port>
+  </wsdl:service>
+  <wsdl:message name="getAvailableProductsAndServicesSoapIn">
+    <wsdl:part name="getAvailableProductsAndServices" element="tns:getAvailableProductsAndServices" />
+  </wsdl:message>
+  <wsdl:message name="getAvailableProductsAndServicesSoapOut">
+    <wsdl:part name="getAvailableProductsAndServicesResult" element="tns:getAvailableProductsAndServicesResponse" />
+  </wsdl:message>
+  <wsdl:message name="exportOrdersSoapIn">
+    <wsdl:part name="exportOrders" element="tns:exportOrders" />
+  </wsdl:message>
+  <wsdl:message name="exportOrdersSoapOut">
+    <wsdl:part name="exportOrdersResponse" element="tns:exportOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="deleteOrdersSoapIn">
+    <wsdl:part name="deleteOrders" element="tns:deleteOrders" />
+  </wsdl:message>
+  <wsdl:message name="deleteOrdersSoapOut">
+    <wsdl:part name="deleteOrdersResponse" element="tns:deleteOrdersResponse" />
+  </wsdl:message>
+  <wsdl:message name="startOrdersConsolidationSoapIn">
+    <wsdl:part name="startOrdersConsolidation" element="tns:startOrdersConsolidation" />
+  </wsdl:message>
+  <wsdl:message name="startOrdersConsolidationSoapOut">
+    <wsdl:part name="startOrdersConsolidationResponse" element="tns:startOrdersConsolidationResponse" />
+  </wsdl:message> 
+  <wsdl:message name="getAvailableProductsAndServicesauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="exportOrdersauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="deleteOrdersauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="startOrdersConsolidationauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>  
+</wsdl:definitions>

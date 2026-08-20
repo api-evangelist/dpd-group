@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/"
+                  xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                  xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/"
+                  xmlns:tns="http://dpd.com/common/service/types/EndOfDayService/1.0"
+                  xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:s1="http://dpd.com/common/service/types/Authentication/2.0"
+                  xmlns:s="http://www.w3.org/2001/XMLSchema"
+                  xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+                  xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+                  targetNamespace="http://dpd.com/common/service/types/EndOfDayService/1.0"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="unqualified" targetNamespace="http://dpd.com/common/service/types/EndOfDayService/1.0">
+      <s:element name="endOfDay" type="tns:endOfDay" />
+      <s:complexType name="endOfDay">
+        <s:sequence>
+          <s:element type="tns:period" name="period" minOccurs="1" maxOccurs="1">
+            <s:annotation>
+              <s:documentation>Time period for End of Day manifest.</s:documentation>
+            </s:annotation>
+          </s:element>
+          <s:element type="tns:printOptions" name="printOptions" minOccurs="0" maxOccurs="1">
+            <s:annotation>
+              <s:documentation>The Options which should be used for manifest printing.</s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="period">
+        <s:annotation>
+          <s:documentation>Time period for End of Day manifest, for example from 10th of September 2018 9am to 11th of September 2018 5pm</s:documentation>
+        </s:annotation>
+        <s:sequence>
+          <s:element name="dateFrom" minOccurs="1" maxOccurs="1">
+            <s:annotation>
+              <s:documentation>format YYYYMMDD, e.g. 20180910</s:documentation>
+            </s:annotation>
+            <s:simpleType>
+              <s:restriction base="s:int">
+                <s:maxInclusive value="99999999"/>
+              </s:restriction>
+            </s:simpleType>
+          </s:element>
+          <s:element name="timeFrom">
+            <s:annotation>
+              <s:documentation>format hhmm, e.g. 0900</s:documentation>
+            </s:annotation>
+            <s:simpleType>
+              <s:restriction base="s:int">
+                <s:maxInclusive value="2400"/>
+              </s:restriction>
+            </s:simpleType>
+          </s:element>
+          <s:element name="dateTo" minOccurs="1" maxOccurs="1">
+            <s:annotation>
+              <s:documentation>format YYYYMMDD, e.g. 20180911</s:documentation>
+            </s:annotation>
+            <s:simpleType>
+              <s:restriction base="s:int">
+                <s:maxInclusive value="99999999"/>
+              </s:restriction>
+            </s:simpleType>
+          </s:element>
+          <s:element name="timeTo">
+            <s:annotation>
+              <s:documentation>format hhmm, e.g. 1700</s:documentation>
+            </s:annotation>
+            <s:simpleType>
+              <s:restriction base="s:int">
+                <s:maxInclusive value="2400"/>
+              </s:restriction>
+            </s:simpleType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="printOptions">
+        <s:sequence>
+          <s:element name="printerLanguage" minOccurs="1" maxOccurs="1">
+            <!--The language in which the parcel labels should be returned. PDF as file output. In any case the output is base64 encoded.-->
+            <s:simpleType>
+              <s:restriction base="s:string">
+                <s:enumeration value="PDF"/>
+              </s:restriction>
+            </s:simpleType>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="endOfDayResponse" type="tns:endOfDayResponse" />
+      <s:complexType name="endOfDayResponse">
+        <s:sequence>
+          <s:element type="s:base64Binary" name="manifestPDF" minOccurs="0">
+            <s:annotation>
+              <s:documentation>Contains end of day manifest PDF data in bytes. </s:documentation>
+            </s:annotation>
+          </s:element>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="faults" type="tns:faults" />
+      <s:complexType name="faults">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultstring" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="unqualified" targetNamespace="http://dpd.com/common/service/types/Authentication/2.0">
+      <s:element name="authentication" type="s1:authentication"/>
+      <s:complexType name="authentication">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="delisId" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="authToken" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="messageLanguage" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="authenticationFault" type="s1:authenticationFault" />
+      <s:complexType name="authenticationFault">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="errorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="endOfDay">
+    <wsdl:part name="parameters" element="tns:endOfDay" />
+  </wsdl:message>
+  <wsdl:message name="endOfDayResponse">
+    <wsdl:part name="return" element="tns:endOfDayResponse" />
+  </wsdl:message>
+  <wsdl:message name="endOfDayHeader">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="authenticationFaultMsg">
+    <wsdl:part name="fault" element="s1:authenticationFault" />
+  </wsdl:message>
+  <wsdl:message name="faultsMsg">
+    <wsdl:part name="faults" element="tns:faults" />
+  </wsdl:message>
+  <wsdl:portType name="EndOfDayServiceSoap10Soap">
+    <wsdl:operation name="endOfDay">
+      <wsdl:documentation>
+        <!--Generates end of day manifest-->
+      </wsdl:documentation>
+      <wsdl:input message="tns:endOfDay" />
+      <wsdl:output message="tns:endOfDayResponse" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="EndOfDayServiceSoap10Soap" type="tns:EndOfDayServiceSoap10Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="endOfDay">
+      <soap:operation soapAction="http://dpd.com/common/service/types/EndOfDayService/1.0/endOfDay"
+                      style="document"/>
+      <wsdl:input>
+        <soap:header message="tns:endOfDayHeader" use="literal" part="authentication" />
+        <soap:body use="literal" parts="parameters" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EndOfDayServiceSoap10">
+    <wsdl:documentation>
+      <version>1.0.0</version>
+    </wsdl:documentation>
+    <wsdl:port name="EndOfDayServiceSoap10Soap" binding="tns:EndOfDayServiceSoap10Soap">
+      <soap:address location="https://wsshipper.dpd.be/soap/Services/EndOfDayService/V1_0" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

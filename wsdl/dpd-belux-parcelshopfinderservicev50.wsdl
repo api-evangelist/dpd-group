@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://dpd.com/common/service/types/ParcelShopFinderService/5.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s1="http://dpd.com/common/service/types/Authentication/2.0" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://dpd.com/common/service/types/ParcelShopFinderService/5.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ParcelShopFinderService/5.0">
+      <s:element name="findCities" type="tns:findCities" />
+      <s:complexType name="findCities">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="country" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="zipCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="city" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="limit" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="order" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="findCitiesResponse" type="tns:ArrayOfCity" />
+      <s:complexType name="ArrayOfCity">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="city" nillable="true" type="tns:city" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="city">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="countryNum" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="zipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="town" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="findParcelShops" type="tns:findParcelShops" />
+      <s:complexType name="findParcelShops">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="country" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="zipCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="city" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="street" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="houseNo" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="limit" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="availabilityDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="hideClosed" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="searchCountry" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="services" type="tns:services" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="type" type="tns:ParcelShopTypeEnum" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="services">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="service" type="tns:service" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="service">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="code" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="available" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="serviceDetail" type="tns:serviceDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:simpleType name="ParcelShopTypeEnum" final="restriction">
+        <s:restriction base="s:string">
+          <s:enumeration value="All" />
+          <s:enumeration value="Parcelshop" />
+          <s:enumeration value="Locker" />
+        </s:restriction>
+      </s:simpleType>
+      <s:complexType name="serviceDetail">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="code" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="findParcelShopsResponse" type="tns:ArrayOfParcelShop" />
+      <s:complexType name="ArrayOfParcelShop">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="parcelShop" nillable="true" type="tns:parcelShop" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="parcelShop">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="parcelShopId" type="s:long" />
+          <s:element minOccurs="0" maxOccurs="1" name="pudoId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="company" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="street" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="houseNo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="country" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="countryNum" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="state" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="zipCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="city" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="town" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="phone" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="fax" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="email" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="homepage" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="latitude" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="longitude" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="coordinateX" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="coordinateY" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="coordinateZ" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="distance" type="s:double" />
+          <s:element minOccurs="0" maxOccurs="1" name="expressPickupTime" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="extraInfo" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="openingHours" type="tns:OpeningHoursType" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="holiday" type="tns:HolidayType" />
+          <s:element minOccurs="0" maxOccurs="1" name="services" type="tns:ServiceType" />
+          <s:element minOccurs="0" maxOccurs="1" name="isPrinterAvailable" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="OpeningHoursType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="weekday" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="openMorning" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="closeMorning" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="closeAfternoon" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="openAfternoon" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="HolidayType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="holidayStart" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="holidayEnd" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="available" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="serviceDetail" type="tns:ServiceDetailType" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DescriptionType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="DescriptionType" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServiceDetailType">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="code" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="description" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="findParcelShopsByGeoData" type="tns:findParcelShopsByGeoData" />
+      <s:complexType name="findParcelShopsByGeoData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="longitude" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="latitude" type="s:double" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="limit" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="availabilityDate" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="hideClosed" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="unbounded" form="unqualified" name="searchCountry" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" form="unqualified" name="services" type="tns:services" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="findParcelShopsByGeoDataResponse" type="tns:ArrayOfParcelShop" />
+      <s:element name="faults" type="tns:faults" />
+      <s:complexType name="faults">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultstring" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="unqualified" targetNamespace="http://dpd.com/common/service/types/Authentication/2.0">
+      <s:element name="authentication" type="s1:authentication"/>
+      <s:complexType name="authentication">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="delisId" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="authToken" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="messageLanguage" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="authenticationFault" type="s1:authenticationFault" />
+      <s:complexType name="authenticationFault">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="errorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="findCitiesSoapIn">
+    <wsdl:part name="findCities" element="tns:findCities" />
+  </wsdl:message>
+  <wsdl:message name="findCitiesSoapOut">
+    <wsdl:part name="findCitiesResult" element="tns:findCitiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="findCitiesauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsSoapIn">
+    <wsdl:part name="findParcelShops" element="tns:findParcelShops" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsSoapOut">
+    <wsdl:part name="findParcelShopsResult" element="tns:findParcelShopsResponse" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsByGeoDataSoapIn">
+    <wsdl:part name="findParcelShopsByGeoData" element="tns:findParcelShopsByGeoData" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsByGeoDataSoapOut">
+    <wsdl:part name="findParcelShopsByGeoDataResult" element="tns:findParcelShopsByGeoDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="findParcelShopsByGeoDataauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="faultsMsg">
+    <wsdl:part name="faults" element="tns:faults" />
+  </wsdl:message>
+  <wsdl:message name="authenticationFaultMsg">
+    <wsdl:part name="faults" element="s1:authenticationFault" />
+  </wsdl:message>
+  <wsdl:portType name="ParcelShopFinderServiceSoapSoap">
+    <wsdl:operation name="findCities">
+      <wsdl:input message="tns:findCitiesSoapIn" />
+      <wsdl:output message="tns:findCitiesSoapOut" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="findParcelShops">
+      <wsdl:input message="tns:findParcelShopsSoapIn" />
+      <wsdl:output message="tns:findParcelShopsSoapOut" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="findParcelShopsByGeoData">
+      <wsdl:input message="tns:findParcelShopsByGeoDataSoapIn" />
+      <wsdl:output message="tns:findParcelShopsByGeoDataSoapOut" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ParcelShopFinderServiceSoapSoap" type="tns:ParcelShopFinderServiceSoapSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="findCities">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ParcelShopFinderService/5.0/findCities" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:findCitiesauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findParcelShops">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ParcelShopFinderService/5.0/findParcelShops" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:findParcelShopsauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findParcelShopsByGeoData">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ParcelShopFinderService/5.0/findParcelShopsByGeoData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:findParcelShopsByGeoDataauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ParcelShopFinderServiceSoap">
+    <wsdl:port name="ParcelShopFinderServiceSoapSoap" binding="tns:ParcelShopFinderServiceSoapSoap">
+      <soap:address location="https://wsshipper.dpd.be/soap/services/ParcelShopFinderService/V5_0" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,52 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DPD GeoAPI",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Get the tracking info for multiple parcels",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v2/parcels/tracking",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Same as the `GET /parcels/{parcelNo}/tracking` endpoint but for batched tracking information.  \n"
+    },
+    {
+      "info": {
+        "name": "Get parcel tracking info",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v2/parcels/:parcelIdent/tracking",
+        "params": [
+          {
+            "name": "parcelIdent",
+            "value": "",
+            "type": "path",
+            "description": "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+          }
+        ]
+      },
+      "docs": "Get parcel tracking info"
+    }
+  ],
+  "bundled": true
+}

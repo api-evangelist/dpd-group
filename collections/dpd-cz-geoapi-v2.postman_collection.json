@@ -1,0 +1,470 @@
+{
+  "item": [
+    {
+      "id": "96d877dc-f86f-426f-a16a-9fdf811e3257",
+      "name": "Get the tracking info for multiple parcels",
+      "request": {
+        "name": "Get the tracking info for multiple parcels",
+        "description": {
+          "content": "Same as the `GET /parcels/{parcelNo}/tracking` endpoint but for batched tracking information.  \n",
+          "type": "text/plain"
+        },
+        "url": {
+          "path": [
+            "parcels",
+            "tracking"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": []
+        },
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "POST",
+        "auth": null,
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"parcels\": [\n    {\n      \"parcelNumber\": \"<string>\"\n    },\n    {\n      \"parcelNumber\": \"<string>\"\n    }\n  ]\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": [
+        {
+          "id": "a8d63ca9-d5c7-4bb8-a7a8-07daa17d474c",
+          "name": "The parcel tracking info",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "[\n  {\n    \"parcelEvents\": [\n      {\n        \"createdAt\": \"string\",\n        \"id\": \"string\",\n        \"status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"additionalInfo\": \"string\",\n        \"service\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"createdAt\": \"string\",\n        \"id\": \"string\",\n        \"status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"additionalInfo\": \"string\",\n        \"service\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"parcelInfo\": {\n      \"parcelId\": 138,\n      \"parcelNumber\": \"13815045502659\",\n      \"receiver\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"routing\": {\n        \"main\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"back\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"sender\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"serviceDesignation\": {\n        \"backVariant\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"declaredSender\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"pickupPointId\": \"CZ10190\",\n      \"cod\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\",\n        \"description\": \"Cash on delivery - Allows you to specify the amount to be collected from the consignee\",\n        \"title\": \"Cash on delivery\"\n      }\n    }\n  },\n  {\n    \"parcelEvents\": [\n      {\n        \"createdAt\": \"string\",\n        \"id\": \"string\",\n        \"status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"additionalInfo\": \"string\",\n        \"service\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"createdAt\": \"string\",\n        \"id\": \"string\",\n        \"status\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"additionalInfo\": \"string\",\n        \"service\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"parcelInfo\": {\n      \"parcelId\": 138,\n      \"parcelNumber\": \"13815045502659\",\n      \"receiver\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"routing\": {\n        \"main\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"back\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"sender\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"serviceDesignation\": {\n        \"backVariant\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"declaredSender\": {\n        \"address\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"info\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"pickupPointId\": \"CZ10190\",\n      \"cod\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\",\n        \"description\": \"Cash on delivery - Allows you to specify the amount to be collected from the consignee\",\n        \"title\": \"Cash on delivery\"\n      }\n    }\n  }\n]",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "c240eadb-f24b-483d-8cda-f8c6941b2ade",
+          "name": "Uncaught server error - Issue is on our side",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              }
+            ],
+            "method": "POST",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    },
+    {
+      "id": "00ff106e-138b-473a-b638-ec6ceb4bae41",
+      "name": "Get parcel tracking info",
+      "request": {
+        "name": "Get parcel tracking info",
+        "description": {},
+        "url": {
+          "path": [
+            "parcels",
+            ":parcelIdent",
+            "tracking"
+          ],
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "query": [],
+          "variable": [
+            {
+              "disabled": false,
+              "type": "any",
+              "value": "<number>",
+              "key": "parcelIdent",
+              "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+            }
+          ]
+        },
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "method": "GET",
+        "auth": null
+      },
+      "response": [
+        {
+          "id": "0bfa45b2-625a-45b7-9903-558e74b5043a",
+          "name": "Parcel events for the given parcel",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                ":parcelIdent",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "parcelIdent",
+                  "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"parcelEvents\": [\n    {\n      \"createdAt\": \"string\",\n      \"id\": \"string\",\n      \"status\": {\n        \"description\": \"string\",\n        \"statusCode\": \"string\"\n      },\n      \"additionalInfo\": \"string\",\n      \"service\": {\n        \"code\": \"string\",\n        \"additionalCode\": \"string\"\n      }\n    },\n    {\n      \"createdAt\": \"string\",\n      \"id\": \"string\",\n      \"status\": {\n        \"description\": \"string\",\n        \"statusCode\": \"string\"\n      },\n      \"additionalInfo\": \"string\",\n      \"service\": {\n        \"code\": \"string\",\n        \"additionalCode\": \"string\"\n      }\n    }\n  ],\n  \"parcelInfo\": {\n    \"parcelId\": 138,\n    \"parcelNumber\": \"13815045502659\",\n    \"receiver\": {\n      \"address\": {\n        \"city\": \"Praha 8\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postalCode\": \"40001\",\n        \"street\": \"Example Street 368/23\",\n        \"houseNumber\": \"string\"\n      },\n      \"info\": {\n        \"name1\": \"John Doe\",\n        \"name2\": \"John Doe\",\n        \"contact\": {\n          \"person\": \"John Doe\",\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"routing\": {\n      \"main\": {\n        \"destinationDepot\": {\n          \"depotNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"dispatchDepot\": {\n          \"city\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countryAlpha2\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"depotNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"street\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"routing\": {\n          \"DSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"OSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"SSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"routingText\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      },\n      \"back\": {\n        \"destinationDepot\": {\n          \"depotNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"dispatchDepot\": {\n          \"city\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"countryAlpha2\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"depotNumbers\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"postalCode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"street\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"routing\": {\n          \"DSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"OSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"SSORT\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"routingText\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"sender\": {\n      \"address\": {\n        \"city\": \"Praha 8\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postalCode\": \"40001\",\n        \"street\": \"Example Street 368/23\",\n        \"houseNumber\": \"string\"\n      },\n      \"info\": {\n        \"name1\": \"John Doe\",\n        \"name2\": \"John Doe\",\n        \"contact\": {\n          \"person\": \"John Doe\",\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"serviceDesignation\": {\n      \"code\": \"string\",\n      \"combination\": \"string\",\n      \"prefix\": \"string\",\n      \"text\": \"string\",\n      \"mark\": \"string\",\n      \"backVariant\": {\n        \"code\": \"string\",\n        \"combination\": \"string\",\n        \"prefix\": \"string\",\n        \"text\": \"string\",\n        \"mark\": \"string\"\n      }\n    },\n    \"declaredSender\": {\n      \"address\": {\n        \"city\": \"Praha 8\",\n        \"country\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"postalCode\": \"40001\",\n        \"street\": \"Example Street 368/23\",\n        \"houseNumber\": \"string\"\n      },\n      \"info\": {\n        \"name1\": \"John Doe\",\n        \"name2\": \"John Doe\",\n        \"contact\": {\n          \"person\": \"John Doe\",\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"pickupPointId\": \"CZ10190\",\n    \"cod\": {\n      \"amountCents\": 8495.71701274918,\n      \"currency\": \"CZK\",\n      \"payment\": \"Cash\",\n      \"account\": {\n        \"bankCode\": \"0800\",\n        \"bankName\": \"KOMERCNI BANKA\",\n        \"accountNumber\": \"654321-1234567890\",\n        \"accountName\": \"SPOLECNOST HLAVNI UCET\",\n        \"domestic\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"international\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"variableSymbol\": \"17\"\n    }\n  }\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "1dfa3aec-23cb-4456-82e1-db31b1199230",
+          "name": "The parcel number is invalid or the request is malformed",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                ":parcelIdent",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "parcelIdent",
+                  "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"description\": \"string\"\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "b393d544-b812-4531-b8cb-d68c93c2c14d",
+          "name": "The API token provided has expired or it is not valid",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                ":parcelIdent",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "parcelIdent",
+                  "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"description\": \"string\"\n}",
+          "cookie": [],
+          "_postman_previewlanguage": "json"
+        },
+        {
+          "id": "56a76340-338b-4cc0-8264-889e26fbabeb",
+          "name": "Parcel with the specified id does not exist",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                ":parcelIdent",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "parcelIdent",
+                  "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Not Found",
+          "code": 404,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        },
+        {
+          "id": "bd3032c8-d55e-4158-9d65-0c7cfd4ab451",
+          "name": "Uncaught server error - Issue is on our side",
+          "originalRequest": {
+            "url": {
+              "path": [
+                "parcels",
+                ":parcelIdent",
+                "tracking"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "parcelIdent",
+                  "description": "(Required) The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+                }
+              ]
+            },
+            "header": [
+              {
+                "description": {
+                  "content": "Added as a part of security scheme: apikey",
+                  "type": "text/plain"
+                },
+                "key": "x-api-key",
+                "value": "<API Key>"
+              }
+            ],
+            "method": "GET",
+            "body": {}
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "text/plain"
+            }
+          ],
+          "body": "",
+          "cookie": [],
+          "_postman_previewlanguage": "text"
+        }
+      ],
+      "event": [],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      }
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://geoapi.dpd.cz/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "4065379f-c1f3-4266-bb82-9fe1b7318a41",
+    "name": "DPD GeoAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This documentations describes what the GeoAPI is and how to use it properly.\n\n**What is GeoAPI**\n\nThe GeoAPI allows DPD customers to manage (CRUD) their shipments and shipment related data.\n\nThe main purpose of the API is to provide the customer the means for:\n\n  - Creating and managing new shipments\n  - Ordering pickups for parcels\n  - Printing parcel labels\n  - Listing all available shipping services\n  - Validating shipping routes\n \n  It also provides methods for listing your pickup addresses and the details of individual parcels.\n\n  Each user is assigned a user account under which he is able to track multiple customer DSWs (customer numbers).  \n  You as a customer can use a single GeoAPI account to send shipments under multiple DPD customer numbers.\n\n**V1 documentation**\n\nThe V2 of the API does not support all the API endpoints.  \nThe rest of the endpoints can be found in the V1 documentation.  \nFor complete V1 documentation, please visit <a href='/v1/swagger'>/v1/swagger</a>.\n\n\nContact Support:\n Name: DPD CZ\n Email: info@dpd.cz",
+      "type": "text/plain"
+    }
+  }
+}

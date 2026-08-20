@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://dpd.com/common/service/types/ParcelLifeCycleService/2.0" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s1="http://dpd.com/common/service/types/Authentication/2.0" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://dpd.com/common/service/types/ParcelLifeCycleService/2.0" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://dpd.com/common/service/types/ParcelLifeCycleService/2.0">
+      <s:element name="getParcelLabelNumberForWebNumber" type="tns:getParcelLabelNumberForWebNumber" />
+      <s:complexType name="getParcelLabelNumberForWebNumber">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="webNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getParcelLabelNumberForWebNumberResponse" type="tns:getParcelLabelNumberForWebNumberResponse" />
+      <s:complexType name="getParcelLabelNumberForWebNumberResponse">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="parcelLabelNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getTrackingData" type="tns:getTrackingData" />
+      <s:complexType name="getTrackingData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="parcelLabelNumber" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="getTrackingDataResponse" type="tns:getTrackingDataResponse" />
+      <s:complexType name="getTrackingDataResponse">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="trackingresult" type="tns:TrackingResult" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrackingResult">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="shipmentInfo" type="tns:ShipmentInfo" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="statusInfo" type="tns:StatusInfo" />
+          <s:element minOccurs="0" maxOccurs="3" name="contactInfo" type="tns:ContentItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ShipmentInfo">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="receiver" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="predictInformation" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="serviceDescription" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="1" name="additionalServiceElements" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="trackingProperty" type="tns:TrackingProperty" />
+          <s:element minOccurs="1" maxOccurs="1" name="status" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="label" type="tns:ContentLine" />
+          <s:element minOccurs="1" maxOccurs="1" name="description" type="tns:ContentItem" />
+          <s:element minOccurs="1" maxOccurs="1" name="statusHasBeenReached" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="isCurrentStatus" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="showContactInfo" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="location" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="1" name="date" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="normalItems" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="importantItems" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="errorItems" type="tns:ContentItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ContentItem">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="label" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="content" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="1" name="linkTarget" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ContentLine">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="content" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="bold" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="paragraph" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TrackingProperty">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="key" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="value" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfContentLine">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ContentLine" nillable="true" type="tns:ContentLine" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="StatusInfo">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="status" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="label" type="tns:ContentLine" />
+          <s:element minOccurs="1" maxOccurs="1" name="description" type="tns:ContentItem" />
+          <s:element minOccurs="1" maxOccurs="1" name="statusHasBeenReached" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="isCurrentStatus" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="showContactInfo" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="location" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="1" name="date" type="tns:ContentLine" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="normalItems" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="importantItems" type="tns:ContentItem" />
+          <s:element minOccurs="0" maxOccurs="unbounded" name="errorItems" type="tns:ContentItem" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="faults" type="tns:faults" />
+      <s:complexType name="faults">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" form="unqualified" name="faultstring" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+    <s:schema elementFormDefault="unqualified" targetNamespace="http://dpd.com/common/service/types/Authentication/2.0">
+      <s:element name="authentication" type="s1:authentication"/>
+      <s:complexType name="authentication">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="delisId" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="authToken" type="s:string"/>
+          <s:element minOccurs="1" maxOccurs="1" name="messageLanguage" type="s:string"/>
+        </s:sequence>
+        <s:anyAttribute/>
+      </s:complexType>
+      <s:element name="authenticationFault" type="s1:authenticationFault" />
+      <s:complexType name="authenticationFault">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="errorCode" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="errorMessage" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getParcelLabelNumberForWebNumberSoapIn">
+    <wsdl:part name="getParcelLabelNumberForWebNumber" element="tns:getParcelLabelNumberForWebNumber" />
+  </wsdl:message>
+  <wsdl:message name="getParcelLabelNumberForWebNumberSoapOut">
+    <wsdl:part name="getParcelLabelNumberForWebNumberResult" element="tns:getParcelLabelNumberForWebNumberResponse" />
+  </wsdl:message>
+  <wsdl:message name="getParcelLabelNumberForWebNumberauthentication">
+    <wsdl:part name="authentication" element="s1:authentication" />
+  </wsdl:message>
+  <wsdl:message name="getTrackingDataSoapIn">
+    <wsdl:part name="getTrackingData" element="tns:getTrackingData" />
+  </wsdl:message>
+  <wsdl:message name="getTrackingDataSoapOut">
+    <wsdl:part name="getTrackingDataResult" element="tns:getTrackingDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="authenticationFaultMsg">
+    <wsdl:part name="fault" element="s1:authenticationFault" />
+  </wsdl:message>
+  <wsdl:message name="faultsMsg">
+    <wsdl:part name="faults" element="tns:faults" />
+  </wsdl:message>
+  <wsdl:portType name="ParcelLifeCycleServiceSoapSoap">
+    <wsdl:operation name="getParcelLabelNumberForWebNumber">
+      <wsdl:input message="tns:getParcelLabelNumberForWebNumberSoapIn" />
+      <wsdl:output message="tns:getParcelLabelNumberForWebNumberSoapOut" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+    <wsdl:operation name="getTrackingData">
+      <wsdl:input message="tns:getTrackingDataSoapIn" />
+      <wsdl:output message="tns:getTrackingDataSoapOut" />
+      <wsdl:fault message="tns:faultsMsg" name="faults" />
+      <wsdl:fault message="tns:authenticationFaultMsg" name="authenticationFault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ParcelLifeCycleServiceSoapSoap" type="tns:ParcelLifeCycleServiceSoapSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getParcelLabelNumberForWebNumber">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ParcelLifeCycleService/2.0/getParcelLabelNumberForWebNumber" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:getParcelLabelNumberForWebNumberauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getTrackingData">
+      <soap:operation soapAction="http://dpd.com/common/service/types/ParcelLifeCycleService/2.0/getTrackingData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+        <soap:header message="tns:getParcelLabelNumberForWebNumberauthentication" part="authentication" use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+      <wsdl:fault name="authenticationFault">
+        <soap:fault name="authenticationFault" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="faults">
+        <soap:fault name="faults" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ParcelLifeCycleServiceSoap">
+    <wsdl:port name="ParcelLifeCycleServiceSoapSoap" binding="tns:ParcelLifeCycleServiceSoapSoap">
+      <soap:address location="https://wsshipper.dpd.be/soap/services/ParcelLifeCycleService/V2_0" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

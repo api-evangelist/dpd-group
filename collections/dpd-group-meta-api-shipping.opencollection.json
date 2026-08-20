@@ -1,0 +1,426 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "META-API Shipment",
+    "version": "3.3.26\n2026-07-23 12:55:02"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shipping",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "shippingV2ShipmentPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v2/shipment",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              },
+              {
+                "name": "ExtraBarcode",
+                "value": ""
+              },
+              {
+                "name": "PUS-CLIENT-KEY",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "LabelPrintFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPaperFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrinterStartPosition",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "qrcode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "DropOffType",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrintResolution",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "withDocument",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "AUTO-PUS-SELECTOR",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV2PickupschedulingPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v2/pickupscheduling",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV2ColreqPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v2/colreq",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV1ShipmentPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v1/shipment",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              },
+              {
+                "name": "ExtraBarcode",
+                "value": ""
+              },
+              {
+                "name": "PUS-CLIENT-KEY",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "LabelPrintFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPaperFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrinterStartPosition",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "qrcode",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "DropOffType",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrintResolution",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "withDocument",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "AUTO-PUS-SELECTOR",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV1PickupschedulingPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v1/pickupscheduling",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV1LoginPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v1/login",
+            "headers": [
+              {
+                "name": "X-DPD-BUCODE",
+                "value": ""
+              },
+              {
+                "name": "X-DPD-LOGIN",
+                "value": ""
+              },
+              {
+                "name": "X-DPD-PASSWORD",
+                "value": ""
+              },
+              {
+                "name": "X-DPD-CLIENTID",
+                "value": ""
+              },
+              {
+                "name": "X-DPD-CLIENTSECRET",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "force",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV1LabelPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v1/label",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "LabelPrintFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPaperFormat",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrinterStartPosition",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "LabelPrintResolution",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "shippingV1ColreqPost",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dpdgroup.com/shipping/v1/colreq",
+            "headers": [
+              {
+                "name": "X-DPD-REQUESTOR",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "debug",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "simulate",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

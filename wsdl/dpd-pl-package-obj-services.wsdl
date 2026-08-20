@@ -1,0 +1,995 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://dpdservices.dpd.com.pl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="DPDPackageObjServicesService" targetNamespace="http://dpdservices.dpd.com.pl/">
+  <wsdl:types>
+<schema xmlns="http://www.w3.org/2001/XMLSchema">
+  <import namespace="http://dpdservices.dpd.com.pl/" schemaLocation="https://dpdservices.dpd.com.pl/DPDPackageObjServicesService/DPDPackageObjServices?xsd=DPDPackageObjServicesService_schema1.xsd"/>
+</schema>
+  </wsdl:types>
+  <wsdl:message name="generateSpedLabelsV1Response">
+    <wsdl:part element="tns:generateSpedLabelsV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="importDeliveryBusinessEventV1Response">
+    <wsdl:part element="tns:importDeliveryBusinessEventV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="SchemaValidationException">
+    <wsdl:part element="tns:SchemaValidationException" name="SchemaValidationException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateDomesticReturnLabelV1">
+    <wsdl:part element="tns:generateDomesticReturnLabelV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolV2Response">
+    <wsdl:part element="tns:generateProtocolV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateReturnPackages">
+    <wsdl:part element="tns:generateReturnPackages" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV6">
+    <wsdl:part element="tns:generatePackagesNumbersV6" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolsWithDestinationsV2Response">
+    <wsdl:part element="tns:generateProtocolsWithDestinationsV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV7">
+    <wsdl:part element="tns:generatePackagesNumbersV7" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV2Response">
+    <wsdl:part element="tns:generatePackagesNumbersV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV8">
+    <wsdl:part element="tns:generatePackagesNumbersV8" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV9">
+    <wsdl:part element="tns:generatePackagesNumbersV9" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="appendParcelsToPackageV1Response">
+    <wsdl:part element="tns:appendParcelsToPackageV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateInternationalPackageNumbersV1">
+    <wsdl:part element="tns:generateInternationalPackageNumbersV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV4Response">
+    <wsdl:part element="tns:generatePackagesNumbersV4Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV3Response">
+    <wsdl:part element="tns:generateSpedLabelsV3Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV1">
+    <wsdl:part element="tns:generatePackagesNumbersV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV2">
+    <wsdl:part element="tns:generatePackagesNumbersV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateDomesticReturnLabelV1Response">
+    <wsdl:part element="tns:generateDomesticReturnLabelV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV3">
+    <wsdl:part element="tns:generatePackagesNumbersV3" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV4">
+    <wsdl:part element="tns:generatePackagesNumbersV4" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateDropOffPinV1Response">
+    <wsdl:part element="tns:generateDropOffPinV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV5">
+    <wsdl:part element="tns:generatePackagesNumbersV5" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DeniedAccessWSException">
+    <wsdl:part element="tns:DeniedAccessWSException" name="DeniedAccessWSException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV7Response">
+    <wsdl:part element="tns:generatePackagesNumbersV7Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateDropOffPinV1">
+    <wsdl:part element="tns:generateDropOffPinV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV1Response">
+    <wsdl:part element="tns:packagesPickupCallV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findPostalCodeV1Response">
+    <wsdl:part element="tns:findPostalCodeV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateReturnLabelV1Response">
+    <wsdl:part element="tns:generateReturnLabelV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolsWithDestinationsV1">
+    <wsdl:part element="tns:generateProtocolsWithDestinationsV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV5Response">
+    <wsdl:part element="tns:generatePackagesNumbersV5Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolsWithDestinationsV2">
+    <wsdl:part element="tns:generateProtocolsWithDestinationsV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="Exception">
+    <wsdl:part element="tns:Exception" name="Exception">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateShipmentV2Response">
+    <wsdl:part element="tns:generateShipmentV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="DPDServiceException">
+    <wsdl:part element="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="importDeliveryBusinessEventV1">
+    <wsdl:part element="tns:importDeliveryBusinessEventV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV10Response">
+    <wsdl:part element="tns:generatePackagesNumbersV10Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV3Response">
+    <wsdl:part element="tns:packagesPickupCallV3Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV9Response">
+    <wsdl:part element="tns:generatePackagesNumbersV9Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateInternationalPackageNumbersV1Response">
+    <wsdl:part element="tns:generateInternationalPackageNumbersV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV10">
+    <wsdl:part element="tns:generatePackagesNumbersV10" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolV1">
+    <wsdl:part element="tns:generateProtocolV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolV2">
+    <wsdl:part element="tns:generateProtocolV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateShipmentV1">
+    <wsdl:part element="tns:generateShipmentV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateShipmentV2">
+    <wsdl:part element="tns:generateShipmentV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV1">
+    <wsdl:part element="tns:generateSpedLabelsV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolV1Response">
+    <wsdl:part element="tns:generateProtocolV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV4">
+    <wsdl:part element="tns:generateSpedLabelsV4" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV3">
+    <wsdl:part element="tns:generateSpedLabelsV3" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV2">
+    <wsdl:part element="tns:generateSpedLabelsV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV1Response">
+    <wsdl:part element="tns:generatePackagesNumbersV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV4Response">
+    <wsdl:part element="tns:generateSpedLabelsV4Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="findPostalCodeV1">
+    <wsdl:part element="tns:findPostalCodeV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateProtocolsWithDestinationsV1Response">
+    <wsdl:part element="tns:generateProtocolsWithDestinationsV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateSpedLabelsV2Response">
+    <wsdl:part element="tns:generateSpedLabelsV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV3Response">
+    <wsdl:part element="tns:generatePackagesNumbersV3Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="appendParcelsToPackageV2Response">
+    <wsdl:part element="tns:appendParcelsToPackageV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCourierOrderAvailabilityV1Response">
+    <wsdl:part element="tns:getCourierOrderAvailabilityV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV3">
+    <wsdl:part element="tns:packagesPickupCallV3" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV6Response">
+    <wsdl:part element="tns:generatePackagesNumbersV6Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV4">
+    <wsdl:part element="tns:packagesPickupCallV4" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV1">
+    <wsdl:part element="tns:packagesPickupCallV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV2">
+    <wsdl:part element="tns:packagesPickupCallV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="appendParcelsToPackageV1">
+    <wsdl:part element="tns:appendParcelsToPackageV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateReturnLabelV1">
+    <wsdl:part element="tns:generateReturnLabelV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getCourierOrderAvailabilityV1">
+    <wsdl:part element="tns:getCourierOrderAvailabilityV1" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="appendParcelsToPackageV2">
+    <wsdl:part element="tns:appendParcelsToPackageV2" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateReturnPackagesResponse">
+    <wsdl:part element="tns:generateReturnPackagesResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV2Response">
+    <wsdl:part element="tns:packagesPickupCallV2Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generateShipmentV1Response">
+    <wsdl:part element="tns:generateShipmentV1Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="packagesPickupCallV4Response">
+    <wsdl:part element="tns:packagesPickupCallV4Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="generatePackagesNumbersV8Response">
+    <wsdl:part element="tns:generatePackagesNumbersV8Response" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DPDPackageObjServices">
+    <wsdl:operation name="generateProtocolV1">
+      <wsdl:input message="tns:generateProtocolV1" name="generateProtocolV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateProtocolV1Response" name="generateProtocolV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolV2">
+      <wsdl:input message="tns:generateProtocolV2" name="generateProtocolV2">
+    </wsdl:input>
+      <wsdl:output message="tns:generateProtocolV2Response" name="generateProtocolV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateShipmentV1">
+      <wsdl:input message="tns:generateShipmentV1" name="generateShipmentV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateShipmentV1Response" name="generateShipmentV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateShipmentV2">
+      <wsdl:input message="tns:generateShipmentV2" name="generateShipmentV2">
+    </wsdl:input>
+      <wsdl:output message="tns:generateShipmentV2Response" name="generateShipmentV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateDomesticReturnLabelV1">
+      <wsdl:input message="tns:generateDomesticReturnLabelV1" name="generateDomesticReturnLabelV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateDomesticReturnLabelV1Response" name="generateDomesticReturnLabelV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV1">
+      <wsdl:input message="tns:generateSpedLabelsV1" name="generateSpedLabelsV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateSpedLabelsV1Response" name="generateSpedLabelsV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV4">
+      <wsdl:input message="tns:generateSpedLabelsV4" name="generateSpedLabelsV4">
+    </wsdl:input>
+      <wsdl:output message="tns:generateSpedLabelsV4Response" name="generateSpedLabelsV4Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV3">
+      <wsdl:input message="tns:generateSpedLabelsV3" name="generateSpedLabelsV3">
+    </wsdl:input>
+      <wsdl:output message="tns:generateSpedLabelsV3Response" name="generateSpedLabelsV3Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateReturnPackages">
+      <wsdl:input message="tns:generateReturnPackages" name="generateReturnPackages">
+    </wsdl:input>
+      <wsdl:output message="tns:generateReturnPackagesResponse" name="generateReturnPackagesResponse">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV2">
+      <wsdl:input message="tns:generateSpedLabelsV2" name="generateSpedLabelsV2">
+    </wsdl:input>
+      <wsdl:output message="tns:generateSpedLabelsV2Response" name="generateSpedLabelsV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV6">
+      <wsdl:input message="tns:generatePackagesNumbersV6" name="generatePackagesNumbersV6">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV6Response" name="generatePackagesNumbersV6Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV7">
+      <wsdl:input message="tns:generatePackagesNumbersV7" name="generatePackagesNumbersV7">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV7Response" name="generatePackagesNumbersV7Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV8">
+      <wsdl:input message="tns:generatePackagesNumbersV8" name="generatePackagesNumbersV8">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV8Response" name="generatePackagesNumbersV8Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV9">
+      <wsdl:input message="tns:generatePackagesNumbersV9" name="generatePackagesNumbersV9">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV9Response" name="generatePackagesNumbersV9Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPostalCodeV1">
+      <wsdl:input message="tns:findPostalCodeV1" name="findPostalCodeV1">
+    </wsdl:input>
+      <wsdl:output message="tns:findPostalCodeV1Response" name="findPostalCodeV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateInternationalPackageNumbersV1">
+      <wsdl:input message="tns:generateInternationalPackageNumbersV1" name="generateInternationalPackageNumbersV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateInternationalPackageNumbersV1Response" name="generateInternationalPackageNumbersV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV1">
+      <wsdl:input message="tns:generatePackagesNumbersV1" name="generatePackagesNumbersV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV1Response" name="generatePackagesNumbersV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV2">
+      <wsdl:input message="tns:generatePackagesNumbersV2" name="generatePackagesNumbersV2">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV2Response" name="generatePackagesNumbersV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV3">
+      <wsdl:input message="tns:generatePackagesNumbersV3" name="generatePackagesNumbersV3">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV3Response" name="generatePackagesNumbersV3Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV4">
+      <wsdl:input message="tns:generatePackagesNumbersV4" name="generatePackagesNumbersV4">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV4Response" name="generatePackagesNumbersV4Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV5">
+      <wsdl:input message="tns:generatePackagesNumbersV5" name="generatePackagesNumbersV5">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV5Response" name="generatePackagesNumbersV5Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV3">
+      <wsdl:input message="tns:packagesPickupCallV3" name="packagesPickupCallV3">
+    </wsdl:input>
+      <wsdl:output message="tns:packagesPickupCallV3Response" name="packagesPickupCallV3Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV4">
+      <wsdl:input message="tns:packagesPickupCallV4" name="packagesPickupCallV4">
+    </wsdl:input>
+      <wsdl:output message="tns:packagesPickupCallV4Response" name="packagesPickupCallV4Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV1">
+      <wsdl:input message="tns:packagesPickupCallV1" name="packagesPickupCallV1">
+    </wsdl:input>
+      <wsdl:output message="tns:packagesPickupCallV1Response" name="packagesPickupCallV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateDropOffPinV1">
+      <wsdl:input message="tns:generateDropOffPinV1" name="generateDropOffPinV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateDropOffPinV1Response" name="generateDropOffPinV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV2">
+      <wsdl:input message="tns:packagesPickupCallV2" name="packagesPickupCallV2">
+    </wsdl:input>
+      <wsdl:output message="tns:packagesPickupCallV2Response" name="packagesPickupCallV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="appendParcelsToPackageV1">
+      <wsdl:input message="tns:appendParcelsToPackageV1" name="appendParcelsToPackageV1">
+    </wsdl:input>
+      <wsdl:output message="tns:appendParcelsToPackageV1Response" name="appendParcelsToPackageV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateReturnLabelV1">
+      <wsdl:input message="tns:generateReturnLabelV1" name="generateReturnLabelV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateReturnLabelV1Response" name="generateReturnLabelV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCourierOrderAvailabilityV1">
+      <wsdl:input message="tns:getCourierOrderAvailabilityV1" name="getCourierOrderAvailabilityV1">
+    </wsdl:input>
+      <wsdl:output message="tns:getCourierOrderAvailabilityV1Response" name="getCourierOrderAvailabilityV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:Exception" name="Exception">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="appendParcelsToPackageV2">
+      <wsdl:input message="tns:appendParcelsToPackageV2" name="appendParcelsToPackageV2">
+    </wsdl:input>
+      <wsdl:output message="tns:appendParcelsToPackageV2Response" name="appendParcelsToPackageV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolsWithDestinationsV1">
+      <wsdl:input message="tns:generateProtocolsWithDestinationsV1" name="generateProtocolsWithDestinationsV1">
+    </wsdl:input>
+      <wsdl:output message="tns:generateProtocolsWithDestinationsV1Response" name="generateProtocolsWithDestinationsV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolsWithDestinationsV2">
+      <wsdl:input message="tns:generateProtocolsWithDestinationsV2" name="generateProtocolsWithDestinationsV2">
+    </wsdl:input>
+      <wsdl:output message="tns:generateProtocolsWithDestinationsV2Response" name="generateProtocolsWithDestinationsV2Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="importDeliveryBusinessEventV1">
+      <wsdl:input message="tns:importDeliveryBusinessEventV1" name="importDeliveryBusinessEventV1">
+    </wsdl:input>
+      <wsdl:output message="tns:importDeliveryBusinessEventV1Response" name="importDeliveryBusinessEventV1Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:SchemaValidationException" name="SchemaValidationException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DeniedAccessWSException" name="DeniedAccessWSException">
+    </wsdl:fault>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV10">
+      <wsdl:input message="tns:generatePackagesNumbersV10" name="generatePackagesNumbersV10">
+    </wsdl:input>
+      <wsdl:output message="tns:generatePackagesNumbersV10Response" name="generatePackagesNumbersV10Response">
+    </wsdl:output>
+      <wsdl:fault message="tns:DPDServiceException" name="DPDServiceException">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DPDPackageObjServicesServiceSoapBinding" type="tns:DPDPackageObjServices">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="generateProtocolV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateProtocolV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateProtocolV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateProtocolV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateProtocolV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateShipmentV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateShipmentV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateShipmentV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateShipmentV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateShipmentV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateShipmentV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateDomesticReturnLabelV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateDomesticReturnLabelV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateDomesticReturnLabelV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateSpedLabelsV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateSpedLabelsV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV4">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateSpedLabelsV4">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateSpedLabelsV4Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV3">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateSpedLabelsV3">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateSpedLabelsV3Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateReturnPackages">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateReturnPackages">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateReturnPackagesResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateSpedLabelsV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateSpedLabelsV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateSpedLabelsV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV6">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV6">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV6Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV7">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV7">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV7Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV8">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV8">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV8Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV9">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV9">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV9Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="findPostalCodeV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="findPostalCodeV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="findPostalCodeV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateInternationalPackageNumbersV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateInternationalPackageNumbersV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateInternationalPackageNumbersV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV3">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV3">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV3Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV4">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV4">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV4Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV5">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV5">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV5Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV3">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="packagesPickupCallV3">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="packagesPickupCallV3Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV4">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="packagesPickupCallV4">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="packagesPickupCallV4Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="packagesPickupCallV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="packagesPickupCallV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateDropOffPinV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateDropOffPinV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateDropOffPinV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="packagesPickupCallV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="packagesPickupCallV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="packagesPickupCallV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="appendParcelsToPackageV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="appendParcelsToPackageV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="appendParcelsToPackageV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateReturnLabelV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateReturnLabelV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateReturnLabelV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="getCourierOrderAvailabilityV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="getCourierOrderAvailabilityV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="getCourierOrderAvailabilityV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="Exception">
+        <soap:fault name="Exception" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="appendParcelsToPackageV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="appendParcelsToPackageV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="appendParcelsToPackageV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolsWithDestinationsV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateProtocolsWithDestinationsV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateProtocolsWithDestinationsV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generateProtocolsWithDestinationsV2">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generateProtocolsWithDestinationsV2">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generateProtocolsWithDestinationsV2Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="importDeliveryBusinessEventV1">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="importDeliveryBusinessEventV1">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="importDeliveryBusinessEventV1Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="SchemaValidationException">
+        <soap:fault name="SchemaValidationException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DeniedAccessWSException">
+        <soap:fault name="DeniedAccessWSException" use="literal"/>
+      </wsdl:fault>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+    <wsdl:operation name="generatePackagesNumbersV10">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="generatePackagesNumbersV10">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="generatePackagesNumbersV10Response">
+        <soap:body use="literal"/>
+      </wsdl:output>
+      <wsdl:fault name="DPDServiceException">
+        <soap:fault name="DPDServiceException" use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DPDPackageObjServicesService">
+    <wsdl:port binding="tns:DPDPackageObjServicesServiceSoapBinding" name="DPDPackageObjServicesPort">
+      <soap:address location="https://dpdservices.dpd.com.pl/DPDPackageObjServicesService/DPDPackageObjServices"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

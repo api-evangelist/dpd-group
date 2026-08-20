@@ -1,0 +1,269 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "DPD GeoAPI",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Get the active customers of the user account and their list of addresses.",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/me"
+      },
+      "docs": "Use this method to get information about your customers and customer addresses.\n\nUser account which is used to find the data is determined by an API key provided in a request header.\n"
+    },
+    {
+      "info": {
+        "name": "List all parcels for the current active user account",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/parcels",
+        "params": [
+          {
+            "name": "from",
+            "value": "",
+            "type": "query",
+            "description": "Start of the time-frame in the YYYY-MM-DD (ISO 8601) format"
+          },
+          {
+            "name": "to",
+            "value": "",
+            "type": "query",
+            "description": "End of the time-frame in the YYYY-MM-DD (ISO 8601) format"
+          }
+        ]
+      },
+      "docs": "Use this for getting the list of all parcels associated with any of the customers under this user account.  \nReturns everything that was created in a selected time-frame by the current user account.  \nThe goal is to provide an overview of every parcel via a single endpoint.\n"
+    },
+    {
+      "info": {
+        "name": "Print the labels for multiple parcels",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/parcels/labels",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Same as the `POST /parcels/{parcelIdent}/labels` endpoint but for batched printing.  \nA single ZPL/EPL script will contain instructions for printing multiple labels.  \nThe PDF will contain one or multiple pages with all labels.\n\n**Capabilities**\n\nSame as the `POST /parcels/{parcelIdent}/labels` \n\n**Limitations**\n\nSame as the `POST /parcels/{parcelIdent}/labels`\n\nBear in mind that a shipment cannot have both a label and drop-off codes. \\\nOnce an attempt to print a label or to generate drop-off co"
+    },
+    {
+      "info": {
+        "name": "Print the parcel labels",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/parcels/:parcelIdent/labels",
+        "params": [
+          {
+            "name": "parcelIdent",
+            "value": "",
+            "type": "path",
+            "description": "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "The parcel can have multiple labels, so an array is always returned.  \nThe script/PDF always contains only single label.\n\nTwo labels will be returned when printing the labels for a swap parcel.  \nOne of the labels, that is designated for the return journey to the sender, is placed into the package.  \nThe system allows only for a single parcel swap shipments. The exchange is always done on a piece-by-piece bases.\n\n**Capabilities**\n\n- You can choose between the following formats: **ZPL, EPL, PDF a"
+    },
+    {
+      "info": {
+        "name": "Get the tracking info for multiple parcels",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/parcels/tracking",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Same as the `GET /parcels/{parcelNo}/tracking` endpoint but for batched tracking information.\n"
+    },
+    {
+      "info": {
+        "name": "Get parcel tracking info",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/parcels/:parcelIdent/tracking",
+        "params": [
+          {
+            "name": "parcelIdent",
+            "value": "",
+            "type": "path",
+            "description": "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+          }
+        ]
+      },
+      "docs": "Get parcel tracking info"
+    },
+    {
+      "info": {
+        "name": "Create a new pickup order.",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/pickup-orders",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "You can create pickup orders via this endpoint.  \nA pickup order is a request for a courier to come and pick your parcels up.  \nThe courier will then proceed to forward the parcels into further transit and make sure they will eventually reach their shipping destination.  \n\nIf the customerAddress (standard) or parcelNo (collection) is not found, an error will be returned\n\nIf you provide a parcel number that belongs to a standard parcel when creating the pickup order,  \nan error will be thrown as "
+    },
+    {
+      "info": {
+        "name": "Show information about a specific pickup order.",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/pickup-orders/:pickupOrderId",
+        "params": [
+          {
+            "name": "pickupOrderId",
+            "value": "",
+            "type": "path",
+            "description": "The unique ID of the pickup order in question"
+          }
+        ]
+      },
+      "docs": "Show information about a specific pickup order."
+    },
+    {
+      "info": {
+        "name": "Cancel pickup order by pickupOrderId",
+        "type": "http"
+      },
+      "http": {
+        "method": "DELETE",
+        "url": "https://geoapi.dpd.cz/v1/pickup-orders/:pickupOrderId",
+        "params": [
+          {
+            "name": "pickupOrderId",
+            "value": "",
+            "type": "path",
+            "description": "The unique ID of the pickup order in question"
+          }
+        ]
+      },
+      "docs": "Use this endpoint to cancel your parcel pickup orders.\n\n**Limitations**\n\nIt might not be possible to cancel some pickup orders.  \nPickup orders can be canceled only until a certain deadline   \nThis is usually early in the morning of the pickup day.\n"
+    },
+    {
+      "info": {
+        "name": "List of all available shipping services in JSON.",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/shipping-services"
+      },
+      "docs": "List of all available shipping services in JSON."
+    },
+    {
+      "info": {
+        "name": "List all available countries for your account",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/countries"
+      },
+      "docs": "List all available countries for your account"
+    },
+    {
+      "info": {
+        "name": "List all customers associated with the active user account",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/customers"
+      },
+      "docs": "Each user account has multiple customers associated with it.  \n\nEach customer has its own [DSW](#/CustomerDSW) and his own customer addresses.\n"
+    },
+    {
+      "info": {
+        "name": "List all addresses associated with the specified customer",
+        "type": "http"
+      },
+      "http": {
+        "method": "GET",
+        "url": "https://geoapi.dpd.cz/v1/customers/:customerDSW/addresses",
+        "params": [
+          {
+            "name": "customerDSW",
+            "value": "",
+            "type": "path",
+            "description": "The DSW of the customer in question"
+          }
+        ]
+      },
+      "docs": "You can use these customer addresses when creating a new shipment or pickup order.\n\nIf the customer is not associated with your account, an error will be returned.\n"
+    },
+    {
+      "info": {
+        "name": "Create new shipments",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/shipments",
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Use this endpoint to create new parcel shipments.\n\nShipments consist of one or more parcels.\n\n**Recommendations:** \n\n*It is strongly recommended to batch the shipments into medium sized requests (cca 10 items). Sending many small requests at once can cause performance degradation.\nGeoApi handles maximum of 50 shipments in one request.*\n\nIn case you have incorporated a mistake into the shipment data,  \njust create a new shipment with corrected data.  \nYou can then throw away the printed labels an"
+    },
+    {
+      "info": {
+        "name": "Get label-less drop-off codes for a parcel",
+        "type": "http"
+      },
+      "http": {
+        "method": "POST",
+        "url": "https://geoapi.dpd.cz/v1/parcels/:parcelIdent/drop-off-codes",
+        "params": [
+          {
+            "name": "parcelIdent",
+            "value": "",
+            "type": "path",
+            "description": "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+          }
+        ],
+        "body": {
+          "type": "json",
+          "data": "{}"
+        }
+      },
+      "docs": "Returns codes that can be used for drop-off instead of a printed label.\n\n**Limitations**\n  \nBear in mind that a shipment cannot have both a label and drop-off codes. \nOnce an attempt to print a label or to generate drop-off codes has been made, \nthe shipment will be marked as such and GeoAPI won't let you switch to a different drop-off method.\n"
+    }
+  ],
+  "bundled": true
+}
