@@ -1,0 +1,1188 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Shipments API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Shipments
+paths:
+  /shipments:
+    post:
+      description: 'Use this endpoint to create new parcel shipments.
+
+
+        Shipments consist of one or more parcels.
+
+
+        **Recommendations:**
+
+
+        *It is strongly recommended to batch the shipments into medium sized requests (cca 10 items). Sending many small requests at once can cause performance degradation.
+
+        GeoApi handles maximum of 50 shipments in one request.*
+
+
+        In case you have incorporated a mistake into the shipment data,
+
+        just create a new shipment with corrected data.
+
+        You can then throw away the printed labels and use new ones.'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/NewShipment'
+              maxItems: 50
+              type: array
+        description: The shipment specifications
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Shipment'
+                type: array
+          description: Info about the created shipments
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewShipmentError'
+          description: The request was invalid due to malformed input or incorrect usage.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NewShipmentError'
+          description: The customer id is not associated with your account or the API token provided is not valid
+        '408':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request Timeout. Took too long to respond.
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Create new shipments
+      tags:
+      - Shipments
+      operationId: postShipments
+      x-operation-id-source: derived
+components:
+  schemas:
+    NewShipment_parcels_inner_additionalServices:
+      properties:
+        insurance:
+          $ref: '#/components/schemas/NewShipment_parcels_inner_additionalServices_insurance'
+      type: object
+    ParcelReference1:
+      description: 'A reference is an internal information for your use cases.
+
+        You can use this (for instance) to correlate the parcel with your internal system IDs.
+
+
+        This reference is printed on the parcel label.
+
+        It is shortened to 14/17 characters when printed on the label.
+
+        '
+      maxLength: 35
+      type: string
+    Customer:
+      description: For more info about customers see the [Customer DSW](#/CustomerDSW)
+      properties:
+        DSW:
+          $ref: '#/components/schemas/CustomerDSW'
+        isActive:
+          type: boolean
+        id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+      - DSW
+      - id
+      - isActive
+      type: object
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
+    SubjectName:
+      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    DeliveryOptions:
+      properties:
+        completeness:
+          $ref: '#/components/schemas/Completeness'
+      type: object
+    ParcelWeight:
+      description: 'Weight of the parcel in grams
+
+        E.g 1500 represents 1.5 kg.
+
+        '
+      type: number
+    CustomerIdent_oneOf:
+      properties:
+        dsw:
+          $ref: '#/components/schemas/CustomerDSW'
+      required:
+      - dsw
+      type: object
+    PhoneNumber:
+      description: Can be with or without the international prefix
+      example: 123 456 789
+      maxLength: 31
+      type: string
+    PickupPointService:
+      allOf:
+      - $ref: '#/components/schemas/PickupPointID'
+      - description: 'You can use this service to order a delivery to a specified pickup point
+
+
+          Set this value to the ID of the pickup point you want the shipment to be delivered to.
+
+          '
+        title: Pickup point delivery
+    Insurance:
+      properties:
+        amountCents:
+          description: 'Units of the specified currency in cents.
+
+            For example 125 units of CZK is 1.25 CZK.
+
+            '
+          type: number
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+      - amountCents
+      - currency
+      type: object
+    NewShipment_services:
+      allOf:
+      - $ref: '#/components/schemas/ShipmentServices'
+      - description: "You can choose the DPD provided services in this section  \n\nThere are a lot of services that DPD offers,  \nbut only some combinations are valid.\n\n**Limitations**\n\nSome services can be used separately and others need to be combined with one another.\n\n- You can use the service table to find the correct service combination for your use case. TODO: Service table link\n- Or alternatively you can use the GET /services endpoint to get a list of all compatible services.\n"
+    Shipment_services:
+      properties:
+        serviceCode:
+          $ref: '#/components/schemas/ServiceCode'
+        serviceCombination:
+          $ref: '#/components/schemas/ServiceCombination'
+        selectedServices:
+          $ref: '#/components/schemas/Shipment_services_selectedServices'
+      required:
+      - serviceCode
+      - serviceCombination
+      type: object
+    CountryIdent_oneOf_1:
+      properties:
+        isoAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+      required:
+      - isoAlpha2
+      type: object
+    CustomerAddressIdent:
+      description: Used to uniquely identify a customer address in the API
+      oneOf:
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf_1'
+    CodAccount_domestic:
+      description: "Country specific bank account information.\n\nThis is currently reserved for CZ based bank accounts!  \n\nIf you provide any non CZ based bank acccount that will pass validation, it might get used for domestic CZ payments!\n"
+      properties:
+        bankCode:
+          description: Code of your bank
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          description: 'Your custom bank designation (might be displayed to the customer).
+
+
+            We suggest you use capital letters and numbers.
+
+            '
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          description: The account number without bankCode
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          description: 'Your custom account number name for organizational purposes.
+
+
+            We suggest using only capital letters and numbers.
+
+            '
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+      required:
+      - accountName
+      - accountNumber
+      - bankCode
+      - bankName
+      type: object
+    CustomerAddressIdent_oneOf:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerAddressId'
+      required:
+      - id
+      type: object
+    Shipment_services_selectedServices:
+      allOf:
+      - $ref: '#/components/schemas/ShipmentServices'
+      - description: The services that have been selected for this shipment
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    ShipmentServices:
+      properties:
+        notification:
+          $ref: '#/components/schemas/NotificationService'
+        airExpress:
+          $ref: '#/components/schemas/AirExpressService'
+        dpdTimeGuarantee:
+          $ref: '#/components/schemas/DPDTimeGuaranteeService'
+        dpdGuarantee:
+          $ref: '#/components/schemas/DPDGuaranteeService'
+        swap:
+          $ref: '#/components/schemas/SwapService'
+        dpdPneu:
+          $ref: '#/components/schemas/DPDPneuService'
+        cashOnDelivery:
+          $ref: '#/components/schemas/CashOnDeliveryService_1'
+        pickupPoint:
+          $ref: '#/components/schemas/PickupPointService'
+        departmentDelivery:
+          $ref: '#/components/schemas/DepartmentDeliveryService'
+        personalIdentification:
+          $ref: '#/components/schemas/PersonalIdentificationService'
+        dpdReturn:
+          $ref: '#/components/schemas/DPDReturnService'
+        shopToShop:
+          $ref: '#/components/schemas/ShopToShopService'
+        shopToHome:
+          $ref: '#/components/schemas/ShopToHomeService'
+        ddtl:
+          $ref: '#/components/schemas/DedicatedDirectTruckLoadService'
+        noRedirection:
+          $ref: '#/components/schemas/NoRedirectionService'
+      type: object
+    ServiceCombination:
+      description: 'The DPD wide shipping service/product combination code.
+
+        This is the combination of the codes from the selected services.
+
+        '
+      example: D-B2C-PSD
+      type: string
+    SubjectInfo_contact:
+      properties:
+        person:
+          example: John Doe
+          minLength: 2
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      type: object
+    NewShipmentError:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/NewShipmentError_description'
+      required:
+      - code
+      - message
+      type: object
+    CustomerAddressIdent_oneOf_1:
+      properties:
+        it4emId:
+          $ref: '#/components/schemas/CustomerAddressIt4emId'
+      required:
+      - it4emId
+      type: object
+    CustomerDSW:
+      description: "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n"
+      maxLength: 12
+      minLength: 11
+      type: string
+    Parcel:
+      description: For more info about parcels see the [Parcel Number](#/ParcelNo)
+      properties:
+        parcelNumbers:
+          $ref: '#/components/schemas/ParcelNumbers'
+        references:
+          $ref: '#/components/schemas/ParcelReferences'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        isPrinted:
+          description: Are the labels for this parcel already printed?
+          type: boolean
+        weightGrams:
+          $ref: '#/components/schemas/ParcelWeight'
+        id:
+          type: number
+      required:
+      - id
+      - isPrinted
+      - parcelNumbers
+      type: object
+    CodAccount:
+      description: The account to which the COD payment should be sent
+      properties:
+        bankCode:
+          deprecated: true
+          description: "Code of your bank  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          deprecated: true
+          description: "Your custom bank designation (might be displayed to the customer).  \n\nWe suggest you use capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          deprecated: true
+          description: "The account number without bankCode  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          deprecated: true
+          description: "Your custom account number name for organizational purposes.  \n\nWe suggest using only capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+        domestic:
+          $ref: '#/components/schemas/CodAccount_domestic'
+        international:
+          $ref: '#/components/schemas/CodAccount_international'
+      type: object
+    PayerSpecs:
+      allOf:
+      - description: Specification of the payer of the shipment. Mostly could be derived from sender or receiver. Required in some types of shipments (for example in 3rdPartyCollection shipment).
+        properties:
+          customer:
+            $ref: '#/components/schemas/CustomerIdent'
+          customerAddress:
+            $ref: '#/components/schemas/Payer_Specs_customerAddress'
+        title: Payer Specs
+        type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
+    Completeness:
+      description: "Provide this information if you want to specify the completeness of the delivery.\n- CompleteOnly = All parcels of the shipment must be delivered\n- PossiblyIncomplete = The shipment can be delivered incomplete\n\ndefault behavior:\n  - shipment with CoD = CompleteOnly\n  - shipment without CoD = PossiblyIncomplete\n"
+      enum:
+      - CompleteOnly
+      - PossiblyIncomplete
+      type: string
+    ParcelReference3:
+      description: "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n"
+      maxLength: 35
+      type: string
+    NewShipment_parcels_inner_additionalServices_insurance:
+      allOf:
+      - description: 'Additional insurance (Higher that the base insurance)
+
+          '
+      - $ref: '#/components/schemas/InsuranceInput'
+    ShopToHomeService:
+      default: false
+      description: 'A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier
+
+
+        The package is delivered to an arbitrary address.
+
+        '
+      title: DPD Shop to Home
+      type: boolean
+    PickupPointID:
+      description: 'Uniquely identifies a pickup point
+
+
+        Also internally used by DPD
+
+        '
+      example: CZ10190
+      type: string
+    ServiceCode:
+      description: 'The DPD wide shipping service/product code.
+
+
+        This is calculated based on the requested shipment services like COD, notification and etc...
+
+
+        It is (for instance) used when resolving the shipping route.
+
+        '
+      example: '101'
+      type: string
+    NotificationService:
+      default: false
+      description: 'Private shipment with predict notifications and 1HP
+
+
+        Enable this service to send notifications about the delivery times to your customers.
+
+        '
+      title: Notification
+      type: boolean
+    City_1:
+      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: Praha 8
+      maxLength: 35
+      type: string
+    Shipment:
+      properties:
+        id:
+          $ref: '#/components/schemas/ShipmentId'
+        shipmentType:
+          $ref: '#/components/schemas/ShipmentType'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        references:
+          $ref: '#/components/schemas/ShipmentReferences'
+        receiver:
+          $ref: '#/components/schemas/Receiver'
+        sender:
+          $ref: '#/components/schemas/Sender'
+        payer:
+          $ref: '#/components/schemas/Payer'
+        declaredSender:
+          $ref: '#/components/schemas/DeclaredSender'
+        services:
+          $ref: '#/components/schemas/Shipment_services'
+        parcels:
+          items:
+            $ref: '#/components/schemas/Parcel'
+          type: array
+        source:
+          $ref: '#/components/schemas/Source'
+      required:
+      - customer
+      - payer
+      - receiver
+      - sender
+      - shipmentType
+      type: object
+    ShipmentType:
+      description: 'A type of the shipment. The type has impact on validations of sender/receiver, selected services, parcel numbers assigning and routing.
+
+        '
+      enum:
+      - Standard
+      - Collection
+      - ThirdPartyCollection
+      - Import
+      - ThirdPartyStandard
+      - Return
+      type: string
+    ParcelReference4:
+      description: "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n"
+      maxLength: 35
+      type: string
+    SubjectInfo:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        contact:
+          $ref: '#/components/schemas/SubjectInfo_contact'
+      required:
+      - name1
+      title: Subject information
+      type: object
+    CodAccount_international:
+      properties:
+        IBAN:
+          description: The IBAN of the COD account
+          example: CZ6508000000192000145399
+          maxLength: 34
+          type: string
+        BIC:
+          description: BIC - The SWIFT Address assigned to a bank
+          example: KOMBCZPP
+          maxLength: 11
+          minLength: 8
+          type: string
+      required:
+      - BIC
+      - IBAN
+      type: object
+    ParcelNumbers:
+      properties:
+        main:
+          allOf:
+          - $ref: '#/components/schemas/ParcelNo'
+          - description: Parcel number for a standard/collection parcel
+        back:
+          allOf:
+          - $ref: '#/components/schemas/ParcelNo'
+          - description: Parcel number assigned only to back parcels (in Swap service)
+      title: Parcel numbers
+      type: object
+    NewShipment_parcels_inner:
+      properties:
+        parcelNumber:
+          allOf:
+          - description: "Parcel number from your own parcel number range. \nIf you do not supply this property, the number will be automatically assigned\nby the system and will be returned in the response for further use.\n"
+          - $ref: '#/components/schemas/ParcelNo'
+        backParcelNumber:
+          allOf:
+          - $ref: '#/components/schemas/ParcelNo'
+          - description: 'Back parcel number is used in SWAP service for the parcel returned to you. When the number is not provided and SWAP service is selected, then this number will be autogenerated.
+
+              '
+        references:
+          $ref: '#/components/schemas/ParcelReferences'
+        additionalServices:
+          $ref: '#/components/schemas/NewShipment_parcels_inner_additionalServices'
+        weightGrams:
+          $ref: '#/components/schemas/ParcelWeight'
+      type: object
+    DeclaredSender:
+      description: "Allows you to specify any address as the declared sender.\n\nDeclared sender is a sender that will be listed on the parcel labels \nand will also be listed in the shipment data.\n\nHowever it does not affect the actual shipment routing. The actual sender (pickup place) will still be the \"sender\".\n\n**Usages**\n\n- This is, for instance, used when you are shipping packages for your partner / declared sender.\n"
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    ShipmentReference:
+      description: 'You can set this to your invoice number or other value per preference and data needs.
+
+        '
+      maxLength: 35
+      title: Shipment reference
+      type: string
+    CountryIdent_oneOf:
+      properties:
+        isoAlpha3:
+          $ref: '#/components/schemas/CountryAlpha3'
+      required:
+      - isoAlpha3
+      type: object
+    CashOnDeliveryWithAccount:
+      properties:
+        amountCents:
+          $ref: '#/components/schemas/CodAmount'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        payment:
+          $ref: '#/components/schemas/PaymentType'
+        account:
+          $ref: '#/components/schemas/CodAccount'
+        variableSymbol:
+          description: Variable symbol of the COD payment
+          example: '17'
+          maxLength: 10
+          type: string
+      required:
+      - amountCents
+      - currency
+      - payment
+      type: object
+    DPDGuaranteeService:
+      default: false
+      description: 'Enable for guaranteed timely delivery abroad
+
+        '
+      title: DPD Guarantee
+      type: boolean
+    ParcelReferences:
+      description: A reference is an internal information for your use cases.
+      properties:
+        ref1:
+          $ref: '#/components/schemas/ParcelReference1'
+        ref2:
+          $ref: '#/components/schemas/ParcelReference2'
+        ref3:
+          $ref: '#/components/schemas/ParcelReference3'
+        ref4:
+          $ref: '#/components/schemas/ParcelReference4'
+      title: Parcel references
+      type: object
+    CountryIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CountryIdent_oneOf'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
+    Source:
+      description: 'Contains information related to the "source" of the shipment.
+
+        The source usually refers to the system that created the shipment via the API.
+
+        '
+      properties:
+        systemId:
+          description: 'Uniquely identifies the source system in which the shipment was created.
+
+
+            This has to be filled if you have received instructions from the DPD to do so.
+
+
+            You can fill this even if you did not receive the instructions.
+
+            We will then be able to connect the shipments with your particular system for debugging and analytics if you do so.
+
+            '
+          type: string
+        additionalInfo:
+          additionalProperties: true
+          type: object
+      type: object
+    DedicatedDirectTruckLoadService:
+      default: false
+      description: 'A special service where multiple parcels are delivered in a single containe.
+
+        '
+      title: Dedicated Direct Truck Load
+      type: boolean
+    DetailedError:
+      properties:
+        path:
+          example: 0 -> receiver -> info -> name1
+          type: string
+        message:
+          example: String must contain at most 35 character(s)
+          type: string
+        unionErrors:
+          items:
+            $ref: '#/components/schemas/DetailedUnionError'
+          type: array
+      required:
+      - path
+      type: object
+    CustomerID:
+      description: 'The internal GeoAPI customer ID
+
+
+        You would only use this if there is no other way to identify the customer.
+
+        '
+      type: number
+    Email:
+      type: string
+    DetailedUnionError_issues_inner:
+      properties:
+        path:
+          example: 0 -> receiver -> info -> name1
+          type: string
+        message:
+          example: String must contain at most 35 character(s)
+          type: string
+      required:
+      - path
+      type: object
+    PostalCode:
+      example: '40001'
+      maxLength: 7
+      minLength: 3
+      type: string
+    Address:
+      properties:
+        street:
+          $ref: '#/components/schemas/Street_1'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        city:
+          $ref: '#/components/schemas/City_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        country:
+          $ref: '#/components/schemas/CountryIdent'
+      required:
+      - city
+      - country
+      - postalCode
+      - street
+      type: object
+    ShipmentReferences:
+      description: 'A reference is an internal information for your use cases.
+
+
+        Shipment references are only used in the data, not printed to any labels.
+
+        '
+      properties:
+        ref1:
+          $ref: '#/components/schemas/ShipmentReference'
+        ref2:
+          $ref: '#/components/schemas/ShipmentReference'
+        ref3:
+          $ref: '#/components/schemas/ShipmentReference'
+        ref4:
+          $ref: '#/components/schemas/ShipmentReference'
+      title: Shipment References
+      type: object
+    CodAmount:
+      description: "The amount to be collected on delivery.  \nThis value is always represented in cents of the specified currency.  \nCents in this context signify a 1/100 of the currency base units.\n\nFor example when the COD is supposed to be 45.5 CZK, the value should be 4550 (with appropriate currency settings)  \nOr when the COD is supposed to be 2 EUR, the sent value should be 200 (with appropriate currency settings)  \n"
+      type: number
+    DPDTimeGuaranteeService:
+      description: 'You can choose from the selection of DPD delivery services with guaranteed delivery times
+
+
+        DPD12 - Delivery before 12:00
+
+
+        DPD18 - Guaranteed second day delivery before 18:00
+
+        '
+      enum:
+      - DPD12
+      - DPD18
+      title: DPD Time guarantee
+      type: string
+    Payer_Specs_customerAddress:
+      oneOf:
+      - $ref: '#/components/schemas/CustomerAddressIdent'
+      - $ref: '#/components/schemas/Address_1'
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    CountryIdent_oneOf_2:
+      properties:
+        isoNumeric:
+          $ref: '#/components/schemas/CountryNumeric'
+      required:
+      - isoNumeric
+      type: object
+    AirExpressService:
+      default: false
+      description: Service providing express air delivery
+      title: Air express
+      type: boolean
+    IDCheck:
+      description: This data is used when a check against a personal ID card is required
+      properties:
+        name:
+          description: The name of the person to be checked
+          example: John Doe
+          maxLength: 35
+          type: string
+        personalId:
+          description: The personal identification card number of the receiving person
+          example: '123456789012345678'
+          maxLength: 18
+          type: string
+      required:
+      - name
+      type: object
+    InsuranceInput:
+      allOf:
+      - $ref: '#/components/schemas/Insurance'
+      - properties:
+          currency:
+            enum:
+            - CZK
+            - EUR
+            type: string
+    DetailedUnionError:
+      properties:
+        option:
+          example: 0
+          type: number
+        description:
+          example: The issues presented in this object represent issues for one of the available union options. Only one of the presented options can be satisfied at once.
+          type: string
+        issues:
+          items:
+            $ref: '#/components/schemas/DetailedUnionError_issues_inner'
+          type: array
+      required:
+      - message
+      - option
+      type: object
+    CustomerAddressIt4emId:
+      description: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
+      type: number
+    CustomerAddressId:
+      description: Internal GeoAPI ID
+      type: number
+    Payer:
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        customerAddress:
+          $ref: '#/components/schemas/CustomerAddress'
+      required:
+      - customer
+    ShipmentId:
+      description: 'Unique shipment ID.
+
+
+        This ID is used to reference the shipment in the API endpoints.
+
+        '
+      example: 123456789
+      type: number
+    PaymentType:
+      description: 'CASH - Payment by cash
+
+
+        CASH_OR_CARD - Payment by cash or card
+
+        '
+      enum:
+      - Cash
+      - CashOrCard
+      type: string
+    Address_1:
+      description: Physical address of the payer of the shipment
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      title: Address
+      type: object
+    NewShipment:
+      properties:
+        customer:
+          $ref: '#/components/schemas/NewShipment_customer'
+        deliveryOptions:
+          $ref: '#/components/schemas/DeliveryOptions'
+        shipmentType:
+          $ref: '#/components/schemas/ShipmentType'
+        sender:
+          $ref: '#/components/schemas/SenderSpecs'
+        receiver:
+          $ref: '#/components/schemas/ReceiverSpecs'
+        payer:
+          $ref: '#/components/schemas/PayerSpecs'
+        references:
+          $ref: '#/components/schemas/ShipmentReferences'
+        declaredSender:
+          $ref: '#/components/schemas/DeclaredSender'
+        parcels:
+          items:
+            $ref: '#/components/schemas/NewShipment_parcels_inner'
+          type: array
+        source:
+          $ref: '#/components/schemas/Source'
+        services:
+          $ref: '#/components/schemas/NewShipment_services'
+      required:
+      - customer
+      - parcels
+      - receiver
+      - sender
+      - shipmentType
+      title: New Shipment
+      type: object
+    PersonalIdentificationService:
+      allOf:
+      - $ref: '#/components/schemas/IDCheck'
+      description: 'Delivery with personal identification using the ID-Check method.
+
+
+        The receiver will have to provide an identification card matching the information provided here.
+
+
+        If you have selected a pickup point delivery service, then the identification will be conducted at the pickup point.
+
+
+        **Limitations**
+
+
+        The personal identification service is only available when the delivery to department is not requested:
+
+
+        See the service table for more info.
+
+        '
+      title: Personal identification
+    ParcelReference2:
+      description: 'A reference is an internal information for your use cases.
+
+        You can use this (for instance) to correlate the parcel with your internal system IDs.
+
+
+        This reference is printed on the parcel label.
+
+        This is shortened do 14/17 characters when printed on the label.
+
+        '
+      maxLength: 35
+      type: string
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    DPDReturnService:
+      default: false
+      description: 'A special service where the **original receiver** of a **previous shipment** returns the shipment, typically due to a complaint.
+
+
+        The return shipment will be dropped of by the **original receiver** at a pickup point and sent back to the **original sender**.
+
+
+        But this new shipment must be setup in a usual way as it will travel from the **sender** (original receiver) to the **receiver** (original sender).
+
+        The only difference is the **semantic link** to the **previous shipment**.
+
+
+        **Limitations**
+
+
+        DPD service cannot be combined with any other service. Also only the PDF label can be printed.
+
+        '
+      title: DPD Return Service
+      type: boolean
+    ParcelNo:
+      description: "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n"
+      example: '13815045502659'
+      maxLength: 14
+      minLength: 14
+      type: string
+    CustomerIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+      - id
+      type: object
+    NewShipmentError_description:
+      oneOf:
+      - items:
+          $ref: '#/components/schemas/DetailedError'
+        type: array
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    SwapService:
+      description: Swap shipment - Parcels exchanged one for another
+      title: Swap
+      type: boolean
+    CustomerAddress:
+      description: "Each user account, can have multiple customers (identified by DSW).  \nAnd each customer can have multiple customer addresses.  \nThese addresses can for instance represent the pickup addresses for pickup services.\n"
+      properties:
+        it4emId:
+          $ref: '#/components/schemas/CustomerAddressIt4emId'
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          description: "Your registered address. \nYou can for instance create (parcel) pickup orders on these addresses.\n"
+        isActive:
+          type: boolean
+      required:
+      - address
+      - info
+      - isActive
+      - it4emId
+      type: object
+    ReceiverSpecs:
+      allOf:
+      - title: Receiver Specs
+      - description: Specification of the receiver of the shipment (destination)
+      - oneOf:
+        - $ref: '#/components/schemas/CustomerAddressIdent'
+        - description: Physical address of the receiver of the shipment (destination)
+          properties:
+            info:
+              $ref: '#/components/schemas/SubjectInfo'
+            address:
+              $ref: '#/components/schemas/Address'
+          required:
+          - address
+          - info
+          title: Address
+          type: object
+    HouseNumber:
+      type: string
+    ShopToShopService:
+      default: false
+      description: 'A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier
+
+
+        The package is also always delivered to a pickup point
+
+        '
+      title: DPD Shop to Shop
+      type: boolean
+    NoRedirectionService:
+      default: false
+      description: 'This is an additional service to the S2S product which cannot be redirected
+
+        '
+      title: DPD No Direction
+      type: boolean
+    Sender:
+      description: Info about the sender of the shipment (source)
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    CustomerIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CustomerIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerIdent_oneOf_1'
+    CashOnDeliveryService_1:
+      allOf:
+      - $ref: '#/components/schemas/CashOnDeliveryWithAccount'
+      - description: Cash on delivery - Allows you to specify the amount to be collected from the consignee
+        title: Cash on delivery
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    Street_1:
+      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
+      example: Example Street 368/23
+      maxLength: 35
+      type: string
+    DPDPneuService:
+      default: false
+      description: Delivery of (vehicle) tires
+      title: DPD Pneu
+      type: boolean
+    NewShipment_customer:
+      allOf:
+      - description: Info about the customer under which this shipment should be tracked.
+      - $ref: '#/components/schemas/CustomerIdent'
+    DepartmentDeliveryService:
+      description: 'The shipment is delivered to a department without any personal identification.
+
+
+        Internal info: Setting identification to "false" (the only option currently) equals the "1" type in the old GeoAPI
+
+        '
+      properties:
+        building:
+          description: The building where the shipment is delivered to
+          example: Budova A
+          maxLength: 25
+          type: string
+        floor:
+          description: The floor where the shipment is delivered to
+          example: Druhé patro
+          maxLength: 25
+          type: string
+        department:
+          description: The department where the shipment is delivered to
+          example: Dopravní oddělení
+          maxLength: 25
+          type: string
+      required:
+      - building
+      - department
+      - floor
+      title: Department delivery
+      type: object
+    Receiver:
+      description: Info about the receiver of the shipment (destination)
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    SenderSpecs:
+      allOf:
+      - title: Sender Specs
+      - description: Specification of the sender of the shipment (source)
+      - oneOf:
+        - $ref: '#/components/schemas/CustomerAddressIdent'
+        - description: Physical address of the sender of the shipment (source)
+          properties:
+            info:
+              $ref: '#/components/schemas/SubjectInfo'
+            address:
+              $ref: '#/components/schemas/Address'
+          required:
+          - address
+          - info
+          title: Address
+          type: object
+    SubjectNameSecondary:
+      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey

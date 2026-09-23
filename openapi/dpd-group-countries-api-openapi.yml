@@ -1,0 +1,139 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Countries API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Countries
+paths:
+  /countries:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Country'
+                type: array
+          description: A list of countries
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: List all available countries for your account
+      tags:
+      - Countries
+      operationId: getCountries
+      x-operation-id-source: derived
+components:
+  schemas:
+    Country:
+      properties:
+        localizedName:
+          description: Localized country name (e.g. in Czech)
+          type: string
+        numericCode:
+          $ref: '#/components/schemas/CountryNumeric'
+        alpha2Code:
+          $ref: '#/components/schemas/CountryAlpha2'
+        alpha3Code:
+          $ref: '#/components/schemas/CountryAlpha3'
+        codInfo:
+          $ref: '#/components/schemas/Country_codInfo'
+      required:
+      - alpha2Code
+      - alpha3Code
+      - codInfo
+      - localizedName
+      - numericCode
+      type: object
+    Country_codInfo:
+      description: Info about COD (Cash On Delivery) services for a country
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        maxAmountCents:
+          description: 'Maximum allowed COD amount for this country
+
+
+            Represented in cents of the given currency
+
+            '
+          type: number
+        cardMaxAmountCents:
+          description: 'Maximum allowed COD amount for card payments for this country
+
+
+            Represented in cents of the given currency
+
+            '
+          type: number
+      type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey

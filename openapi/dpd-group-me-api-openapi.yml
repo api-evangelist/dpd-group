@@ -1,0 +1,281 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Me API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Me
+paths:
+  /me:
+    get:
+      description: 'Use this method to get information about your customers and customer addresses.
+
+
+        User account which is used to find the data is determined by an API key provided in a request header.'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Me'
+          description: All active customers of the current user account and their list of addresses
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Get the active customers of the user account and their list of addresses
+      tags:
+      - Me
+      operationId: getMe
+      x-operation-id-source: derived
+components:
+  schemas:
+    Me_customers_inner:
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        addresses:
+          items:
+            $ref: '#/components/schemas/CustomerAddress'
+          type: array
+      required:
+      - addresses
+      - customer
+      type: object
+    SubjectInfo:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        contact:
+          $ref: '#/components/schemas/SubjectInfo_contact'
+      required:
+      - name1
+      title: Subject information
+      type: object
+    Customer:
+      description: For more info about customers see the [Customer DSW](#/CustomerDSW)
+      properties:
+        DSW:
+          $ref: '#/components/schemas/CustomerDSW'
+        isActive:
+          type: boolean
+        id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+      - DSW
+      - id
+      - isActive
+      type: object
+    SubjectInfo_contact:
+      properties:
+        person:
+          example: John Doe
+          minLength: 2
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      type: object
+    CountryIdent_oneOf:
+      properties:
+        isoAlpha3:
+          $ref: '#/components/schemas/CountryAlpha3'
+      required:
+      - isoAlpha3
+      type: object
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    SubjectName:
+      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    CountryIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CountryIdent_oneOf'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
+    Me:
+      description: The first active customer of the user account and their list of addresses
+      properties:
+        userAccount:
+          $ref: '#/components/schemas/UserAccount'
+        customers:
+          items:
+            $ref: '#/components/schemas/Me_customers_inner'
+          type: array
+      required:
+      - customers
+      - userAccount
+      type: object
+    CustomerDSW:
+      description: "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n"
+      maxLength: 12
+      minLength: 11
+      type: string
+    CustomerID:
+      description: 'The internal GeoAPI customer ID
+
+
+        You would only use this if there is no other way to identify the customer.
+
+        '
+      type: number
+    Email:
+      type: string
+    CustomerAddress:
+      description: "Each user account, can have multiple customers (identified by DSW).  \nAnd each customer can have multiple customer addresses.  \nThese addresses can for instance represent the pickup addresses for pickup services.\n"
+      properties:
+        it4emId:
+          $ref: '#/components/schemas/CustomerAddressIt4emId'
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          allOf:
+          - $ref: '#/components/schemas/Address'
+          description: "Your registered address. \nYou can for instance create (parcel) pickup orders on these addresses.\n"
+        isActive:
+          type: boolean
+      required:
+      - address
+      - info
+      - isActive
+      - it4emId
+      type: object
+    PostalCode:
+      example: '40001'
+      maxLength: 7
+      minLength: 3
+      type: string
+    HouseNumber:
+      type: string
+    PhoneNumber:
+      description: Can be with or without the international prefix
+      example: 123 456 789
+      maxLength: 31
+      type: string
+    Address:
+      properties:
+        street:
+          $ref: '#/components/schemas/Street_1'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        city:
+          $ref: '#/components/schemas/City_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        country:
+          $ref: '#/components/schemas/CountryIdent'
+      required:
+      - city
+      - country
+      - postalCode
+      - street
+      type: object
+    UserAccount:
+      description: User Account of the GeoApi.
+      properties:
+        id:
+          type: number
+        apiKey:
+          type: string
+        accountNote:
+          type: string
+      required:
+      - apiKey
+      - id
+      type: object
+    CountryIdent_oneOf_1:
+      properties:
+        isoAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+      required:
+      - isoAlpha2
+      type: object
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    City_1:
+      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: Praha 8
+      maxLength: 35
+      type: string
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    CountryIdent_oneOf_2:
+      properties:
+        isoNumeric:
+          $ref: '#/components/schemas/CountryNumeric'
+      required:
+      - isoNumeric
+      type: object
+    Street_1:
+      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
+      example: Example Street 368/23
+      maxLength: 35
+      type: string
+    CustomerAddressIt4emId:
+      description: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
+      type: number
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    SubjectNameSecondary:
+      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey

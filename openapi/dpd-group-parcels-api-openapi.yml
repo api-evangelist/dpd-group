@@ -1,0 +1,1673 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Parcels API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Parcels
+paths:
+  /parcels:
+    get:
+      description: 'Use this for getting the list of all parcels associated with any of the customers under this user account.
+
+        Returns everything that was created in a selected time-frame by the current user account.
+
+        The goal is to provide an overview of every parcel via a single endpoint.'
+      parameters:
+      - description: Start of the time-frame in the YYYY-MM-DD (ISO 8601) format
+        explode: true
+        in: query
+        name: from
+        required: true
+        schema:
+          $ref: '#/components/schemas/DateTime'
+        style: form
+      - description: End of the time-frame in the YYYY-MM-DD (ISO 8601) format
+        explode: true
+        in: query
+        name: to
+        required: true
+        schema:
+          $ref: '#/components/schemas/DateTime'
+        style: form
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Parcel'
+                type: array
+          description: List of all parcels for the current user account
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: List all parcels for the current active user account
+      tags:
+      - Parcels
+      operationId: getParcels
+      x-operation-id-source: derived
+  /parcels/labels:
+    post:
+      description: 'Same as the `POST /parcels/{parcelIdent}/labels` endpoint but for batched printing.
+
+        A single ZPL/EPL script will contain instructions for printing multiple labels.
+
+        The PDF will contain one or multiple pages with all labels.
+
+
+        **Capabilities**
+
+
+        Same as the `POST /parcels/{parcelIdent}/labels`
+
+
+        **Limitations**
+
+
+        Same as the `POST /parcels/{parcelIdent}/labels`
+
+
+        Bear in mind that a shipment cannot have both a label and drop-off codes. \
+
+        Once an attempt to print a label or to generate drop-off codes has been made, \
+
+        the shipment will be marked as such and GeoAPI will not let you switch to a different drop-off method.'
+      requestBody:
+        content:
+          application/json:
+            examples:
+              pdfA4:
+                summary: A4 PDF format print request
+                value:
+                  printType: PDF
+                  printProperties:
+                    pageSize: A4
+                    labelsPerPage: 4
+                    labelsOffset: 1
+                  parcels:
+                  - parcelNumber: '13815045502659'
+                  - id: 138
+              pdfA6:
+                summary: A6 PDF format print request
+                value:
+                  printType: PDF
+                  printProperties:
+                    pageSize: A6
+                    labelsPerPage: 1
+                  parcels:
+                  - parcelNumber: '13815045502659'
+                  - id: 138
+              eplRaw:
+                summary: EPL or Raw format print request
+                value:
+                  printType: EPL
+                  parcels:
+                  - parcelNumber: '13815045502659'
+                  - id: 138
+              zpl:
+                summary: ZPL format print request
+                value:
+                  printType: ZPL
+                  parcels:
+                  - parcelNumber: '13815045502659'
+                  - id: 138
+              zplLegacyBarcode:
+                summary: ZPL with legacy narrow barcode (denser, harder to scan)
+                value:
+                  printType: ZPL
+                  printProperties:
+                    barcodeLayout: narrowAuto
+                  parcels:
+                  - parcelNumber: '13815045502659'
+            schema:
+              $ref: '#/components/schemas/_parcels_labels_post_request'
+        description: The printing options and parcels
+        required: true
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/LabelScript'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelRaw'
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/LabelPDF'
+          description: The parcel labels
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Some of the parcel numbers are invalid, the request is malformed or some of the parcels are collection parcels
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Some of the provided parcels do not exist
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Concurrent request conflicted with the current request
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Print the labels for multiple parcels
+      tags:
+      - Parcels
+      operationId: postParcelsLabels
+      x-operation-id-source: derived
+  /parcels/{parcelIdent}/labels:
+    post:
+      description: 'The parcel can have multiple labels, so an array is always returned.
+
+        The script/PDF always contains only single label.
+
+
+        Two labels will be returned when printing the labels for a swap parcel.
+
+        One of the labels, that is designated for the return journey to the sender, is placed into the package.
+
+        The system allows only for a single parcel swap shipments. The exchange is always done on a piece-by-piece bases.
+
+
+        **Capabilities**
+
+
+        - You can choose between the following formats: **ZPL, EPL, PDF and raw data**.
+
+        For more info see Print Type
+
+        - The ZPL/EPL script can be sent directly to the printer port.
+
+        - The decoded Base64 can be saved as a PDF file.
+
+        - The raw data output can be used to populate a custom print template.
+
+
+        **Limitations**
+
+
+        - **This endpoint cannot be called for collection parcels, DPD will take care of printing their shipping labels.**
+
+        Collection parcels - Parcels that are sent from the customer to you (e.g. a complaint)'
+      parameters:
+      - description: "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+        examples:
+          implicitParcelNumber:
+            summary: Implicit parcel number
+            value: '12345678901234'
+          explicitParcelNumber:
+            summary: Explicit parcel number
+            value: no-12345678901234
+          explicitId:
+            summary: Explicit GeoAPI ID
+            value: id-23456
+        explode: false
+        in: path
+        name: parcelIdent
+        required: true
+        schema:
+          $ref: '#/components/schemas/_parcels__parcelIdent__labels_post_parcelIdent_parameter'
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            examples:
+              pdfA4:
+                summary: A4 PDF format print request
+                value:
+                  printType: PDF
+                  printProperties:
+                    pageSize: A4
+                    labelsPerPage: 4
+                    labelsOffset: 1
+              pdfA6:
+                summary: A6 PDF format print request
+                value:
+                  printType: PDF
+                  printProperties:
+                    pageSize: A6
+                    labelsPerPage: 1
+              eplRaw:
+                summary: EPL or Raw format print request
+                value:
+                  printType: EPL
+              zpl:
+                summary: ZPL format print request
+                value:
+                  printType: ZPL
+              zplLegacyBarcode:
+                summary: ZPL with legacy narrow barcode (denser, harder to scan)
+                value:
+                  printType: ZPL
+                  printProperties:
+                    barcodeLayout: narrowAuto
+            schema:
+              $ref: '#/components/schemas/_parcels__parcelIdent__labels_post_request'
+        description: The printing options
+        required: true
+      responses:
+        '200':
+          content:
+            text/plain:
+              schema:
+                $ref: '#/components/schemas/LabelScript'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelRaw'
+            application/pdf:
+              schema:
+                $ref: '#/components/schemas/LabelPDF'
+            application/octet-stream:
+              schema:
+                $ref: '#/components/schemas/LabelBinary'
+          description: The parcel labels
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The parcel number is invalid, the request is malformed or the parcel is a collection parcel
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Parcel with the specified id does not exist
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Concurrent request conflicted with the current request
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Print the parcel labels
+      tags:
+      - Parcels
+      operationId: postParcelsByParcelIdentLabels
+      x-operation-id-source: derived
+  /parcels/tracking:
+    post:
+      description: Same as the `GET /parcels/{parcelNo}/tracking` endpoint but for batched tracking information.
+      requestBody:
+        $ref: '#/components/requestBodies/PostTrackingRequestBody'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TrackingResult'
+                type: array
+          description: The parcel tracking info
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Parcel number is invalid or the request is malformed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Some of the provided parcels do not exist
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Get the tracking info for multiple parcels
+      tags:
+      - Parcels
+      operationId: postParcelsTracking
+      x-operation-id-source: derived
+  /parcels/{parcelIdent}/tracking:
+    get:
+      parameters:
+      - description: "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+        examples:
+          implicitParcelNumber:
+            summary: Implicit parcel number
+            value: '12345678901234'
+          explicitParcelNumber:
+            summary: Explicit parcel number
+            value: no-12345678901234
+          explicitId:
+            summary: Explicit GeoAPI ID
+            value: id-23456
+        explode: false
+        in: path
+        name: parcelIdent
+        required: true
+        schema:
+          $ref: '#/components/schemas/_parcels__parcelIdent__labels_post_parcelIdent_parameter'
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingResult'
+          description: Parcel events for the given parcel
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The parcel number is invalid or the request is malformed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Parcel with the specified id does not exist
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Get parcel tracking info
+      tags:
+      - Parcels
+      operationId: getParcelsByParcelIdentTracking
+      x-operation-id-source: derived
+  /parcels/{parcelIdent}/drop-off-codes:
+    post:
+      description: 'Returns codes that can be used for drop-off instead of a printed label.
+
+
+        **Limitations**
+
+
+        Bear in mind that a shipment cannot have both a label and drop-off codes.
+
+        Once an attempt to print a label or to generate drop-off codes has been made,
+
+        the shipment will be marked as such and GeoAPI won''t let you switch to a different drop-off method.'
+      parameters:
+      - description: "The identification of the parcel in question.\n\nThe value will be interpreted as a parcel number by default.\n\nIf you want to provide a GeoAPI ID then provide the input with the 'id-' prefix (e.g. `id-23479`).  \nYou can do this with the parcel number too using the 'no-' prefix (e.b. `no-12345678901234`)\n"
+        examples:
+          implicitParcelNumber:
+            summary: Implicit parcel number
+            value: '12345678901234'
+          explicitParcelNumber:
+            summary: Explicit parcel number
+            value: no-12345678901234
+          explicitId:
+            summary: Explicit GeoAPI ID
+            value: id-23456
+        explode: false
+        in: path
+        name: parcelIdent
+        required: true
+        schema:
+          $ref: '#/components/schemas/_parcels__parcelIdent__labels_post_parcelIdent_parameter'
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/PostDropOffCodesRequestBody'
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DropoffCodes'
+          description: Label-less drop-off codes
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The request was invalid due to malformed input or incorrect usage.
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Parcel with the specified id does not exist
+        '408':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request Timeout. Took too long to respond.
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Concurrent request conflicted with the current request
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Get label-less drop-off codes for a parcel
+      tags:
+      - Parcels
+      operationId: postParcelsByParcelIdentDropOffCodes
+      x-operation-id-source: derived
+components:
+  schemas:
+    DropoffCodes_aztec:
+      properties:
+        value:
+          description: Base64 encoded aztec code in the selected format
+          type: string
+        format:
+          $ref: '#/components/schemas/AztecFormats'
+      required:
+      - format
+      - value
+      type: object
+    ParcelReference1:
+      description: 'A reference is an internal information for your use cases.
+
+        You can use this (for instance) to correlate the parcel with your internal system IDs.
+
+
+        This reference is printed on the parcel label.
+
+        It is shortened to 14/17 characters when printed on the label.
+
+        '
+      maxLength: 35
+      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
+    SubjectName:
+      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    TrackingResult_parcelEvents_inner:
+      properties:
+        id:
+          type: string
+        status:
+          $ref: '#/components/schemas/TrackingResult_parcelEvents_inner_status'
+        additionalInfo:
+          type: string
+        createdAt:
+          type: string
+        service:
+          $ref: '#/components/schemas/TrackingResult_parcelEvents_inner_service'
+      required:
+      - createdAt
+      - id
+      - status
+      type: object
+    ParcelWeight:
+      description: 'Weight of the parcel in grams
+
+        E.g 1500 represents 1.5 kg.
+
+        '
+      type: number
+    DropOffCodesInput_aztec:
+      description: If the options are filled in, the aztec code will be included in the selected format
+      properties:
+        format:
+          $ref: '#/components/schemas/AztecFormats'
+      required:
+      - format
+      type: object
+    DSORT:
+      description: The delivery route
+      type: string
+    TrackingResult_parcelInfo:
+      description: Info about the parcel
+      properties:
+        sender:
+          $ref: '#/components/schemas/Sender'
+        receiver:
+          $ref: '#/components/schemas/Receiver'
+        declaredSender:
+          $ref: '#/components/schemas/DeclaredSender'
+        pickupPointId:
+          $ref: '#/components/schemas/PickupPointID'
+        cod:
+          $ref: '#/components/schemas/CashOnDeliveryService_1'
+        serviceDesignation:
+          $ref: '#/components/schemas/TrackingResult_parcelInfo_serviceDesignation'
+        parcelId:
+          $ref: '#/components/schemas/ParcelId'
+        parcelNumber:
+          $ref: '#/components/schemas/ParcelNo'
+        routing:
+          $ref: '#/components/schemas/TrackingResult_parcelInfo_routing'
+      required:
+      - parcelId
+      - parcelNumber
+      - receiver
+      - routing
+      - sender
+      - serviceDesignation
+      type: object
+    PDFPrintTypeInput:
+      properties:
+        printType:
+          description: "Option descriptions\n- PDF - PDF in the Base64 encoding containing the parcel label.  \n  The first 17 characters from the parcel reference 3 and reference 4 are used on the label.\n"
+          enum:
+          - PDF
+          type: string
+        printProperties:
+          $ref: '#/components/schemas/PDFPrintTypeInput_printProperties'
+      required:
+      - printProperties
+      - printType
+      type: object
+    ZPLPrintTypeInput:
+      properties:
+        printType:
+          description: "Option descriptions\n- ZPL - ZPL script format ready for printing.\n  The first 17 characters from the parcel reference 3 and reference 4 are used on the label.\n"
+          enum:
+          - ZPL
+          type: string
+        printProperties:
+          $ref: '#/components/schemas/ZPLPrintProperties'
+      required:
+      - printType
+      type: object
+    PhoneNumber:
+      description: Can be with or without the international prefix
+      example: 123 456 789
+      maxLength: 31
+      type: string
+    DateTime:
+      description: Represented in the ISO 8601 format
+      example: '2025-07-22T16:32:10.679Z'
+      type: string
+    Insurance:
+      properties:
+        amountCents:
+          description: 'Units of the specified currency in cents.
+
+            For example 125 units of CZK is 1.25 CZK.
+
+            '
+          type: number
+        currency:
+          $ref: '#/components/schemas/Currency'
+      required:
+      - amountCents
+      - currency
+      type: object
+    CountryIdent_oneOf_1:
+      properties:
+        isoAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+      required:
+      - isoAlpha2
+      type: object
+    LabelData_parcel_references:
+      properties:
+        ref1:
+          $ref: '#/components/schemas/ParcelReference1'
+        ref2:
+          $ref: '#/components/schemas/ParcelReference2'
+      type: object
+    LabelData_delivery_pickupPoint:
+      properties:
+        pudoId:
+          $ref: '#/components/schemas/PickupPointID'
+        name:
+          $ref: '#/components/schemas/PickupPointName'
+      required:
+      - name
+      - pudoId
+      type: object
+    DropoffCodes:
+      properties:
+        pin:
+          $ref: '#/components/schemas/DropoffCodes_pin'
+        aztec:
+          $ref: '#/components/schemas/DropoffCodes_aztec'
+      required:
+      - expiresAt
+      - pin
+      type: object
+    CodAccount_domestic:
+      description: "Country specific bank account information.\n\nThis is currently reserved for CZ based bank accounts!  \n\nIf you provide any non CZ based bank acccount that will pass validation, it might get used for domestic CZ payments!\n"
+      properties:
+        bankCode:
+          description: Code of your bank
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          description: 'Your custom bank designation (might be displayed to the customer).
+
+
+            We suggest you use capital letters and numbers.
+
+            '
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          description: The account number without bankCode
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          description: 'Your custom account number name for organizational purposes.
+
+
+            We suggest using only capital letters and numbers.
+
+            '
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+      required:
+      - accountName
+      - accountNumber
+      - bankCode
+      - bankName
+      type: object
+    LabelData_delivery:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        contactPerson:
+          $ref: '#/components/schemas/ContactPerson'
+        street:
+          $ref: '#/components/schemas/Street_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        city:
+          $ref: '#/components/schemas/City_1'
+        countryAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        pickupPoint:
+          $ref: '#/components/schemas/LabelData_delivery_pickupPoint'
+      required:
+      - city
+      - countryAlpha2
+      - name1
+      - postalCode
+      - street
+      type: object
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    RoutingData:
+      properties:
+        routing:
+          $ref: '#/components/schemas/Routing'
+        dispatchDepot:
+          $ref: '#/components/schemas/DispatchDepot'
+        destinationDepot:
+          $ref: '#/components/schemas/RoutingData_destinationDepot'
+      required:
+      - destinationDepot
+      - dispatchDepot
+      - routing
+      type: object
+    SSORT:
+      description: Sorting
+      type: string
+    TrackingResult_parcelEvents_inner_service:
+      properties:
+        code:
+          type: string
+        additionalCode:
+          type: string
+      required:
+      - code
+      type: object
+    ServiceCombination:
+      description: 'The DPD wide shipping service/product combination code.
+
+        This is the combination of the codes from the selected services.
+
+        '
+      example: D-B2C-PSD
+      type: string
+    SubjectInfo_contact:
+      properties:
+        person:
+          example: John Doe
+          minLength: 2
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      type: object
+    _parcels__parcelIdent__labels_post_request:
+      oneOf:
+      - $ref: '#/components/schemas/StandardPrintTypeInput'
+      - $ref: '#/components/schemas/ZPLPrintTypeInput'
+      - $ref: '#/components/schemas/PDFPrintTypeInput'
+    _parcels_labels_post_request:
+      oneOf:
+      - $ref: '#/components/schemas/StandardPrintTypeBatchInput'
+      - $ref: '#/components/schemas/ZPLPrintTypeBatchInput'
+      - $ref: '#/components/schemas/PDFPrintTypeBatchInput'
+    TrackingInput:
+      properties:
+        parcels:
+          description: Parcel identifiers
+          items:
+            $ref: '#/components/schemas/TrackingInput_parcels_inner'
+          type: array
+      required:
+      - parcels
+      type: object
+    Parcel:
+      description: For more info about parcels see the [Parcel Number](#/ParcelNo)
+      properties:
+        parcelNumbers:
+          $ref: '#/components/schemas/ParcelNumbers'
+        references:
+          $ref: '#/components/schemas/ParcelReferences'
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        isPrinted:
+          description: Are the labels for this parcel already printed?
+          type: boolean
+        weightGrams:
+          $ref: '#/components/schemas/ParcelWeight'
+        id:
+          type: number
+      required:
+      - id
+      - isPrinted
+      - parcelNumbers
+      type: object
+    CodAccount:
+      description: The account to which the COD payment should be sent
+      properties:
+        bankCode:
+          deprecated: true
+          description: "Code of your bank  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          deprecated: true
+          description: "Your custom bank designation (might be displayed to the customer).  \n\nWe suggest you use capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          deprecated: true
+          description: "The account number without bankCode  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          deprecated: true
+          description: "Your custom account number name for organizational purposes.  \n\nWe suggest using only capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+        domestic:
+          $ref: '#/components/schemas/CodAccount_domestic'
+        international:
+          $ref: '#/components/schemas/CodAccount_international'
+      type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
+    ParcelReference3:
+      description: "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n"
+      maxLength: 35
+      type: string
+    StandardPrintTypeBatchInput:
+      allOf:
+      - $ref: '#/components/schemas/StandardPrintTypeInput'
+      - properties:
+          parcels:
+            items:
+              $ref: '#/components/schemas/ParcelIdent'
+            type: array
+        required:
+        - parcels
+        type: object
+    DropOffCodesInput:
+      properties:
+        aztec:
+          $ref: '#/components/schemas/DropOffCodesInput_aztec'
+      type: object
+    PickupPointID:
+      description: 'Uniquely identifies a pickup point
+
+
+        Also internally used by DPD
+
+        '
+      example: CZ10190
+      type: string
+    ServiceCode:
+      description: 'The DPD wide shipping service/product code.
+
+
+        This is calculated based on the requested shipment services like COD, notification and etc...
+
+
+        It is (for instance) used when resolving the shipping route.
+
+        '
+      example: '101'
+      type: string
+    DepotName:
+      example: DPD - 0152361
+      type: string
+    City_1:
+      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: Praha 8
+      maxLength: 35
+      type: string
+    LabelBinary:
+      description: 'Some of the label templates benefit from being sent in a raw byte format.
+
+
+        Currently EPL labels that include the GW command have to be sent in binary format to preserve the image data "as is"
+
+        '
+      format: binary
+      type: string
+    RoutingData_destinationDepot_depotNumbers:
+      properties:
+        longNumber:
+          type: string
+        shortNumber:
+          type: string
+      required:
+      - longNumber
+      - shortNumber
+      type: object
+    ParcelReference4:
+      description: "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n"
+      maxLength: 35
+      type: string
+    ParcelIdent_oneOf:
+      properties:
+        parcelNumber:
+          $ref: '#/components/schemas/ParcelNo'
+      required:
+      - parcelNumber
+      type: object
+    ParcelId:
+      description: 'The internal GeoAPI parcel ID
+
+
+        You would only use this if there is no other way to identify the parcel.
+
+        '
+      example: 138
+      type: number
+    SubjectInfo:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        contact:
+          $ref: '#/components/schemas/SubjectInfo_contact'
+      required:
+      - name1
+      title: Subject information
+      type: object
+    ParcelNumbers:
+      properties:
+        main:
+          allOf:
+          - $ref: '#/components/schemas/ParcelNo'
+          - description: Parcel number for a standard/collection parcel
+        back:
+          allOf:
+          - $ref: '#/components/schemas/ParcelNo'
+          - description: Parcel number assigned only to back parcels (in Swap service)
+      title: Parcel numbers
+      type: object
+    CodAccount_international:
+      properties:
+        IBAN:
+          description: The IBAN of the COD account
+          example: CZ6508000000192000145399
+          maxLength: 34
+          type: string
+        BIC:
+          description: BIC - The SWIFT Address assigned to a bank
+          example: KOMBCZPP
+          maxLength: 11
+          minLength: 8
+          type: string
+      required:
+      - BIC
+      - IBAN
+      type: object
+    DeclaredSender:
+      description: "Allows you to specify any address as the declared sender.\n\nDeclared sender is a sender that will be listed on the parcel labels \nand will also be listed in the shipment data.\n\nHowever it does not affect the actual shipment routing. The actual sender (pickup place) will still be the \"sender\".\n\n**Usages**\n\n- This is, for instance, used when you are shipping packages for your partner / declared sender.\n"
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    CashOnDeliveryWithAccount:
+      properties:
+        amountCents:
+          $ref: '#/components/schemas/CodAmount'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        payment:
+          $ref: '#/components/schemas/PaymentType'
+        account:
+          $ref: '#/components/schemas/CodAccount'
+        variableSymbol:
+          description: Variable symbol of the COD payment
+          example: '17'
+          maxLength: 10
+          type: string
+      required:
+      - amountCents
+      - currency
+      - payment
+      type: object
+    CountryIdent_oneOf:
+      properties:
+        isoAlpha3:
+          $ref: '#/components/schemas/CountryAlpha3'
+      required:
+      - isoAlpha3
+      type: object
+    TrackingResult:
+      properties:
+        parcelInfo:
+          $ref: '#/components/schemas/TrackingResult_parcelInfo'
+        parcelEvents:
+          description: Individual parcel events
+          items:
+            $ref: '#/components/schemas/TrackingResult_parcelEvents_inner'
+          type: array
+      required:
+      - parcelEvents
+      - parcelInfo
+      type: object
+    ParcelReferences:
+      description: A reference is an internal information for your use cases.
+      properties:
+        ref1:
+          $ref: '#/components/schemas/ParcelReference1'
+        ref2:
+          $ref: '#/components/schemas/ParcelReference2'
+        ref3:
+          $ref: '#/components/schemas/ParcelReference3'
+        ref4:
+          $ref: '#/components/schemas/ParcelReference4'
+      title: Parcel references
+      type: object
+    DropoffCodes_pin:
+      properties:
+        value:
+          type: string
+        expiresAt:
+          $ref: '#/components/schemas/DateTime'
+      required:
+      - expiresAt
+      - value
+      type: object
+    CountryIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CountryIdent_oneOf'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
+    ZPLPrintProperties:
+      description: 'Optional configuration for ZPL label barcode rendering.
+
+        If omitted, the standard `wideAuto` layout is used.
+
+        Only applicable when printType is ZPL.
+
+        '
+      properties:
+        barcodeLayout:
+          description: "Barcode rendering layout preset.\nIf omitted, `wideAuto` is used.\n- `wideAuto` — Wide bars (module width 3) with automatic Code 128 subset selection.\n  The standard rendering for ZPL: less dense, easier to scan, recommended for 203 dpi printers.\n- `narrowAuto` — Narrow bars (module width 2) with Code 128 Subset B encoding.\n  Denser, harder-to-scan output. Use only if downstream tooling requires the legacy format.\n"
+          enum:
+          - wideAuto
+          - narrowAuto
+          type: string
+      type: object
+    RoutingData_destinationDepot:
+      properties:
+        depotNumbers:
+          $ref: '#/components/schemas/RoutingData_destinationDepot_depotNumbers'
+      required:
+      - depotNumbers
+      type: object
+    Routing:
+      properties:
+        routingText:
+          $ref: '#/components/schemas/RoutingText'
+        DSORT:
+          $ref: '#/components/schemas/DSORT'
+        OSORT:
+          $ref: '#/components/schemas/OSORT'
+        SSORT:
+          $ref: '#/components/schemas/SSORT'
+      required:
+      - DSORT
+      - OSORT
+      - SSORT
+      - routingText
+      type: object
+    Email:
+      type: string
+    PostalCode:
+      example: '40001'
+      maxLength: 7
+      minLength: 3
+      type: string
+    LabelPDF:
+      description: Base64 encoded PDF representing one or more labels
+      format: byte
+      type: string
+    LabelScript:
+      description: "A script in a txt format that can be sent to the printer.  \nIt can contain instructions for single label or multiple labels.  \nSupported formats are ZPL and EPL.\n"
+      type: string
+    OSORT:
+      description: The pickup tour
+      type: string
+    AztecFormats:
+      enum:
+      - PDF
+      - PNG
+      - SVG
+      type: string
+    Address:
+      properties:
+        street:
+          $ref: '#/components/schemas/Street_1'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        city:
+          $ref: '#/components/schemas/City_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        country:
+          $ref: '#/components/schemas/CountryIdent'
+      required:
+      - city
+      - country
+      - postalCode
+      - street
+      type: object
+    TrackingResult_parcelEvents_inner_status:
+      properties:
+        statusCode:
+          type: string
+        description:
+          type: string
+      required:
+      - description
+      - statusCode
+      type: object
+    A6PrintProperties:
+      properties:
+        pageSize:
+          description: 'Use the A6 option if you wish to get a version optimized for A6 paper size.
+
+            '
+          enum:
+          - A6
+          type: string
+        labelsPerPage:
+          description: Number of labels per page.
+          enum:
+          - 1
+          type: number
+      required:
+      - labelsPerPage
+      - pageSize
+      type: object
+    LabelData_origin:
+      properties:
+        sender:
+          $ref: '#/components/schemas/LabelData_origin_sender'
+        dispatchDepot:
+          $ref: '#/components/schemas/Depot'
+      required:
+      - dispatchDepot
+      - sender
+      type: object
+    LabelData_service:
+      description: The shipping service/product specification
+      properties:
+        combination:
+          $ref: '#/components/schemas/ServiceCombination'
+        code:
+          $ref: '#/components/schemas/ServiceCode'
+        additionalCode:
+          $ref: '#/components/schemas/AdditionalCode'
+        mark:
+          description: A shipping service mark (It is rarely used)
+          type: string
+        text:
+          description: Service Text used in the routing part of the Label
+          type: string
+      required:
+      - code
+      - combination
+      type: object
+    CodAmount:
+      description: "The amount to be collected on delivery.  \nThis value is always represented in cents of the specified currency.  \nCents in this context signify a 1/100 of the currency base units.\n\nFor example when the COD is supposed to be 45.5 CZK, the value should be 4550 (with appropriate currency settings)  \nOr when the COD is supposed to be 2 EUR, the sent value should be 200 (with appropriate currency settings)  \n"
+      type: number
+    A4PrintProperties:
+      properties:
+        pageSize:
+          description: 'Use the A4 option if you wish to get a version optimized for A4 paper size.
+
+            '
+          enum:
+          - A4
+          type: string
+        labelsPerPage:
+          description: Number of labels per page.
+          enum:
+          - 1
+          - 4
+          type: number
+        labelsOffset:
+          description: Number of labels to skip before printing.
+          maximum: 3
+          minimum: 0
+          type: number
+      required:
+      - labelsPerPage
+      - pageSize
+      type: object
+    Depot:
+      properties:
+        name:
+          $ref: '#/components/schemas/DepotName'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - name
+      type: object
+    TrackingInput_parcels_inner:
+      oneOf:
+      - $ref: '#/components/schemas/ParcelNo'
+      - $ref: '#/components/schemas/ParcelIdent'
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    PDFPrintTypeBatchInput:
+      allOf:
+      - $ref: '#/components/schemas/PDFPrintTypeInput'
+      - properties:
+          parcels:
+            items:
+              $ref: '#/components/schemas/ParcelIdent'
+            type: array
+        required:
+        - parcels
+        type: object
+    CountryIdent_oneOf_2:
+      properties:
+        isoNumeric:
+          $ref: '#/components/schemas/CountryNumeric'
+      required:
+      - isoNumeric
+      type: object
+    IDCheck:
+      description: This data is used when a check against a personal ID card is required
+      properties:
+        name:
+          description: The name of the person to be checked
+          example: John Doe
+          maxLength: 35
+          type: string
+        personalId:
+          description: The personal identification card number of the receiving person
+          example: '123456789012345678'
+          maxLength: 18
+          type: string
+      required:
+      - name
+      type: object
+    LabelData_origin_sender:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        street:
+          $ref: '#/components/schemas/Street_1'
+        city:
+          $ref: '#/components/schemas/City_1'
+        countryAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+      type: object
+    ParcelIdent:
+      oneOf:
+      - $ref: '#/components/schemas/ParcelIdent_oneOf'
+      - $ref: '#/components/schemas/ParcelIdent_oneOf_1'
+    TrackingResult_parcelInfo_serviceDesignation:
+      allOf:
+      - $ref: '#/components/schemas/ServiceDesignation'
+      - properties:
+          backVariant:
+            $ref: '#/components/schemas/ServiceDesignation'
+        type: object
+    PaymentType:
+      description: 'CASH - Payment by cash
+
+
+        CASH_OR_CARD - Payment by cash or card
+
+        '
+      enum:
+      - Cash
+      - CashOrCard
+      type: string
+    PDFPrintTypeInput_printProperties:
+      oneOf:
+      - $ref: '#/components/schemas/A4PrintProperties'
+      - $ref: '#/components/schemas/A6PrintProperties'
+    LabelData:
+      properties:
+        delivery:
+          $ref: '#/components/schemas/LabelData_delivery'
+        origin:
+          $ref: '#/components/schemas/LabelData_origin'
+        parcel:
+          $ref: '#/components/schemas/LabelData_parcel'
+        parcelCount:
+          description: The number of parcels inside the shipment
+          type: number
+        routing:
+          $ref: '#/components/schemas/Routing'
+        service:
+          $ref: '#/components/schemas/LabelData_service'
+        barCode:
+          description: The barcode to be printed on the label
+          example: '%000000213815045502659337372'
+          maxLength: 28
+          minLength: 28
+          type: string
+        barCodeText:
+          description: The text to be printed above the label
+          type: string
+        cod:
+          $ref: '#/components/schemas/LabelData_cod'
+        departmentDelivery:
+          $ref: '#/components/schemas/DepartmentDeliveryService'
+        personalIdentification:
+          $ref: '#/components/schemas/PersonalIdentificationService'
+      required:
+      - barCode
+      - barCodeText
+      - delivery
+      - origin
+      - parcel
+      - parcelCount
+      - routing
+      - service
+      type: object
+    DispatchDepot_depotNumbers:
+      properties:
+        longNumber:
+          type: string
+        shortNumber:
+          type: string
+      type: object
+    PersonalIdentificationService:
+      allOf:
+      - $ref: '#/components/schemas/IDCheck'
+      description: 'Delivery with personal identification using the ID-Check method.
+
+
+        The receiver will have to provide an identification card matching the information provided here.
+
+
+        If you have selected a pickup point delivery service, then the identification will be conducted at the pickup point.
+
+
+        **Limitations**
+
+
+        The personal identification service is only available when the delivery to department is not requested:
+
+
+        See the service table for more info.
+
+        '
+      title: Personal identification
+    ParcelReference2:
+      description: 'A reference is an internal information for your use cases.
+
+        You can use this (for instance) to correlate the parcel with your internal system IDs.
+
+
+        This reference is printed on the parcel label.
+
+        This is shortened do 14/17 characters when printed on the label.
+
+        '
+      maxLength: 35
+      type: string
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    DispatchDepot:
+      properties:
+        depotNumbers:
+          $ref: '#/components/schemas/DispatchDepot_depotNumbers'
+        street:
+          $ref: '#/components/schemas/Street_1'
+        city:
+          $ref: '#/components/schemas/City_1'
+        countryAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+      required:
+      - city
+      - countryAlpha2
+      - depotNumbers
+      - postalCode
+      - street
+      type: object
+    PickupPointName:
+      description: 'Name of the pickup point
+
+
+        Also internally used by DPD
+
+        '
+      example: Tabák - Praha 8
+      type: string
+    TrackingResult_parcelInfo_routing:
+      properties:
+        main:
+          $ref: '#/components/schemas/RoutingData'
+        back:
+          $ref: '#/components/schemas/RoutingData'
+      type: object
+    LabelData_parcel:
+      properties:
+        parcelNo:
+          $ref: '#/components/schemas/ParcelNo'
+        parcelNoCheck:
+          description: Parcel number check character
+          maxLength: 1
+          minLength: 1
+          type: string
+        index:
+          description: The parcel index in the shipment (MPS)
+          type: number
+        references:
+          $ref: '#/components/schemas/LabelData_parcel_references'
+        weightKilograms:
+          type: string
+      required:
+      - index
+      - parcelNo
+      - parcelNoCheck
+      type: object
+    ParcelNo:
+      description: "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n"
+      example: '13815045502659'
+      maxLength: 14
+      minLength: 14
+      type: string
+    ZPLPrintTypeBatchInput:
+      allOf:
+      - $ref: '#/components/schemas/ZPLPrintTypeInput'
+      - properties:
+          parcels:
+            items:
+              $ref: '#/components/schemas/ParcelIdent'
+            type: array
+        required:
+        - parcels
+        type: object
+    StandardPrintTypeInput:
+      properties:
+        printType:
+          description: "Option descriptions\n- EPL - EPL script format ready for printing.\n  The first 14 characters from the parcel reference 3 and reference 4 are used on the label.\n- RAW - Raw data, can be used for own printing solution.\n  This type returns the reference3 and reference4 fields for every physical parcel in full length.\n"
+          enum:
+          - EPL
+          - RAW
+          type: string
+      required:
+      - printType
+      type: object
+    LabelRaw:
+      description: Data for all the parcels
+      items:
+        $ref: '#/components/schemas/LabelData'
+      type: array
+    HouseNumber:
+      type: string
+    LabelData_cod:
+      properties:
+        amount:
+          description: 'The Cash On Delivery amount to be collected.
+
+            '
+          type: string
+        currency:
+          $ref: '#/components/schemas/Currency'
+        payment:
+          $ref: '#/components/schemas/PaymentType'
+        variableSymbol:
+          description: Variable symbol of the COD payment
+          example: '17'
+          maxLength: 10
+          type: string
+      required:
+      - amount
+      - currency
+      - payment
+      type: object
+    RoutingText:
+      description: The routing text includes information such as depot country alpha 2, destination business unit, destination depot, S-Sort
+      example: CZ-DPD-1392-001B
+      type: string
+    ServiceDesignation:
+      properties:
+        code:
+          type: string
+        combination:
+          type: string
+        prefix:
+          type: string
+        text:
+          type: string
+        mark:
+          type: string
+      required:
+      - code
+      - combination
+      - prefix
+      type: object
+    Sender:
+      description: Info about the sender of the shipment (source)
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    CashOnDeliveryService_1:
+      allOf:
+      - $ref: '#/components/schemas/CashOnDeliveryWithAccount'
+      - description: Cash on delivery - Allows you to specify the amount to be collected from the consignee
+        title: Cash on delivery
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    _parcels__parcelIdent__labels_post_parcelIdent_parameter:
+      oneOf:
+      - $ref: '#/components/schemas/ParcelId'
+      - $ref: '#/components/schemas/ParcelNo'
+    ContactPerson:
+      description: 'The name of the person who can be contacted for more information about the parcel.
+
+        '
+      example: John Doe
+      type: string
+    Street_1:
+      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
+      example: Example Street 368/23
+      maxLength: 35
+      type: string
+    ParcelIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/ParcelId'
+      required:
+      - id
+      type: object
+    DepartmentDeliveryService:
+      description: 'The shipment is delivered to a department without any personal identification.
+
+
+        Internal info: Setting identification to "false" (the only option currently) equals the "1" type in the old GeoAPI
+
+        '
+      properties:
+        building:
+          description: The building where the shipment is delivered to
+          example: Budova A
+          maxLength: 25
+          type: string
+        floor:
+          description: The floor where the shipment is delivered to
+          example: Druhé patro
+          maxLength: 25
+          type: string
+        department:
+          description: The department where the shipment is delivered to
+          example: Dopravní oddělení
+          maxLength: 25
+          type: string
+      required:
+      - building
+      - department
+      - floor
+      title: Department delivery
+      type: object
+    Receiver:
+      description: Info about the receiver of the shipment (destination)
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    AdditionalCode:
+      description: 'The DPD wide shipping additional service/product code
+
+
+        The original shipping ServiceCode is no longer enough and has to be supplemented by the AdditionalCode
+
+        '
+      example: A15
+      type: string
+    SubjectNameSecondary:
+      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+  requestBodies:
+    PostTrackingRequestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TrackingInput'
+      required: true
+    PostDropOffCodesRequestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DropOffCodesInput'
+      required: false
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey

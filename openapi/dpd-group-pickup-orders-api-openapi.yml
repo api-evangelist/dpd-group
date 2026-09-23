@@ -1,0 +1,566 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Pickup Orders API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Pickup Orders
+paths:
+  /pickup-orders:
+    post:
+      description: 'You can create pickup orders via this endpoint.
+
+        A pickup order is a request for a courier to come and pick your parcels up.
+
+        The courier will then proceed to forward the parcels into further transit and make sure they will eventually reach their shipping destination.
+
+
+        If the customerAddress (standard) or parcelNo (collection) is not found, an error will be returned
+
+
+        If you provide a parcel number that belongs to a standard parcel when creating the pickup order,
+
+        an error will be thrown as the parcel number is only expected to be provided when ordering a pickup for a collection parcel.
+
+
+        **Other means of ordering pickups**
+
+
+        - The pickup can be ordered via the `POST /pickup-orders` endpoint or it can be personally negotiated (you can setup recurring pickups this way).'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                $ref: '#/components/schemas/NewPickupOrder'
+              maxItems: 50
+              type: array
+        description: The pickup order options
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PickupOrder'
+                type: array
+          description: The pickup order has been successfully created
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Some of the parcel numbers, the customer address or the pickup date is invalid, or the request is malformed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '408':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: Request Timeout. Took too long to respond.
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Create a new pickup order
+      tags:
+      - Pickup Orders
+      operationId: postPickupOrders
+      x-operation-id-source: derived
+  /pickup-orders/{pickupOrderId}:
+    delete:
+      description: 'Use this endpoint to cancel your parcel pickup orders.
+
+
+        **Limitations**
+
+
+        It might not be possible to cancel some pickup orders.
+
+        Pickup orders can be canceled only until a certain deadline
+
+        This is usually early in the morning of the pickup day.'
+      parameters:
+      - description: The unique ID of the pickup order in question
+        explode: false
+        in: path
+        name: pickupOrderId
+        required: true
+        schema:
+          $ref: '#/components/schemas/PickupOrderID'
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_pickup_orders__pickupOrderId__delete_200_response'
+          description: Pickup order successfully deleted
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The unique ID is invalid, the request is malformed or the order can not be canceled at this time
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Pickup order with the specified id does not exist
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Cancel pickup order by pickupOrderId
+      tags:
+      - Pickup Orders
+      operationId: deletePickupOrdersByPickupOrderId
+      x-operation-id-source: derived
+    get:
+      parameters:
+      - description: The unique ID of the pickup order in question
+        explode: false
+        in: path
+        name: pickupOrderId
+        required: true
+        schema:
+          $ref: '#/components/schemas/PickupOrderID'
+        style: simple
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PickupOrder'
+          description: Successfully found the requested pickup order
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The unique ID is invalid or the request is malformed
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: The API token provided has expired or it is not valid
+        '404':
+          description: Pickup order with the specified ID does not exist
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: Show information about a specific pickup order
+      tags:
+      - Pickup Orders
+      operationId: getPickupOrdersByPickupOrderId
+      x-operation-id-source: derived
+components:
+  schemas:
+    ParcelId:
+      description: 'The internal GeoAPI parcel ID
+
+
+        You would only use this if there is no other way to identify the parcel.
+
+        '
+      example: 138
+      type: number
+    SubjectInfo:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        contact:
+          $ref: '#/components/schemas/SubjectInfo_contact'
+      required:
+      - name1
+      title: Subject information
+      type: object
+    PickupOrderID:
+      description: "This ID is used in the API to uniquely identify a pickup order.\n\nThe user is able to order a pickup for a shipment on one of the customer addresses.  \nDPD will pick the shipment up on the address specified by the user and transfer it to the DPD depot for further processing.  \nThe user is also able to order a regular pickup, in that case the user is usually not using this API to create new shipments.\n"
+      type: number
+    SubjectInfo_contact:
+      properties:
+        person:
+          example: John Doe
+          minLength: 2
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      type: object
+    CountryIdent_oneOf:
+      properties:
+        isoAlpha3:
+          $ref: '#/components/schemas/CountryAlpha3'
+      required:
+      - isoAlpha3
+      type: object
+    Date:
+      description: Represented in the YYYY-MM-DD (ISO 8601) format
+      maxLength: 10
+      minLength: 10
+      type: string
+    CustomerAddressIdent_oneOf_1:
+      properties:
+        it4emId:
+          $ref: '#/components/schemas/CustomerAddressIt4emId'
+      required:
+      - it4emId
+      type: object
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    SubjectName:
+      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
+    CountryIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CountryIdent_oneOf'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
+    CustomerDSW:
+      description: "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n"
+      maxLength: 12
+      minLength: 11
+      type: string
+    ParcelNo:
+      description: "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n"
+      example: '13815045502659'
+      maxLength: 14
+      minLength: 14
+      type: string
+    CustomerIdent_oneOf:
+      properties:
+        dsw:
+          $ref: '#/components/schemas/CustomerDSW'
+      required:
+      - dsw
+      type: object
+    CustomerIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+      - id
+      type: object
+    CustomerID:
+      description: 'The internal GeoAPI customer ID
+
+
+        You would only use this if there is no other way to identify the customer.
+
+        '
+      type: number
+    Email:
+      type: string
+    PickupOrder:
+      properties:
+        id:
+          $ref: '#/components/schemas/PickupOrderID'
+        specs:
+          $ref: '#/components/schemas/PickupOrder_specs'
+        statusCode:
+          $ref: '#/components/schemas/StatusCode'
+        statusText:
+          $ref: '#/components/schemas/StatusText'
+      required:
+      - id
+      - specs
+      - statusCode
+      - statusText
+    StatusCode:
+      description: 'Returns the current state of pickup order.
+
+        - Created is a default state
+
+        '
+      enum:
+      - New
+      - Created
+      - ToCancel
+      - Canceled
+      type: string
+    PostalCode:
+      example: '40001'
+      maxLength: 7
+      minLength: 3
+      type: string
+    HouseNumber:
+      type: string
+    PhoneNumber:
+      description: Can be with or without the international prefix
+      example: 123 456 789
+      maxLength: 31
+      type: string
+    NewPickupOrder:
+      allOf:
+      - title: New pickup order specification
+      - oneOf:
+        - $ref: '#/components/schemas/AddressPickupOrderSpecs'
+        - $ref: '#/components/schemas/ParcelPickupOrderSpecs'
+        - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
+    Address:
+      properties:
+        street:
+          $ref: '#/components/schemas/Street_1'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        city:
+          $ref: '#/components/schemas/City_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        country:
+          $ref: '#/components/schemas/CountryIdent'
+      required:
+      - city
+      - country
+      - postalCode
+      - street
+      type: object
+    CustomerIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CustomerIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerIdent_oneOf_1'
+    ParcelIdent_oneOf:
+      properties:
+        parcelNumber:
+          $ref: '#/components/schemas/ParcelNo'
+      required:
+      - parcelNumber
+      type: object
+    CollectionPickupOrderResponse:
+      description: 'The created collection pickup order.
+
+        '
+      properties:
+        parcels:
+          description: 'All parcel numbers from the collection shipment for which the pickup order was created.
+
+            '
+          items:
+            $ref: '#/components/schemas/ParcelIdent'
+          type: array
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - parcels
+      title: Collection
+    CountryIdent_oneOf_1:
+      properties:
+        isoAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+      required:
+      - isoAlpha2
+      type: object
+    ArbitraryAddressPickupOrderSpecs:
+      description: 'The pickup is ordered to an arbitrary address.
+
+
+        The courier can/will pick up all parcels for which you have printed labels at the location.
+
+        '
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerIdent'
+        arbitraryAddress:
+          $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs_arbitraryAddress'
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - arbitraryAddress
+      - customer
+      title: ArbitraryAddress
+    CustomerAddressIdent:
+      description: Used to uniquely identify a customer address in the API
+      oneOf:
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf_1'
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    CourierNote:
+      description: "This is a note for the courier.  \nYou can leave some additional information for the courier using this property.\n"
+      example: Call before arrival
+      maxLength: 200
+      type: string
+    City_1:
+      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: Praha 8
+      maxLength: 35
+      type: string
+    ArbitraryAddressPickupOrderSpecs_arbitraryAddress:
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    CountryIdent_oneOf_2:
+      properties:
+        isoNumeric:
+          $ref: '#/components/schemas/CountryNumeric'
+      required:
+      - isoNumeric
+      type: object
+    CustomerAddressIdent_oneOf:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerAddressId'
+      required:
+      - id
+      type: object
+    StatusText:
+      description: 'Detailed information about the status of the pickup order.
+
+        - `New` = The pickup has been ordered by the customer. We are now waiting for its creation in the DPD systems.
+
+        - `Created` = The pickup order has been created in the DPD systems
+
+        - `ToCancel` = A cancel request for the pickup order has been received and sent for processing
+
+        - `Canceled` = The pickup order has been successfully canceled
+
+        '
+      maxLength: 200
+      type: string
+    Street_1:
+      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
+      example: Example Street 368/23
+      maxLength: 35
+      type: string
+    AddressPickupOrderSpecs:
+      description: 'The pickup is ordered to a selected customer address (your address).
+
+
+        The courier can/will pick up all parcels for which you have printed labels.
+
+        '
+      properties:
+        customerAddress:
+          $ref: '#/components/schemas/CustomerAddressIdent'
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - customerAddress
+      title: Address
+    _pickup_orders__pickupOrderId__delete_200_response:
+      properties:
+        pickupId:
+          $ref: '#/components/schemas/PickupOrderID'
+      required:
+      - pickupId
+      type: object
+    PickupOrder_specs:
+      oneOf:
+      - $ref: '#/components/schemas/AddressPickupOrderSpecs'
+      - $ref: '#/components/schemas/CollectionPickupOrderResponse'
+      - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
+    ParcelIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/ParcelId'
+      required:
+      - id
+      type: object
+    ParcelPickupOrderSpecs:
+      description: 'The pickup is ordered for a specific collection parcel(s).
+
+
+        The labels are printed by the DPD.
+
+        '
+      properties:
+        parcel:
+          $ref: '#/components/schemas/ParcelIdent'
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - parcel
+      title: Parcel
+    CustomerAddressIt4emId:
+      description: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
+      type: number
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    ParcelIdent:
+      oneOf:
+      - $ref: '#/components/schemas/ParcelIdent_oneOf'
+      - $ref: '#/components/schemas/ParcelIdent_oneOf_1'
+    SubjectNameSecondary:
+      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    CustomerAddressId:
+      description: Internal GeoAPI ID
+      type: number
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey

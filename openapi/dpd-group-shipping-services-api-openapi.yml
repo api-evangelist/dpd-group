@@ -1,0 +1,587 @@
+openapi: 3.2.0
+info:
+  contact:
+    email: info@dpd.cz
+    name: DPD CZ
+    url: https://www.dpd.com/cz/cs/
+  description: This documentations describes what the GeoAPI is and how to use it properly.
+  title: DPD Geo Shipping Services API
+  version: 1.0.0
+servers:
+- description: GeoAPI Production environment
+  url: https://geoapi.dpd.cz/v1
+- description: GeoAPI Test environment
+  url: https://geoapi-test.dpd.cz/v1
+security:
+- ApiKeyAuth: []
+tags:
+- name: Shipping Services
+paths:
+  /shipping-services:
+    get:
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShippingServiceList'
+                type: array
+          description: A list of shipping services
+        '500':
+          description: Uncaught server error - Issue is on our side
+      summary: List of all available shipping services in JSON
+      tags:
+      - Shipping Services
+      operationId: getShippingServices
+      x-operation-id-source: derived
+components:
+  schemas:
+    PaymentType:
+      description: 'CASH - Payment by cash
+
+
+        CASH_OR_CARD - Payment by cash or card
+
+        '
+      enum:
+      - Cash
+      - CashOrCard
+      type: string
+    ShipmentServices:
+      properties:
+        notification:
+          $ref: '#/components/schemas/NotificationService'
+        airExpress:
+          $ref: '#/components/schemas/AirExpressService'
+        dpdTimeGuarantee:
+          $ref: '#/components/schemas/DPDTimeGuaranteeService'
+        dpdGuarantee:
+          $ref: '#/components/schemas/DPDGuaranteeService'
+        swap:
+          $ref: '#/components/schemas/SwapService'
+        dpdPneu:
+          $ref: '#/components/schemas/DPDPneuService'
+        cashOnDelivery:
+          $ref: '#/components/schemas/CashOnDeliveryService_1'
+        pickupPoint:
+          $ref: '#/components/schemas/PickupPointService'
+        departmentDelivery:
+          $ref: '#/components/schemas/DepartmentDeliveryService'
+        personalIdentification:
+          $ref: '#/components/schemas/PersonalIdentificationService'
+        dpdReturn:
+          $ref: '#/components/schemas/DPDReturnService'
+        shopToShop:
+          $ref: '#/components/schemas/ShopToShopService'
+        shopToHome:
+          $ref: '#/components/schemas/ShopToHomeService'
+        ddtl:
+          $ref: '#/components/schemas/DedicatedDirectTruckLoadService'
+        noRedirection:
+          $ref: '#/components/schemas/NoRedirectionService'
+      type: object
+    CodAccount_international:
+      properties:
+        IBAN:
+          description: The IBAN of the COD account
+          example: CZ6508000000192000145399
+          maxLength: 34
+          type: string
+        BIC:
+          description: BIC - The SWIFT Address assigned to a bank
+          example: KOMBCZPP
+          maxLength: 11
+          minLength: 8
+          type: string
+      required:
+      - BIC
+      - IBAN
+      type: object
+    ShippingService_limitations_mpsDisabled:
+      oneOf:
+      - type: boolean
+      - $ref: '#/components/schemas/ShippingService_limitations_mpsDisabled_oneOf'
+    CashOnDeliveryWithAccount:
+      properties:
+        amountCents:
+          $ref: '#/components/schemas/CodAmount'
+        currency:
+          $ref: '#/components/schemas/Currency'
+        payment:
+          $ref: '#/components/schemas/PaymentType'
+        account:
+          $ref: '#/components/schemas/CodAccount'
+        variableSymbol:
+          description: Variable symbol of the COD payment
+          example: '17'
+          maxLength: 10
+          type: string
+      required:
+      - amountCents
+      - currency
+      - payment
+      type: object
+    PersonalIdentificationService:
+      allOf:
+      - $ref: '#/components/schemas/IDCheck'
+      description: 'Delivery with personal identification using the ID-Check method.
+
+
+        The receiver will have to provide an identification card matching the information provided here.
+
+
+        If you have selected a pickup point delivery service, then the identification will be conducted at the pickup point.
+
+
+        **Limitations**
+
+
+        The personal identification service is only available when the delivery to department is not requested:
+
+
+        See the service table for more info.
+
+        '
+      title: Personal identification
+    DPDGuaranteeService:
+      default: false
+      description: 'Enable for guaranteed timely delivery abroad
+
+        '
+      title: DPD Guarantee
+      type: boolean
+    DedicatedDirectTruckLoadService:
+      default: false
+      description: 'A special service where multiple parcels are delivered in a single containe.
+
+        '
+      title: Dedicated Direct Truck Load
+      type: boolean
+    DPDReturnService:
+      default: false
+      description: 'A special service where the **original receiver** of a **previous shipment** returns the shipment, typically due to a complaint.
+
+
+        The return shipment will be dropped of by the **original receiver** at a pickup point and sent back to the **original sender**.
+
+
+        But this new shipment must be setup in a usual way as it will travel from the **sender** (original receiver) to the **receiver** (original sender).
+
+        The only difference is the **semantic link** to the **previous shipment**.
+
+
+        **Limitations**
+
+
+        DPD service cannot be combined with any other service. Also only the PDF label can be printed.
+
+        '
+      title: DPD Return Service
+      type: boolean
+    CodAccount:
+      description: The account to which the COD payment should be sent
+      properties:
+        bankCode:
+          deprecated: true
+          description: "Code of your bank  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          deprecated: true
+          description: "Your custom bank designation (might be displayed to the customer).  \n\nWe suggest you use capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          deprecated: true
+          description: "The account number without bankCode  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          deprecated: true
+          description: "Your custom account number name for organizational purposes.  \n\nWe suggest using only capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n"
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+        domestic:
+          $ref: '#/components/schemas/CodAccount_domestic'
+        international:
+          $ref: '#/components/schemas/CodAccount_international'
+      type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
+    SwapService:
+      description: Swap shipment - Parcels exchanged one for another
+      title: Swap
+      type: boolean
+    PickupPointService:
+      allOf:
+      - $ref: '#/components/schemas/PickupPointID'
+      - description: 'You can use this service to order a delivery to a specified pickup point
+
+
+          Set this value to the ID of the pickup point you want the shipment to be delivered to.
+
+          '
+        title: Pickup point delivery
+    ShopToHomeService:
+      default: false
+      description: 'A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier
+
+
+        The package is delivered to an arbitrary address.
+
+        '
+      title: DPD Shop to Home
+      type: boolean
+    ShippingService_limitations_mpsDisabled_oneOf_timeFrames_inner:
+      properties:
+        from:
+          type: string
+        to:
+          type: string
+      required:
+      - from
+      - to
+      type: object
+    ShopToShopService:
+      default: false
+      description: 'A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier
+
+
+        The package is also always delivered to a pickup point
+
+        '
+      title: DPD Shop to Shop
+      type: boolean
+    ShippingServiceList:
+      properties:
+        apiServiceCombination:
+          items:
+            type: string
+          type: array
+        servicesForCombination:
+          items:
+            $ref: '#/components/schemas/ShippingService'
+          type: array
+      required:
+      - apiServiceCombination
+      - servicesForCombination
+      type: object
+    NoRedirectionService:
+      default: false
+      description: 'This is an additional service to the S2S product which cannot be redirected
+
+        '
+      title: DPD No Direction
+      type: boolean
+    ShipmentExample:
+      properties:
+        services:
+          $ref: '#/components/schemas/ShipmentServices'
+      required:
+      - services
+      type: object
+    ShippingService_limitations_requiredContactInfo:
+      properties:
+        oneOf:
+          items:
+            type: string
+          type: array
+        allOf:
+          items:
+            type: string
+          type: array
+      type: object
+    PickupPointID:
+      description: 'Uniquely identifies a pickup point
+
+
+        Also internally used by DPD
+
+        '
+      example: CZ10190
+      type: string
+    CodAmount:
+      description: "The amount to be collected on delivery.  \nThis value is always represented in cents of the specified currency.  \nCents in this context signify a 1/100 of the currency base units.\n\nFor example when the COD is supposed to be 45.5 CZK, the value should be 4550 (with appropriate currency settings)  \nOr when the COD is supposed to be 2 EUR, the sent value should be 200 (with appropriate currency settings)  \n"
+      type: number
+    CashOnDeliveryService_1:
+      allOf:
+      - $ref: '#/components/schemas/CashOnDeliveryWithAccount'
+      - description: Cash on delivery - Allows you to specify the amount to be collected from the consignee
+        title: Cash on delivery
+    DPDTimeGuaranteeService:
+      description: 'You can choose from the selection of DPD delivery services with guaranteed delivery times
+
+
+        DPD12 - Delivery before 12:00
+
+
+        DPD18 - Guaranteed second day delivery before 18:00
+
+        '
+      enum:
+      - DPD12
+      - DPD18
+      title: DPD Time guarantee
+      type: string
+    NotificationService:
+      default: false
+      description: 'Private shipment with predict notifications and 1HP
+
+
+        Enable this service to send notifications about the delivery times to your customers.
+
+        '
+      title: Notification
+      type: boolean
+    CodAccount_domestic:
+      description: "Country specific bank account information.\n\nThis is currently reserved for CZ based bank accounts!  \n\nIf you provide any non CZ based bank acccount that will pass validation, it might get used for domestic CZ payments!\n"
+      properties:
+        bankCode:
+          description: Code of your bank
+          example: 0800
+          maxLength: 4
+          minLength: 4
+          type: string
+        bankName:
+          description: 'Your custom bank designation (might be displayed to the customer).
+
+
+            We suggest you use capital letters and numbers.
+
+            '
+          example: KOMERCNI BANKA
+          maxLength: 30
+          type: string
+        accountNumber:
+          description: The account number without bankCode
+          example: 654321-1234567890
+          maxLength: 17
+          minLength: 17
+          type: string
+        accountName:
+          description: 'Your custom account number name for organizational purposes.
+
+
+            We suggest using only capital letters and numbers.
+
+            '
+          example: SPOLECNOST HLAVNI UCET
+          maxLength: 30
+          type: string
+      required:
+      - accountName
+      - accountNumber
+      - bankCode
+      - bankName
+      type: object
+    ShippingService_limitations_mpsDisabled_oneOf:
+      properties:
+        timeFrames:
+          items:
+            $ref: '#/components/schemas/ShippingService_limitations_mpsDisabled_oneOf_timeFrames_inner'
+          type: array
+      required:
+      - timeFrames
+      type: object
+    ShipmentType:
+      description: 'A type of the shipment. The type has impact on validations of sender/receiver, selected services, parcel numbers assigning and routing.
+
+        '
+      enum:
+      - Standard
+      - Collection
+      - ThirdPartyCollection
+      - Import
+      - ThirdPartyStandard
+      - Return
+      type: string
+    AirExpressService:
+      default: false
+      description: Service providing express air delivery
+      title: Air express
+      type: boolean
+    ShippingService_limitations:
+      properties:
+        weightLimit:
+          $ref: '#/components/schemas/ShippingService_limitations_weightLimit'
+        noSameCountry:
+          type: boolean
+        supportedShipmentTypes:
+          items:
+            $ref: '#/components/schemas/ShipmentType'
+          type: array
+        mpsDisabled:
+          $ref: '#/components/schemas/ShippingService_limitations_mpsDisabled'
+        requiredContactInfo:
+          $ref: '#/components/schemas/ShippingService_limitations_requiredContactInfo'
+        printing:
+          type: string
+        countryLimitations:
+          $ref: '#/components/schemas/ShippingService_limitations_countryLimitations'
+      required:
+      - supportedShipmentTypes
+      - weightLimit
+      type: object
+    ShippingService_limitations_countryLimitations_origin:
+      properties:
+        mode:
+          type: string
+        countries:
+          $ref: '#/components/schemas/ShippingService_limitations_countryLimitations_origin_countries'
+      required:
+      - countries
+      - mode
+      type: object
+    ShippingService_limitations_countryLimitations_origin_countries:
+      properties:
+        isoAlpha2:
+          items:
+            $ref: '#/components/schemas/CountryAlpha2'
+          type: array
+      required:
+      - isoAlpha2
+      type: object
+    DPDPneuService:
+      default: false
+      description: Delivery of (vehicle) tires
+      title: DPD Pneu
+      type: boolean
+    ShippingService_limitations_weightLimit:
+      properties:
+        maxWeightGrams:
+          type: number
+      required:
+      - maxWeightGrams
+      type: object
+    IDCheck:
+      description: This data is used when a check against a personal ID card is required
+      properties:
+        name:
+          description: The name of the person to be checked
+          example: John Doe
+          maxLength: 35
+          type: string
+        personalId:
+          description: The personal identification card number of the receiving person
+          example: '123456789012345678'
+          maxLength: 18
+          type: string
+      required:
+      - name
+      type: object
+    ShippingService:
+      properties:
+        id:
+          type: number
+        example:
+          $ref: '#/components/schemas/ShipmentExample'
+        limitations:
+          $ref: '#/components/schemas/ShippingService_limitations'
+        code:
+          type: string
+        additionalCode:
+          $ref: '#/components/schemas/AdditionalCode'
+        text:
+          type: string
+        combination:
+          type: string
+        prefix:
+          type: string
+        mark:
+          type: string
+        backVariant:
+          $ref: '#/components/schemas/ShippingService_backVariant'
+      required:
+      - code
+      - combination
+      - example
+      - id
+      - limitations
+      - prefix
+      type: object
+    DepartmentDeliveryService:
+      description: 'The shipment is delivered to a department without any personal identification.
+
+
+        Internal info: Setting identification to "false" (the only option currently) equals the "1" type in the old GeoAPI
+
+        '
+      properties:
+        building:
+          description: The building where the shipment is delivered to
+          example: Budova A
+          maxLength: 25
+          type: string
+        floor:
+          description: The floor where the shipment is delivered to
+          example: Druhé patro
+          maxLength: 25
+          type: string
+        department:
+          description: The department where the shipment is delivered to
+          example: Dopravní oddělení
+          maxLength: 25
+          type: string
+      required:
+      - building
+      - department
+      - floor
+      title: Department delivery
+      type: object
+    ShippingService_limitations_countryLimitations:
+      properties:
+        origin:
+          $ref: '#/components/schemas/ShippingService_limitations_countryLimitations_origin'
+        destination:
+          $ref: '#/components/schemas/ShippingService_limitations_countryLimitations_origin'
+      type: object
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    AdditionalCode:
+      description: 'The DPD wide shipping additional service/product code
+
+
+        The original shipping ServiceCode is no longer enough and has to be supplemented by the AdditionalCode
+
+        '
+      example: A15
+      type: string
+    ShippingService_backVariant:
+      properties:
+        code:
+          type: string
+        additionalCode:
+          $ref: '#/components/schemas/AdditionalCode'
+        text:
+          type: string
+        combination:
+          type: string
+        prefix:
+          type: string
+        mark:
+          type: string
+      required:
+      - code
+      - combination
+      - prefix
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
+      in: header
+      name: x-api-key
+      type: apiKey
