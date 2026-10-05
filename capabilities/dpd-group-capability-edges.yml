@@ -1,0 +1,55 @@
+slug: dpd-group
+provider: dpd-group
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Parcels
+  spec_file: dpd-group-parcels-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.85
+  evidence: POST /parcels/{parcelIdent}/labels 'Print the parcel labels'; GET /parcels/{parcelIdent}/tracking
+    'Get parcel tracking info'
+  reason: Parcel label production, tracking and drop-off codes are core parcel transport execution — logistics
+    operations within the supply chain.
+- tag: Pickup Orders
+  spec_file: dpd-group-pickup-orders-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.85
+  evidence: POST /pickup-orders 'Create a new pickup order'; DELETE /pickup-orders/{pickupOrderId} 'Cancel
+    pickup order'
+  reason: Booking and cancelling courier collections is transport execution, i.e. logistics operations
+    management.
+- tag: Shipments
+  spec_file: dpd-group-shipments-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.85
+  evidence: POST /shipments 'Create new shipments'; schemas 'NewShipment_customer', 'SenderSpecs', 'ReceiverSpecs',
+    'CashOnDeliveryWithAccount'
+  reason: Creation of shipments with sender/receiver and service specifications is transport/logistics
+    execution.
+- tag: Shipping
+  spec_file: dpd-group-shipping-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.85
+  evidence: POST /shipping/v2/shipment, POST /shipping/v2/pickupscheduling, POST /shipping/v1/label; schemas
+    'shipment.ParcelBarcode', 'pickupscheduling.Pickup'
+  reason: Shipment creation, pickup scheduling and label generation — carrier shipping execution, i.e.
+    logistics operations management.
