@@ -43,26 +43,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Country:
-      properties:
-        localizedName:
-          description: Localized country name (e.g. in Czech)
-          type: string
-        numericCode:
-          $ref: '#/components/schemas/CountryNumeric'
-        alpha2Code:
-          $ref: '#/components/schemas/CountryAlpha2'
-        alpha3Code:
-          $ref: '#/components/schemas/CountryAlpha3'
-        codInfo:
-          $ref: '#/components/schemas/Country_codInfo'
-      required:
-      - alpha2Code
-      - alpha3Code
-      - codInfo
-      - localizedName
-      - numericCode
-      type: object
     Country_codInfo:
       description: Info about COD (Cash On Delivery) services for a country
       properties:
@@ -85,14 +65,21 @@ components:
             '
           type: number
       type: object
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
     Currency:
       description: Currency in the ISO 4217 format
       example: CZK
-      maxLength: 3
-      minLength: 3
-      type: string
-    CountryAlpha3:
-      description: Country ISO Alpha-3 code
       maxLength: 3
       minLength: 3
       type: string
@@ -119,18 +106,31 @@ components:
       maxLength: 3
       minLength: 3
       type: string
-    Error_description:
-      oneOf:
-      - type: string
-      - type: number
-      - additionalProperties: true
-        description: 'Object providing detailed information specific to the encountered error.
-
-
-          This may vary across different error responses.
-
-          '
-        type: object
+    Country:
+      properties:
+        localizedName:
+          description: Localized country name (e.g. in Czech)
+          type: string
+        numericCode:
+          $ref: '#/components/schemas/CountryNumeric'
+        alpha2Code:
+          $ref: '#/components/schemas/CountryAlpha2'
+        alpha3Code:
+          $ref: '#/components/schemas/CountryAlpha3'
+        codInfo:
+          $ref: '#/components/schemas/Country_codInfo'
+      required:
+      - alpha2Code
+      - alpha3Code
+      - codInfo
+      - localizedName
+      - numericCode
+      type: object
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
   securitySchemes:
     ApiKeyAuth:
       description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
