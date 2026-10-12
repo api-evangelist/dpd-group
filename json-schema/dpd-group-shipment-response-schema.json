@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-shipment-response-schema.json",
+  "title": "ShipmentResponse",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-shipping-api-openapi.yml#/components/schemas/ShipmentResponse",
+  "type": "object",
+  "properties": {
+    "warningMessage": {
+      "type": "string"
+    },
+    "shipmentId": {
+      "type": "string"
+    },
+    "parcelIds": {
+      "type": "array",
+      "description": "List of parcel Ids",
+      "items": {
+        "type": "string"
+      }
+    },
+    "networkShipmentId": {
+      "type": "string"
+    },
+    "networkParcelIds": {
+      "type": "array",
+      "description": "List of parcel Ids",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parcelBarcodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ParcelBarcode"
+      }
+    },
+    "label": {
+      "$ref": "#/$defs/Label"
+    },
+    "qrcode": {
+      "$ref": "#/$defs/QrCode"
+    },
+    "others": {
+      "type": "array",
+      "description": "List of other label",
+      "items": {
+        "$ref": "#/$defs/Label"
+      }
+    },
+    "debugList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Debug"
+      }
+    }
+  },
+  "$defs": {
+    "Debug": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "type": "string"
+        },
+        "response": {
+          "type": "string"
+        },
+        "methodName": {
+          "type": "string"
+        }
+      }
+    },
+    "Label": {
+      "type": "object",
+      "properties": {
+        "base64Data": {
+          "type": "string"
+        },
+        "media-type": {
+          "type": "string"
+        },
+        "qrcode": {
+          "type": "string",
+          "description": "BALTICS specificity, format always in PNG"
+        },
+        "pincode": {
+          "type": "string",
+          "description": "BALTICS specificity"
+        }
+      }
+    },
+    "ParcelBarcode": {
+      "type": "object",
+      "properties": {
+        "parcel": {
+          "type": "string",
+          "description": "Parcel number."
+        },
+        "barcode": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        }
+      }
+    },
+    "QrCode": {
+      "type": "object",
+      "properties": {
+        "base64Data": {
+          "type": "string",
+          "description": "qr code data base64 encoded"
+        },
+        "media-type": {
+          "type": "string",
+          "description": "format of the label"
+        },
+        "pincode": {
+          "type": "string",
+          "description": "pin code"
+        }
+      }
+    }
+  }
+}

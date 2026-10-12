@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-parcels-labels-post-request-schema.json",
+  "title": "_parcels_labels_post_request",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/_parcels_labels_post_request",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/StandardPrintTypeBatchInput"
+    },
+    {
+      "$ref": "#/$defs/ZPLPrintTypeBatchInput"
+    },
+    {
+      "$ref": "#/$defs/PDFPrintTypeBatchInput"
+    }
+  ],
+  "$defs": {
+    "A4PrintProperties": {
+      "properties": {
+        "pageSize": {
+          "description": "Use the A4 option if you wish to get a version optimized for A4 paper size.\n",
+          "enum": [
+            "A4"
+          ],
+          "type": "string"
+        },
+        "labelsPerPage": {
+          "description": "Number of labels per page.",
+          "enum": [
+            1,
+            4
+          ],
+          "type": "number"
+        },
+        "labelsOffset": {
+          "description": "Number of labels to skip before printing.",
+          "maximum": 3,
+          "minimum": 0,
+          "type": "number"
+        }
+      },
+      "required": [
+        "labelsPerPage",
+        "pageSize"
+      ],
+      "type": "object"
+    },
+    "A6PrintProperties": {
+      "properties": {
+        "pageSize": {
+          "description": "Use the A6 option if you wish to get a version optimized for A6 paper size.\n",
+          "enum": [
+            "A6"
+          ],
+          "type": "string"
+        },
+        "labelsPerPage": {
+          "description": "Number of labels per page.",
+          "enum": [
+            1
+          ],
+          "type": "number"
+        }
+      },
+      "required": [
+        "labelsPerPage",
+        "pageSize"
+      ],
+      "type": "object"
+    },
+    "PDFPrintTypeBatchInput": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PDFPrintTypeInput"
+        },
+        {
+          "properties": {
+            "parcels": {
+              "items": {
+                "$ref": "#/$defs/ParcelIdent"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "parcels"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "PDFPrintTypeInput": {
+      "properties": {
+        "printType": {
+          "description": "Option descriptions\n- PDF - PDF in the Base64 encoding containing the parcel label.  \n  The first 17 characters from the parcel reference 3 and reference 4 are used on the label.\n",
+          "enum": [
+            "PDF"
+          ],
+          "type": "string"
+        },
+        "printProperties": {
+          "$ref": "#/$defs/PDFPrintTypeInput_printProperties"
+        }
+      },
+      "required": [
+        "printProperties",
+        "printType"
+      ],
+      "type": "object"
+    },
+    "PDFPrintTypeInput_printProperties": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/A4PrintProperties"
+        },
+        {
+          "$ref": "#/$defs/A6PrintProperties"
+        }
+      ]
+    },
+    "ParcelId": {
+      "description": "The internal GeoAPI parcel ID\n\nYou would only use this if there is no other way to identify the parcel.\n",
+      "type": "number"
+    },
+    "ParcelIdent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ParcelIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/ParcelIdent_oneOf_1"
+        }
+      ]
+    },
+    "ParcelIdent_oneOf": {
+      "properties": {
+        "parcelNumber": {
+          "$ref": "#/$defs/ParcelNo"
+        }
+      },
+      "required": [
+        "parcelNumber"
+      ],
+      "type": "object"
+    },
+    "ParcelIdent_oneOf_1": {
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ParcelId"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "ParcelNo": {
+      "description": "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n",
+      "maxLength": 14,
+      "minLength": 14,
+      "type": "string"
+    },
+    "StandardPrintTypeBatchInput": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/StandardPrintTypeInput"
+        },
+        {
+          "properties": {
+            "parcels": {
+              "items": {
+                "$ref": "#/$defs/ParcelIdent"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "parcels"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "StandardPrintTypeInput": {
+      "properties": {
+        "printType": {
+          "description": "Option descriptions\n- EPL - EPL script format ready for printing.\n  The first 14 characters from the parcel reference 3 and reference 4 are used on the label.\n- RAW - Raw data, can be used for own printing solution.\n  This type returns the reference3 and reference4 fields for every physical parcel in full length.\n",
+          "enum": [
+            "EPL",
+            "RAW"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "printType"
+      ],
+      "type": "object"
+    },
+    "ZPLPrintProperties": {
+      "description": "Optional configuration for ZPL label barcode rendering.\nIf omitted, the standard `wideAuto` layout is used.\nOnly applicable when printType is ZPL.\n",
+      "properties": {
+        "barcodeLayout": {
+          "description": "Barcode rendering layout preset.\nIf omitted, `wideAuto` is used.\n- `wideAuto` — Wide bars (module width 3) with automatic Code 128 subset selection.\n  The standard rendering for ZPL: less dense, easier to scan, recommended for 203 dpi printers.\n- `narrowAuto` — Narrow bars (module width 2) with Code 128 Subset B encoding.\n  Denser, harder-to-scan output. Use only if downstream tooling requires the legacy format.\n",
+          "enum": [
+            "wideAuto",
+            "narrowAuto"
+          ],
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ZPLPrintTypeBatchInput": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ZPLPrintTypeInput"
+        },
+        {
+          "properties": {
+            "parcels": {
+              "items": {
+                "$ref": "#/$defs/ParcelIdent"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "parcels"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "ZPLPrintTypeInput": {
+      "properties": {
+        "printType": {
+          "description": "Option descriptions\n- ZPL - ZPL script format ready for printing.\n  The first 17 characters from the parcel reference 3 and reference 4 are used on the label.\n",
+          "enum": [
+            "ZPL"
+          ],
+          "type": "string"
+        },
+        "printProperties": {
+          "$ref": "#/$defs/ZPLPrintProperties"
+        }
+      },
+      "required": [
+        "printType"
+      ],
+      "type": "object"
+    }
+  }
+}

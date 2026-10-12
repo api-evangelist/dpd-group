@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-country-schema.json",
+  "title": "Country",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-countries-api-openapi.yml#/components/schemas/Country",
+  "properties": {
+    "localizedName": {
+      "description": "Localized country name (e.g. in Czech)",
+      "type": "string"
+    },
+    "numericCode": {
+      "$ref": "#/$defs/CountryNumeric"
+    },
+    "alpha2Code": {
+      "$ref": "#/$defs/CountryAlpha2"
+    },
+    "alpha3Code": {
+      "$ref": "#/$defs/CountryAlpha3"
+    },
+    "codInfo": {
+      "$ref": "#/$defs/Country_codInfo"
+    }
+  },
+  "required": [
+    "alpha2Code",
+    "alpha3Code",
+    "codInfo",
+    "localizedName",
+    "numericCode"
+  ],
+  "type": "object",
+  "$defs": {
+    "CountryAlpha2": {
+      "description": "Country ISO Alpha-2 code",
+      "maxLength": 2,
+      "minLength": 2,
+      "type": "string"
+    },
+    "CountryAlpha3": {
+      "description": "Country ISO Alpha-3 code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "CountryNumeric": {
+      "description": "Country ISO numeric code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Country_codInfo": {
+      "description": "Info about COD (Cash On Delivery) services for a country",
+      "properties": {
+        "currency": {
+          "$ref": "#/$defs/Currency"
+        },
+        "maxAmountCents": {
+          "description": "Maximum allowed COD amount for this country\n\nRepresented in cents of the given currency\n",
+          "type": "number"
+        },
+        "cardMaxAmountCents": {
+          "description": "Maximum allowed COD amount for card payments for this country\n\nRepresented in cents of the given currency\n",
+          "type": "number"
+        }
+      },
+      "type": "object"
+    },
+    "Currency": {
+      "description": "Currency in the ISO 4217 format",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    }
+  }
+}

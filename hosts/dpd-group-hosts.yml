@@ -1,0 +1,103 @@
+generated: '2026-10-13'
+method: derived
+source: the pre-flight dossier, apis.yml pointers, spec servers, well-known, vendors -- nothing fetched here
+generator: derive-hosts.py
+summary:
+  hosts: 9
+  own: 3
+  other_domain: 6
+  platform: 0
+  roles:
+  - api
+  - docs
+  - legal
+  - other
+  - website
+hosts:
+- host: api.dpdgroup.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: dpdgroup.com
+  role: api
+  relation: other-domain
+- host: dpdservices.dpd.com.pl
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: dpd.com.pl
+  role: other
+  relation: other-domain
+- host: esolutions.dpd.com
+  found_by:
+  - pointer
+  types:
+  - Portal
+  serves: []
+  registrable_domain: dpd.com
+  role: other
+  relation: own
+- host: geoapi.dpd.cz
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: dpd.cz
+  role: other
+  relation: other-domain
+- host: nst-preprod.dpsin.dpdgroup.com
+  found_by:
+  - pointer
+  types:
+  - Documentation
+  serves: []
+  registrable_domain: dpdgroup.com
+  role: docs
+  relation: other-domain
+- host: public-ws.dpd.com
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: dpd.com
+  role: other
+  relation: own
+- host: wsshipper.dpd.be
+  found_by:
+  - apis[]
+  types: []
+  serves:
+  - api
+  - docs
+  registrable_domain: dpd.be
+  role: other
+  relation: other-domain
+- host: www.dpd.com
+  found_by:
+  - pointer
+  types:
+  - Website
+  serves: []
+  registrable_domain: dpd.com
+  role: website
+  relation: own
+- host: www.geopost.com
+  found_by:
+  - pointer
+  types:
+  - PrivacyPolicy
+  - TermsOfService
+  serves: []
+  registrable_domain: geopost.com
+  role: legal
+  relation: other-domain

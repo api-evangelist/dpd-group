@@ -1,0 +1,666 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-successful-tracking-result-schema.json",
+  "title": "SuccessfulTrackingResult",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/_original/dpd-cz-geoapi-v2-openapi.json#/components/schemas/SuccessfulTrackingResult",
+  "properties": {
+    "parcelInfo": {
+      "$ref": "#/$defs/ParcelInfo"
+    },
+    "parcelEvents": {
+      "$ref": "#/$defs/ParcelEvents"
+    }
+  },
+  "required": [
+    "parcelEvents",
+    "parcelInfo"
+  ],
+  "type": "object",
+  "$defs": {
+    "Address": {
+      "properties": {
+        "street": {
+          "$ref": "#/$defs/Street"
+        },
+        "postalCode": {
+          "$ref": "#/$defs/PostalCode"
+        },
+        "city": {
+          "$ref": "#/$defs/City"
+        },
+        "houseNumber": {
+          "$ref": "#/$defs/HouseNumber"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryIdent"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "postalCode",
+        "street"
+      ],
+      "type": "object"
+    },
+    "CashOnDeliveryService": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CashOnDeliveryWithAccount"
+        },
+        {
+          "description": "Cash on delivery - Allows you to specify the amount to be collected from the consignee",
+          "title": "Cash on delivery"
+        }
+      ]
+    },
+    "CashOnDeliveryWithAccount": {
+      "properties": {
+        "amountCents": {
+          "$ref": "#/$defs/CodAmount"
+        },
+        "currency": {
+          "$ref": "#/$defs/Currency"
+        },
+        "payment": {
+          "$ref": "#/$defs/PaymentType"
+        },
+        "account": {
+          "$ref": "#/$defs/CodAccount"
+        },
+        "variableSymbol": {
+          "description": "Variable symbol of the COD payment",
+          "maxLength": 10,
+          "type": "string"
+        }
+      },
+      "required": [
+        "amountCents",
+        "currency",
+        "payment"
+      ],
+      "type": "object"
+    },
+    "City": {
+      "type": "string"
+    },
+    "CodAccount": {
+      "description": "The account to which the COD payment should be sent",
+      "properties": {
+        "bankCode": {
+          "deprecated": true,
+          "description": "Code of your bank  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "bankName": {
+          "deprecated": true,
+          "description": "Your custom bank designation (might be displayed to the customer).  \n\nWe suggest you use capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "accountNumber": {
+          "deprecated": true,
+          "description": "The account number without bankCode  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 17,
+          "minLength": 17,
+          "type": "string"
+        },
+        "accountName": {
+          "deprecated": true,
+          "description": "Your custom account number name for organizational purposes.  \n\nWe suggest using only capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "domestic": {
+          "$ref": "#/$defs/CodAccount_domestic"
+        },
+        "international": {
+          "$ref": "#/$defs/CodAccount_international"
+        }
+      },
+      "type": "object"
+    },
+    "CodAccount_domestic": {
+      "description": "Country specific bank account information.\n\nThis is currently reserved for CZ based bank accounts!  \n\nIf you provide any non CZ based bank acccount that will pass validation, it might get used for domestic CZ payments!\n",
+      "properties": {
+        "bankCode": {
+          "description": "Code of your bank",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "bankName": {
+          "description": "Your custom bank designation (might be displayed to the customer).\n\nWe suggest you use capital letters and numbers.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The account number without bankCode",
+          "maxLength": 17,
+          "minLength": 17,
+          "type": "string"
+        },
+        "accountName": {
+          "description": "Your custom account number name for organizational purposes.\n\nWe suggest using only capital letters and numbers.\n",
+          "maxLength": 30,
+          "type": "string"
+        }
+      },
+      "required": [
+        "accountName",
+        "accountNumber",
+        "bankCode",
+        "bankName"
+      ],
+      "type": "object"
+    },
+    "CodAccount_international": {
+      "properties": {
+        "IBAN": {
+          "description": "The IBAN of the COD account",
+          "maxLength": 34,
+          "type": "string"
+        },
+        "BIC": {
+          "description": "BIC - The SWIFT Address assigned to a bank",
+          "maxLength": 11,
+          "minLength": 8,
+          "type": "string"
+        }
+      },
+      "required": [
+        "BIC",
+        "IBAN"
+      ],
+      "type": "object"
+    },
+    "CodAmount": {
+      "description": "The amount to be collected on delivery.  \nThis value is always represented in cents of the specified currency.  \nCents in this context signify a 1/100 of the currency base units.\n\nFor example when the COD is supposed to be 45.5 CZK, the value should be 4550 (with appropriate currency settings)  \nOr when the COD is supposed to be 2 EUR, the sent value should be 200 (with appropriate currency settings)  \n",
+      "type": "number"
+    },
+    "CountryAlpha2": {
+      "description": "Country ISO Alpha-2 code",
+      "maxLength": 2,
+      "minLength": 2,
+      "type": "string"
+    },
+    "CountryAlpha3": {
+      "description": "Country ISO Alpha-3 code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "CountryIdent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf_1"
+        },
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf_2"
+        }
+      ]
+    },
+    "CountryIdent_oneOf": {
+      "properties": {
+        "isoAlpha3": {
+          "$ref": "#/$defs/CountryAlpha3"
+        }
+      },
+      "required": [
+        "isoAlpha3"
+      ],
+      "type": "object"
+    },
+    "CountryIdent_oneOf_1": {
+      "properties": {
+        "isoAlpha2": {
+          "$ref": "#/$defs/CountryAlpha2"
+        }
+      },
+      "required": [
+        "isoAlpha2"
+      ],
+      "type": "object"
+    },
+    "CountryIdent_oneOf_2": {
+      "properties": {
+        "isoNumeric": {
+          "$ref": "#/$defs/CountryNumeric"
+        }
+      },
+      "required": [
+        "isoNumeric"
+      ],
+      "type": "object"
+    },
+    "CountryNumeric": {
+      "description": "Country ISO numeric code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Currency": {
+      "description": "Currency in the ISO 4217 format",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "DSORT": {
+      "description": "The delivery route",
+      "type": "string"
+    },
+    "DeclaredSender": {
+      "description": "Allows you to specify any address as the declared sender.\n\nDeclared sender is a sender that will be listed on the parcel labels \nand will also be listed in the shipment data.\n\nHowever it does not affect the actual shipment routing. The actual sender (pickup place) will still be the \"sender\".\n\n**Usages**\n\n- This is, for instance, used when you are shipping packages for your partner / declared sender.\n",
+      "properties": {
+        "info": {
+          "$ref": "#/$defs/SubjectInfo"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        }
+      },
+      "required": [
+        "address",
+        "info"
+      ],
+      "type": "object"
+    },
+    "DispatchDepot": {
+      "properties": {
+        "depotNumbers": {
+          "$ref": "#/$defs/DispatchDepot_depotNumbers"
+        },
+        "street": {
+          "$ref": "#/$defs/Street"
+        },
+        "city": {
+          "$ref": "#/$defs/City"
+        },
+        "countryAlpha2": {
+          "$ref": "#/$defs/CountryAlpha2"
+        },
+        "postalCode": {
+          "$ref": "#/$defs/PostalCode"
+        }
+      },
+      "required": [
+        "city",
+        "countryAlpha2",
+        "depotNumbers",
+        "postalCode",
+        "street"
+      ],
+      "type": "object"
+    },
+    "DispatchDepot_depotNumbers": {
+      "properties": {
+        "longNumber": {
+          "type": "string"
+        },
+        "shortNumber": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "Email": {
+      "type": "string"
+    },
+    "HouseNumber": {
+      "type": "string"
+    },
+    "OSORT": {
+      "description": "The pickup tour",
+      "type": "string"
+    },
+    "ParcelEvents": {
+      "description": "Individual parcel events",
+      "items": {
+        "$ref": "#/$defs/ParcelEvents_inner"
+      },
+      "type": "array"
+    },
+    "ParcelEvents_inner": {
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/$defs/ParcelEvents_inner_status"
+        },
+        "additionalInfo": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "service": {
+          "$ref": "#/$defs/ParcelEvents_inner_service"
+        }
+      },
+      "required": [
+        "createdAt",
+        "id",
+        "status"
+      ],
+      "type": "object"
+    },
+    "ParcelEvents_inner_service": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "additionalCode": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "ParcelEvents_inner_status": {
+      "properties": {
+        "statusCode": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "statusCode"
+      ],
+      "type": "object"
+    },
+    "ParcelId": {
+      "description": "The internal GeoAPI parcel ID\n\nYou would only use this if there is no other way to identify the parcel.\n",
+      "type": "number"
+    },
+    "ParcelInfo": {
+      "description": "Info about the parcel",
+      "properties": {
+        "sender": {
+          "$ref": "#/$defs/Sender"
+        },
+        "receiver": {
+          "$ref": "#/$defs/Receiver"
+        },
+        "declaredSender": {
+          "$ref": "#/$defs/DeclaredSender"
+        },
+        "pickupPointId": {
+          "$ref": "#/$defs/PickupPointID"
+        },
+        "cod": {
+          "$ref": "#/$defs/CashOnDeliveryService"
+        },
+        "serviceDesignation": {
+          "$ref": "#/$defs/ParcelInfo_serviceDesignation"
+        },
+        "parcelId": {
+          "$ref": "#/$defs/ParcelId"
+        },
+        "parcelNumber": {
+          "$ref": "#/$defs/ParcelNo"
+        },
+        "routing": {
+          "$ref": "#/$defs/ParcelInfo_routing"
+        }
+      },
+      "required": [
+        "parcelId",
+        "parcelNumber",
+        "receiver",
+        "routing",
+        "sender",
+        "serviceDesignation"
+      ],
+      "type": "object"
+    },
+    "ParcelInfo_routing": {
+      "properties": {
+        "main": {
+          "$ref": "#/$defs/RoutingData"
+        },
+        "back": {
+          "$ref": "#/$defs/RoutingData"
+        }
+      },
+      "type": "object"
+    },
+    "ParcelInfo_serviceDesignation": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/ServiceDesignation"
+        },
+        {
+          "properties": {
+            "backVariant": {
+              "$ref": "#/$defs/ServiceDesignation"
+            }
+          },
+          "type": "object"
+        }
+      ]
+    },
+    "ParcelNo": {
+      "description": "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n",
+      "maxLength": 14,
+      "minLength": 14,
+      "type": "string"
+    },
+    "PaymentType": {
+      "description": "CASH - Payment by cash\n\nCASH_OR_CARD - Payment by cash or card\n",
+      "enum": [
+        "Cash",
+        "CashOrCard"
+      ],
+      "type": "string"
+    },
+    "PhoneNumber": {
+      "description": "Can be with or without the international prefix",
+      "maxLength": 31,
+      "type": "string"
+    },
+    "PickupPointID": {
+      "description": "Uniquely identifies a pickup point\n\nAlso internally used by DPD\n",
+      "type": "string"
+    },
+    "PostalCode": {
+      "maxLength": 7,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Receiver": {
+      "description": "Info about the receiver of the shipment (destination)",
+      "properties": {
+        "info": {
+          "$ref": "#/$defs/SubjectInfo"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        }
+      },
+      "required": [
+        "address",
+        "info"
+      ],
+      "type": "object"
+    },
+    "Routing": {
+      "properties": {
+        "routingText": {
+          "$ref": "#/$defs/RoutingText"
+        },
+        "DSORT": {
+          "$ref": "#/$defs/DSORT"
+        },
+        "OSORT": {
+          "$ref": "#/$defs/OSORT"
+        },
+        "SSORT": {
+          "$ref": "#/$defs/SSORT"
+        }
+      },
+      "required": [
+        "DSORT",
+        "OSORT",
+        "SSORT",
+        "routingText"
+      ],
+      "type": "object"
+    },
+    "RoutingData": {
+      "properties": {
+        "routing": {
+          "$ref": "#/$defs/Routing"
+        },
+        "dispatchDepot": {
+          "$ref": "#/$defs/DispatchDepot"
+        },
+        "destinationDepot": {
+          "$ref": "#/$defs/RoutingData_destinationDepot"
+        }
+      },
+      "required": [
+        "destinationDepot",
+        "dispatchDepot",
+        "routing"
+      ],
+      "type": "object"
+    },
+    "RoutingData_destinationDepot": {
+      "properties": {
+        "depotNumbers": {
+          "$ref": "#/$defs/RoutingData_destinationDepot_depotNumbers"
+        }
+      },
+      "required": [
+        "depotNumbers"
+      ],
+      "type": "object"
+    },
+    "RoutingData_destinationDepot_depotNumbers": {
+      "properties": {
+        "longNumber": {
+          "type": "string"
+        },
+        "shortNumber": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "longNumber",
+        "shortNumber"
+      ],
+      "type": "object"
+    },
+    "RoutingText": {
+      "description": "The routing text includes information such as depot country alpha 2, destination business unit, destination depot, S-Sort",
+      "type": "string"
+    },
+    "SSORT": {
+      "description": "Sorting",
+      "type": "string"
+    },
+    "Sender": {
+      "description": "Info about the sender of the shipment (source)",
+      "properties": {
+        "info": {
+          "$ref": "#/$defs/SubjectInfo"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        }
+      },
+      "required": [
+        "address",
+        "info"
+      ],
+      "type": "object"
+    },
+    "ServiceDesignation": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "combination": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "mark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "combination",
+        "prefix"
+      ],
+      "type": "object"
+    },
+    "Street": {
+      "description": "Including the descriptive number",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "SubjectInfo": {
+      "properties": {
+        "name1": {
+          "$ref": "#/$defs/SubjectName"
+        },
+        "name2": {
+          "$ref": "#/$defs/SubjectNameSecondary"
+        },
+        "contact": {
+          "$ref": "#/$defs/SubjectInfo_contact"
+        }
+      },
+      "required": [
+        "name1"
+      ],
+      "title": "Subject information",
+      "type": "object"
+    },
+    "SubjectInfo_contact": {
+      "properties": {
+        "person": {
+          "minLength": 2,
+          "type": "string"
+        },
+        "phone": {
+          "$ref": "#/$defs/PhoneNumber"
+        },
+        "email": {
+          "$ref": "#/$defs/Email"
+        }
+      },
+      "type": "object"
+    },
+    "SubjectName": {
+      "description": "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "SubjectNameSecondary": {
+      "description": "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n",
+      "maxLength": 35,
+      "type": "string"
+    }
+  }
+}

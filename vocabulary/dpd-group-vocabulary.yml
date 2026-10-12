@@ -1,0 +1,435 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-vocabulary.py
+source:
+- openapi/dpd-group-countries-api-openapi.yml
+- openapi/dpd-group-customers-api-openapi.yml
+- openapi/dpd-group-me-api-openapi.yml
+- openapi/dpd-group-parcels-api-openapi.yml
+- openapi/dpd-group-pickup-orders-api-openapi.yml
+vocabulary:
+  name: DPD Group Domain Vocabulary
+  description: 'Terms declared by DPD Group''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-13'
+  terms:
+  - term: Shipping
+    definition: the shipping API
+    tags:
+    - Resource Group
+    source: openapi/dpd-group-shipping-api-openapi.yml
+  - term: Country_codInfo
+    definition: Info about COD (Cash On Delivery) services for a country
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/Country_codInfo
+  - term: Currency
+    definition: Currency in the ISO 4217 format
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/Currency
+  - term: CountryAlpha2
+    definition: Country ISO Alpha-2 code
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/CountryAlpha2
+  - term: Error
+    definition: 'Object declared by the contract with fields: code, message, description.'
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/Error
+  - term: CountryNumeric
+    definition: Country ISO numeric code
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/CountryNumeric
+  - term: Country
+    definition: 'Object declared by the contract with fields: localizedName, numericCode, alpha2Code, alpha3Code, codInfo.'
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/Country
+  - term: CountryAlpha3
+    definition: Country ISO Alpha-3 code
+    tags:
+    - Object
+    source: openapi/dpd-group-countries-api-openapi.yml#/components/schemas/CountryAlpha3
+  - term: CountryIdent_oneOf_2
+    definition: 'Object declared by the contract with fields: isoNumeric.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CountryIdent_oneOf_2
+  - term: CustomerID
+    definition: The internal GeoAPI customer ID You would only use this if there is no other way to identify the customer.
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CustomerID
+  - term: Address
+    definition: 'Object declared by the contract with fields: street, postalCode, city, houseNumber, country.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/Address
+  - term: Subject information
+    definition: 'Object declared by the contract with fields: name1, name2, contact.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/SubjectInfo
+  - term: Street_1
+    definition: 'Including the descriptive number WARNING: Depending on type of the label, this field will be shortened to fit the label. - PDF
+      31 characters for receiver and 28 characters for sender - ZPL/EPL 31 characters for receiver and 19 characters for sender'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/Street_1
+  - term: SubjectName
+    definition: 'The name of the sender/receiver. Usually this is the full name of the receiver/sender. You can also specify the name of the receiving/sending
+      company (e.g) It is up to you to specify all required information, for the delivery to be successfully completed. WARNING: Depending on
+      type of the label, this field will be shortened to fit the label. - PDF/EPL 31 characters for receiver and 28 characters f'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/SubjectName
+  - term: PhoneNumber
+    definition: Can be with or without the international prefix
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/PhoneNumber
+  - term: SubjectNameSecondary
+    definition: 'You can use this property if you need to add some additional information about the receiver/sender. Or if the information about
+      the receiver/sender are better expressed in separate fields For example, you can specify the name of the company here, or the name of the
+      person who is sending/receiving for the shipment. WARNING: Depending on type of the label, this field will be shortened to fit the lab'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/SubjectNameSecondary
+  - term: CountryIdent_oneOf
+    definition: 'Object declared by the contract with fields: isoAlpha3.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CountryIdent_oneOf
+  - term: CustomerDSW
+    definition: The customer unique global identification number used across multiple DPD services. A single user account can have multiple customers.
+      This allows for a single user account to manage multiple branches via this API.
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CustomerDSW
+  - term: SubjectInfo_contact
+    definition: 'Object declared by the contract with fields: person, phone, email.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/SubjectInfo_contact
+  - term: CountryIdent_oneOf_1
+    definition: 'Object declared by the contract with fields: isoAlpha2.'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CountryIdent_oneOf_1
+  - term: CustomerAddressIt4emId
+    definition: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CustomerAddressIt4emId
+  - term: Customer
+    definition: For more info about customers see the [Customer DSW](#/CustomerDSW)
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/Customer
+  - term: City_1
+    definition: 'WARNING: Depending on type of the label, this field will be shortened to fit the label. - PDF/EPL 31 characters for receiver
+      and 28 characters for sender - ZPL 31 characters for receiver and 19 characters for sender'
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/City_1
+  - term: CustomerAddress
+    definition: Each user account, can have multiple customers (identified by DSW). And each customer can have multiple customer addresses. These
+      addresses can for instance represent the pickup addresses for pickup services.
+    tags:
+    - Object
+    source: openapi/dpd-group-customers-api-openapi.yml#/components/schemas/CustomerAddress
+  - term: Me_customers_inner
+    definition: 'Object declared by the contract with fields: customer, addresses.'
+    tags:
+    - Object
+    source: openapi/dpd-group-me-api-openapi.yml#/components/schemas/Me_customers_inner
+  - term: Me
+    definition: The first active customer of the user account and their list of addresses
+    tags:
+    - Object
+    source: openapi/dpd-group-me-api-openapi.yml#/components/schemas/Me
+  - term: UserAccount
+    definition: User Account of the GeoApi.
+    tags:
+    - Object
+    source: openapi/dpd-group-me-api-openapi.yml#/components/schemas/UserAccount
+  - term: Receiver
+    definition: Info about the receiver of the shipment (destination)
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/Receiver
+  - term: LabelPDF
+    definition: Base64 encoded PDF representing one or more labels
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelPDF
+  - term: RoutingText
+    definition: The routing text includes information such as depot country alpha 2, destination business unit, destination depot, S-Sort
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/RoutingText
+  - term: ParcelReference1
+    definition: A reference is an internal information for your use cases. You can use this (for instance) to correlate the parcel with your internal
+      system IDs. This reference is printed on the parcel label. It is shortened to 14/17 characters when printed on the label.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelReference1
+  - term: CashOnDeliveryWithAccount
+    definition: 'Object declared by the contract with fields: amountCents, currency, payment, account, variableSymbol.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/CashOnDeliveryWithAccount
+  - term: ZPLPrintProperties
+    definition: Optional configuration for ZPL label barcode rendering. If omitted, the standard `wideAuto` layout is used. Only applicable when
+      printType is ZPL.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ZPLPrintProperties
+  - term: DropoffCodes_pin
+    definition: 'Object declared by the contract with fields: value, expiresAt.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DropoffCodes_pin
+  - term: ParcelReference3
+    definition: Additional information for your use cases. You can use this (for instance) to correlate the parcel with your internal system IDs.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelReference3
+  - term: LabelData_delivery
+    definition: 'Object declared by the contract with fields: name1, name2, phone, contactPerson, street, houseNumber, city, countryAlpha2, postalCode,
+      pickupPoint.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_delivery
+  - term: LabelData
+    definition: 'Object declared by the contract with fields: delivery, origin, parcel, parcelCount, routing, service, barCode, barCodeText, cod,
+      departmentDelivery, personalIdentification.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData
+  - term: RoutingData
+    definition: 'Object declared by the contract with fields: routing, dispatchDepot, destinationDepot.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/RoutingData
+  - term: LabelData_origin
+    definition: 'Object declared by the contract with fields: sender, dispatchDepot.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_origin
+  - term: DropoffCodes
+    definition: 'Object declared by the contract with fields: pin, aztec.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DropoffCodes
+  - term: RoutingData_destinationDepot_depotNumbers
+    definition: 'Object declared by the contract with fields: longNumber, shortNumber.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/RoutingData_destinationDepot_depotNumbers
+  - term: PickupPointName
+    definition: Name of the pickup point Also internally used by DPD
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/PickupPointName
+  - term: ParcelNo
+    definition: Each shipment can have multiple (physical) parcels. This number is used to identify and reference an individual parcel in the
+      shipment. Each parcel has its own label.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelNo
+  - term: ParcelReference4
+    definition: Additional information for your use cases. You can use this (for instance) to correlate the parcel with your internal system IDs.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelReference4
+  - term: ZPLPrintTypeInput
+    definition: 'Object declared by the contract with fields: printType, printProperties.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ZPLPrintTypeInput
+  - term: LabelScript
+    definition: A script in a txt format that can be sent to the printer. It can contain instructions for single label or multiple labels. Supported
+      formats are ZPL and EPL.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelScript
+  - term: DateTime
+    definition: Represented in the ISO 8601 format
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DateTime
+  - term: TrackingResult_parcelInfo_routing
+    definition: 'Object declared by the contract with fields: main, back.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/TrackingResult_parcelInfo_routing
+  - term: DropoffCodes_aztec
+    definition: 'Object declared by the contract with fields: value, format.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DropoffCodes_aztec
+  - term: LabelData_origin_sender
+    definition: 'Object declared by the contract with fields: name1, name2, street, city, countryAlpha2, postalCode.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_origin_sender
+  - term: LabelData_service
+    definition: The shipping service/product specification
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_service
+  - term: DropOffCodesInput_aztec
+    definition: If the options are filled in, the aztec code will be included in the selected format
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DropOffCodesInput_aztec
+  - term: DSORT
+    definition: The delivery route
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DSORT
+  - term: DispatchDepot
+    definition: 'Object declared by the contract with fields: depotNumbers, street, city, countryAlpha2, postalCode.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DispatchDepot
+  - term: DeclaredSender
+    definition: Allows you to specify any address as the declared sender. Declared sender is a sender that will be listed on the parcel labels
+      and will also be listed in the shipment data. However it does not affect the actual shipment routing. The actual sender (pickup place) will
+      still be the "sender". **Usages** - This is, for instance, used when you are shipping packages for your partner / declared sender.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DeclaredSender
+  - term: A4PrintProperties
+    definition: 'Object declared by the contract with fields: pageSize, labelsPerPage, labelsOffset.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/A4PrintProperties
+  - term: TrackingResult_parcelInfo
+    definition: Info about the parcel
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/TrackingResult_parcelInfo
+  - term: ParcelIdent_oneOf
+    definition: 'Object declared by the contract with fields: parcelNumber.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelIdent_oneOf
+  - term: OSORT
+    definition: The pickup tour
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/OSORT
+  - term: Department delivery
+    definition: 'The shipment is delivered to a department without any personal identification. Internal info: Setting identification to "false"
+      (the only option currently) equals the "1" type in the old GeoAPI'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DepartmentDeliveryService
+  - term: PaymentType
+    definition: CASH - Payment by cash CASH_OR_CARD - Payment by cash or card
+    tags:
+    - Enumeration
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/PaymentType
+  - term: PickupPointID
+    definition: Uniquely identifies a pickup point Also internally used by DPD
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/PickupPointID
+  - term: ServiceCombination
+    definition: The DPD wide shipping service/product combination code. This is the combination of the codes from the selected services.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ServiceCombination
+  - term: TrackingInput
+    definition: 'Object declared by the contract with fields: parcels.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/TrackingInput
+  - term: DispatchDepot_depotNumbers
+    definition: 'Object declared by the contract with fields: longNumber, shortNumber.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/DispatchDepot_depotNumbers
+  - term: TrackingResult
+    definition: 'Object declared by the contract with fields: parcelInfo, parcelEvents.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/TrackingResult
+  - term: SSORT
+    definition: Sorting
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/SSORT
+  - term: ContactPerson
+    definition: The name of the person who can be contacted for more information about the parcel.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ContactPerson
+  - term: CodAccount_international
+    definition: 'Object declared by the contract with fields: IBAN, BIC.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/CodAccount_international
+  - term: ServiceCode
+    definition: The DPD wide shipping service/product code. This is calculated based on the requested shipment services like COD, notification
+      and etc... It is (for instance) used when resolving the shipping route.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ServiceCode
+  - term: LabelData_delivery_pickupPoint
+    definition: 'Object declared by the contract with fields: pudoId, name.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_delivery_pickupPoint
+  - term: IDCheck
+    definition: This data is used when a check against a personal ID card is required
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/IDCheck
+  - term: AdditionalCode
+    definition: The DPD wide shipping additional service/product code The original shipping ServiceCode is no longer enough and has to be supplemented
+      by the AdditionalCode
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/AdditionalCode
+  - term: PDFPrintTypeInput
+    definition: 'Object declared by the contract with fields: printType, printProperties.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/PDFPrintTypeInput
+  - term: CodAccount_domestic
+    definition: Country specific bank account information. This is currently reserved for CZ based bank accounts! If you provide any non CZ based
+      bank acccount that will pass validation, it might get used for domestic CZ payments!
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/CodAccount_domestic
+  - term: Parcel
+    definition: For more info about parcels see the [Parcel Number](#/ParcelNo)
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/Parcel
+  - term: CodAccount
+    definition: The account to which the COD payment should be sent
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/CodAccount
+  - term: ParcelWeight
+    definition: Weight of the parcel in grams E.g 1500 represents 1.5 kg.
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/ParcelWeight
+  - term: LabelData_parcel_references
+    definition: 'Object declared by the contract with fields: ref1, ref2.'
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelData_parcel_references
+  - term: Sender
+    definition: Info about the sender of the shipment (source)
+    tags:
+    - Object
+    source: openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/Sender

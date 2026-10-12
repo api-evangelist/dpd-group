@@ -1,0 +1,135 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-mcp-candidate.py
+source:
+- openapi/dpd-group-countries-api-openapi.yml
+- openapi/dpd-group-customers-api-openapi.yml
+- openapi/dpd-group-me-api-openapi.yml
+- openapi/dpd-group-parcels-api-openapi.yml
+- openapi/dpd-group-pickup-orders-api-openapi.yml
+- openapi/dpd-group-shipments-api-openapi.yml
+- openapi/dpd-group-shipping-api-openapi.yml
+- openapi/dpd-group-shipping-services-api-openapi.yml
+status: candidate
+deployment:
+  mode: none
+  auth: unknown
+  verified: derived
+note: No MCP server was found. No probe result in the dossier. Candidate tools below are derived from the 23 operation(s) in the provider's own
+  OpenAPI (23 listed); they describe what a server WOULD expose, not one that exists.
+tools:
+- name: get_countries
+  operationId: getCountries
+  method: GET
+  path: /countries
+  description: List all available countries for your account
+- name: get_customers
+  operationId: getCustomers
+  method: GET
+  path: /customers
+  description: List all customers associated with the active user account
+- name: get_me
+  operationId: getMe
+  method: GET
+  path: /me
+  description: Get the active customers of the user account and their list of addresses
+- name: get_parcels
+  operationId: getParcels
+  method: GET
+  path: /parcels
+  description: List all parcels for the current active user account
+- name: post_pickup_orders
+  operationId: postPickupOrders
+  method: POST
+  path: /pickup-orders
+  description: Create a new pickup order
+- name: post_shipments
+  operationId: postShipments
+  method: POST
+  path: /shipments
+  description: Create new shipments
+- name: shipping_v2_shipment_post
+  operationId: shippingV2ShipmentPost
+  method: POST
+  path: /shipping/v2/shipment
+  description: Shipping V2 shipment post
+- name: get_shipping_services
+  operationId: getShippingServices
+  method: GET
+  path: /shipping-services
+  description: List of all available shipping services in JSON
+- name: get_customers_by_customer_dswaddresses
+  operationId: getCustomersByCustomerDSWAddresses
+  method: GET
+  path: /customers/{customerDSW}/addresses
+  description: List all addresses associated with the specified customer
+- name: post_parcels_labels
+  operationId: postParcelsLabels
+  method: POST
+  path: /parcels/labels
+  description: Print the labels for multiple parcels
+- name: delete_pickup_orders_by_pickup_order_id
+  operationId: deletePickupOrdersByPickupOrderId
+  method: DELETE
+  path: /pickup-orders/{pickupOrderId}
+  description: Cancel pickup order by pickupOrderId
+- name: shipping_v2_pickupscheduling_post
+  operationId: shippingV2PickupschedulingPost
+  method: POST
+  path: /shipping/v2/pickupscheduling
+  description: Shipping V2 pickupscheduling post
+- name: post_parcels_by_parcel_ident_labels
+  operationId: postParcelsByParcelIdentLabels
+  method: POST
+  path: /parcels/{parcelIdent}/labels
+  description: Print the parcel labels
+- name: get_pickup_orders_by_pickup_order_id
+  operationId: getPickupOrdersByPickupOrderId
+  method: GET
+  path: /pickup-orders/{pickupOrderId}
+  description: Show information about a specific pickup order
+- name: shipping_v2_colreq_post
+  operationId: shippingV2ColreqPost
+  method: POST
+  path: /shipping/v2/colreq
+  description: Shipping V2 colreq post
+- name: post_parcels_tracking
+  operationId: postParcelsTracking
+  method: POST
+  path: /parcels/tracking
+  description: Get the tracking info for multiple parcels
+- name: shipping_v1_shipment_post
+  operationId: shippingV1ShipmentPost
+  method: POST
+  path: /shipping/v1/shipment
+  description: Shipping V1 shipment post
+- name: get_parcels_by_parcel_ident_tracking
+  operationId: getParcelsByParcelIdentTracking
+  method: GET
+  path: /parcels/{parcelIdent}/tracking
+  description: Get parcel tracking info
+- name: shipping_v1_pickupscheduling_post
+  operationId: shippingV1PickupschedulingPost
+  method: POST
+  path: /shipping/v1/pickupscheduling
+  description: Shipping V1 pickupscheduling post
+- name: post_parcels_by_parcel_ident_drop_off_codes
+  operationId: postParcelsByParcelIdentDropOffCodes
+  method: POST
+  path: /parcels/{parcelIdent}/drop-off-codes
+  description: Get label-less drop-off codes for a parcel
+- name: shipping_v1_login_post
+  operationId: shippingV1LoginPost
+  method: POST
+  path: /shipping/v1/login
+  description: Shipping V1 login post
+- name: shipping_v1_label_post
+  operationId: shippingV1LabelPost
+  method: POST
+  path: /shipping/v1/label
+  description: Shipping V1 label post
+- name: shipping_v1_colreq_post
+  operationId: shippingV1ColreqPost
+  method: POST
+  path: /shipping/v1/colreq
+  description: Shipping V1 colreq post

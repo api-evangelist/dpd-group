@@ -1,0 +1,397 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-new-pickup-order-schema.json",
+  "title": "NewPickupOrder",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-pickup-orders-api-openapi.yml#/components/schemas/NewPickupOrder",
+  "allOf": [
+    {
+      "title": "New pickup order specification"
+    },
+    {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AddressPickupOrderSpecs"
+        },
+        {
+          "$ref": "#/$defs/ParcelPickupOrderSpecs"
+        },
+        {
+          "$ref": "#/$defs/ArbitraryAddressPickupOrderSpecs"
+        }
+      ]
+    }
+  ],
+  "$defs": {
+    "Address": {
+      "properties": {
+        "street": {
+          "$ref": "#/$defs/Street_1"
+        },
+        "postalCode": {
+          "$ref": "#/$defs/PostalCode"
+        },
+        "city": {
+          "$ref": "#/$defs/City_1"
+        },
+        "houseNumber": {
+          "$ref": "#/$defs/HouseNumber"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryIdent"
+        }
+      },
+      "required": [
+        "city",
+        "country",
+        "postalCode",
+        "street"
+      ],
+      "type": "object"
+    },
+    "AddressPickupOrderSpecs": {
+      "description": "The pickup is ordered to a selected customer address (your address).\n\nThe courier can/will pick up all parcels for which you have printed labels.\n",
+      "properties": {
+        "customerAddress": {
+          "$ref": "#/$defs/CustomerAddressIdent"
+        },
+        "date": {
+          "$ref": "#/$defs/Date"
+        },
+        "note": {
+          "$ref": "#/$defs/CourierNote"
+        }
+      },
+      "required": [
+        "customerAddress"
+      ],
+      "title": "Address"
+    },
+    "ArbitraryAddressPickupOrderSpecs": {
+      "description": "The pickup is ordered to an arbitrary address.\n\nThe courier can/will pick up all parcels for which you have printed labels at the location.\n",
+      "properties": {
+        "customer": {
+          "$ref": "#/$defs/CustomerIdent"
+        },
+        "arbitraryAddress": {
+          "$ref": "#/$defs/ArbitraryAddressPickupOrderSpecs_arbitraryAddress"
+        },
+        "date": {
+          "$ref": "#/$defs/Date"
+        },
+        "note": {
+          "$ref": "#/$defs/CourierNote"
+        }
+      },
+      "required": [
+        "arbitraryAddress",
+        "customer"
+      ],
+      "title": "ArbitraryAddress"
+    },
+    "ArbitraryAddressPickupOrderSpecs_arbitraryAddress": {
+      "properties": {
+        "info": {
+          "$ref": "#/$defs/SubjectInfo"
+        },
+        "address": {
+          "$ref": "#/$defs/Address"
+        }
+      },
+      "required": [
+        "address",
+        "info"
+      ],
+      "type": "object"
+    },
+    "City_1": {
+      "description": "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "CountryAlpha2": {
+      "description": "Country ISO Alpha-2 code",
+      "maxLength": 2,
+      "minLength": 2,
+      "type": "string"
+    },
+    "CountryAlpha3": {
+      "description": "Country ISO Alpha-3 code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "CountryIdent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf_1"
+        },
+        {
+          "$ref": "#/$defs/CountryIdent_oneOf_2"
+        }
+      ]
+    },
+    "CountryIdent_oneOf": {
+      "properties": {
+        "isoAlpha3": {
+          "$ref": "#/$defs/CountryAlpha3"
+        }
+      },
+      "required": [
+        "isoAlpha3"
+      ],
+      "type": "object"
+    },
+    "CountryIdent_oneOf_1": {
+      "properties": {
+        "isoAlpha2": {
+          "$ref": "#/$defs/CountryAlpha2"
+        }
+      },
+      "required": [
+        "isoAlpha2"
+      ],
+      "type": "object"
+    },
+    "CountryIdent_oneOf_2": {
+      "properties": {
+        "isoNumeric": {
+          "$ref": "#/$defs/CountryNumeric"
+        }
+      },
+      "required": [
+        "isoNumeric"
+      ],
+      "type": "object"
+    },
+    "CountryNumeric": {
+      "description": "Country ISO numeric code",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "CourierNote": {
+      "description": "This is a note for the courier.  \nYou can leave some additional information for the courier using this property.\n",
+      "maxLength": 200,
+      "type": "string"
+    },
+    "CustomerAddressId": {
+      "description": "Internal GeoAPI ID",
+      "type": "number"
+    },
+    "CustomerAddressIdent": {
+      "description": "Used to uniquely identify a customer address in the API",
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CustomerAddressIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/CustomerAddressIdent_oneOf_1"
+        }
+      ]
+    },
+    "CustomerAddressIdent_oneOf": {
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/CustomerAddressId"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "CustomerAddressIdent_oneOf_1": {
+      "properties": {
+        "it4emId": {
+          "$ref": "#/$defs/CustomerAddressIt4emId"
+        }
+      },
+      "required": [
+        "it4emId"
+      ],
+      "type": "object"
+    },
+    "CustomerAddressIt4emId": {
+      "description": "This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)",
+      "type": "number"
+    },
+    "CustomerDSW": {
+      "description": "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n",
+      "maxLength": 12,
+      "minLength": 11,
+      "type": "string"
+    },
+    "CustomerID": {
+      "description": "The internal GeoAPI customer ID\n\nYou would only use this if there is no other way to identify the customer.\n",
+      "type": "number"
+    },
+    "CustomerIdent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/CustomerIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/CustomerIdent_oneOf_1"
+        }
+      ]
+    },
+    "CustomerIdent_oneOf": {
+      "properties": {
+        "dsw": {
+          "$ref": "#/$defs/CustomerDSW"
+        }
+      },
+      "required": [
+        "dsw"
+      ],
+      "type": "object"
+    },
+    "CustomerIdent_oneOf_1": {
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/CustomerID"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "Date": {
+      "description": "Represented in the YYYY-MM-DD (ISO 8601) format",
+      "maxLength": 10,
+      "minLength": 10,
+      "type": "string"
+    },
+    "Email": {
+      "type": "string"
+    },
+    "HouseNumber": {
+      "type": "string"
+    },
+    "ParcelId": {
+      "description": "The internal GeoAPI parcel ID\n\nYou would only use this if there is no other way to identify the parcel.\n",
+      "type": "number"
+    },
+    "ParcelIdent": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ParcelIdent_oneOf"
+        },
+        {
+          "$ref": "#/$defs/ParcelIdent_oneOf_1"
+        }
+      ]
+    },
+    "ParcelIdent_oneOf": {
+      "properties": {
+        "parcelNumber": {
+          "$ref": "#/$defs/ParcelNo"
+        }
+      },
+      "required": [
+        "parcelNumber"
+      ],
+      "type": "object"
+    },
+    "ParcelIdent_oneOf_1": {
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ParcelId"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "type": "object"
+    },
+    "ParcelNo": {
+      "description": "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n",
+      "maxLength": 14,
+      "minLength": 14,
+      "type": "string"
+    },
+    "ParcelPickupOrderSpecs": {
+      "description": "The pickup is ordered for a specific collection parcel(s).\n\nThe labels are printed by the DPD.\n",
+      "properties": {
+        "parcel": {
+          "$ref": "#/$defs/ParcelIdent"
+        },
+        "date": {
+          "$ref": "#/$defs/Date"
+        },
+        "note": {
+          "$ref": "#/$defs/CourierNote"
+        }
+      },
+      "required": [
+        "parcel"
+      ],
+      "title": "Parcel"
+    },
+    "PhoneNumber": {
+      "description": "Can be with or without the international prefix",
+      "maxLength": 31,
+      "type": "string"
+    },
+    "PostalCode": {
+      "maxLength": 7,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Street_1": {
+      "description": "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "SubjectInfo": {
+      "properties": {
+        "name1": {
+          "$ref": "#/$defs/SubjectName"
+        },
+        "name2": {
+          "$ref": "#/$defs/SubjectNameSecondary"
+        },
+        "contact": {
+          "$ref": "#/$defs/SubjectInfo_contact"
+        }
+      },
+      "required": [
+        "name1"
+      ],
+      "title": "Subject information",
+      "type": "object"
+    },
+    "SubjectInfo_contact": {
+      "properties": {
+        "person": {
+          "minLength": 2,
+          "type": "string"
+        },
+        "phone": {
+          "$ref": "#/$defs/PhoneNumber"
+        },
+        "email": {
+          "$ref": "#/$defs/Email"
+        }
+      },
+      "type": "object"
+    },
+    "SubjectName": {
+      "description": "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "SubjectNameSecondary": {
+      "description": "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n",
+      "maxLength": 35,
+      "type": "string"
+    }
+  }
+}

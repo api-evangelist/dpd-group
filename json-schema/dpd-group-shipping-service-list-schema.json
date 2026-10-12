@@ -1,0 +1,607 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-shipping-service-list-schema.json",
+  "title": "ShippingServiceList",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-shipping-services-api-openapi.yml#/components/schemas/ShippingServiceList",
+  "properties": {
+    "apiServiceCombination": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "servicesForCombination": {
+      "items": {
+        "$ref": "#/$defs/ShippingService"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "apiServiceCombination",
+    "servicesForCombination"
+  ],
+  "type": "object",
+  "$defs": {
+    "AdditionalCode": {
+      "description": "The DPD wide shipping additional service/product code\n\nThe original shipping ServiceCode is no longer enough and has to be supplemented by the AdditionalCode\n",
+      "type": "string"
+    },
+    "AirExpressService": {
+      "default": false,
+      "description": "Service providing express air delivery",
+      "title": "Air express",
+      "type": "boolean"
+    },
+    "CashOnDeliveryService_1": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/CashOnDeliveryWithAccount"
+        },
+        {
+          "description": "Cash on delivery - Allows you to specify the amount to be collected from the consignee",
+          "title": "Cash on delivery"
+        }
+      ]
+    },
+    "CashOnDeliveryWithAccount": {
+      "properties": {
+        "amountCents": {
+          "$ref": "#/$defs/CodAmount"
+        },
+        "currency": {
+          "$ref": "#/$defs/Currency"
+        },
+        "payment": {
+          "$ref": "#/$defs/PaymentType"
+        },
+        "account": {
+          "$ref": "#/$defs/CodAccount"
+        },
+        "variableSymbol": {
+          "description": "Variable symbol of the COD payment",
+          "maxLength": 10,
+          "type": "string"
+        }
+      },
+      "required": [
+        "amountCents",
+        "currency",
+        "payment"
+      ],
+      "type": "object"
+    },
+    "CodAccount": {
+      "description": "The account to which the COD payment should be sent",
+      "properties": {
+        "bankCode": {
+          "deprecated": true,
+          "description": "Code of your bank  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "bankName": {
+          "deprecated": true,
+          "description": "Your custom bank designation (might be displayed to the customer).  \n\nWe suggest you use capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "accountNumber": {
+          "deprecated": true,
+          "description": "The account number without bankCode  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 17,
+          "minLength": 17,
+          "type": "string"
+        },
+        "accountName": {
+          "deprecated": true,
+          "description": "Your custom account number name for organizational purposes.  \n\nWe suggest using only capital letters and numbers.  \n\nDeprecated: Use the \"domestic\" object instead.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "domestic": {
+          "$ref": "#/$defs/CodAccount_domestic"
+        },
+        "international": {
+          "$ref": "#/$defs/CodAccount_international"
+        }
+      },
+      "type": "object"
+    },
+    "CodAccount_domestic": {
+      "description": "Country specific bank account information.\n\nThis is currently reserved for CZ based bank accounts!  \n\nIf you provide any non CZ based bank acccount that will pass validation, it might get used for domestic CZ payments!\n",
+      "properties": {
+        "bankCode": {
+          "description": "Code of your bank",
+          "maxLength": 4,
+          "minLength": 4,
+          "type": "string"
+        },
+        "bankName": {
+          "description": "Your custom bank designation (might be displayed to the customer).\n\nWe suggest you use capital letters and numbers.\n",
+          "maxLength": 30,
+          "type": "string"
+        },
+        "accountNumber": {
+          "description": "The account number without bankCode",
+          "maxLength": 17,
+          "minLength": 17,
+          "type": "string"
+        },
+        "accountName": {
+          "description": "Your custom account number name for organizational purposes.\n\nWe suggest using only capital letters and numbers.\n",
+          "maxLength": 30,
+          "type": "string"
+        }
+      },
+      "required": [
+        "accountName",
+        "accountNumber",
+        "bankCode",
+        "bankName"
+      ],
+      "type": "object"
+    },
+    "CodAccount_international": {
+      "properties": {
+        "IBAN": {
+          "description": "The IBAN of the COD account",
+          "maxLength": 34,
+          "type": "string"
+        },
+        "BIC": {
+          "description": "BIC - The SWIFT Address assigned to a bank",
+          "maxLength": 11,
+          "minLength": 8,
+          "type": "string"
+        }
+      },
+      "required": [
+        "BIC",
+        "IBAN"
+      ],
+      "type": "object"
+    },
+    "CodAmount": {
+      "description": "The amount to be collected on delivery.  \nThis value is always represented in cents of the specified currency.  \nCents in this context signify a 1/100 of the currency base units.\n\nFor example when the COD is supposed to be 45.5 CZK, the value should be 4550 (with appropriate currency settings)  \nOr when the COD is supposed to be 2 EUR, the sent value should be 200 (with appropriate currency settings)  \n",
+      "type": "number"
+    },
+    "CountryAlpha2": {
+      "description": "Country ISO Alpha-2 code",
+      "maxLength": 2,
+      "minLength": 2,
+      "type": "string"
+    },
+    "Currency": {
+      "description": "Currency in the ISO 4217 format",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "DPDGuaranteeService": {
+      "default": false,
+      "description": "Enable for guaranteed timely delivery abroad\n",
+      "title": "DPD Guarantee",
+      "type": "boolean"
+    },
+    "DPDPneuService": {
+      "default": false,
+      "description": "Delivery of (vehicle) tires",
+      "title": "DPD Pneu",
+      "type": "boolean"
+    },
+    "DPDReturnService": {
+      "default": false,
+      "description": "A special service where the **original receiver** of a **previous shipment** returns the shipment, typically due to a complaint.\n\nThe return shipment will be dropped of by the **original receiver** at a pickup point and sent back to the **original sender**.\n\nBut this new shipment must be setup in a usual way as it will travel from the **sender** (original receiver) to the **receiver** (original sender).\nThe only difference is the **semantic link** to the **previous shipment**.\n\n**Limitations**\n\nDPD service cannot be combined with any other service. Also only the PDF label can be printed.\n",
+      "title": "DPD Return Service",
+      "type": "boolean"
+    },
+    "DPDTimeGuaranteeService": {
+      "description": "You can choose from the selection of DPD delivery services with guaranteed delivery times\n\nDPD12 - Delivery before 12:00\n\nDPD18 - Guaranteed second day delivery before 18:00\n",
+      "enum": [
+        "DPD12",
+        "DPD18"
+      ],
+      "title": "DPD Time guarantee",
+      "type": "string"
+    },
+    "DedicatedDirectTruckLoadService": {
+      "default": false,
+      "description": "A special service where multiple parcels are delivered in a single containe.\n",
+      "title": "Dedicated Direct Truck Load",
+      "type": "boolean"
+    },
+    "DepartmentDeliveryService": {
+      "description": "The shipment is delivered to a department without any personal identification.\n\nInternal info: Setting identification to \"false\" (the only option currently) equals the \"1\" type in the old GeoAPI\n",
+      "properties": {
+        "building": {
+          "description": "The building where the shipment is delivered to",
+          "maxLength": 25,
+          "type": "string"
+        },
+        "floor": {
+          "description": "The floor where the shipment is delivered to",
+          "maxLength": 25,
+          "type": "string"
+        },
+        "department": {
+          "description": "The department where the shipment is delivered to",
+          "maxLength": 25,
+          "type": "string"
+        }
+      },
+      "required": [
+        "building",
+        "department",
+        "floor"
+      ],
+      "title": "Department delivery",
+      "type": "object"
+    },
+    "IDCheck": {
+      "description": "This data is used when a check against a personal ID card is required",
+      "properties": {
+        "name": {
+          "description": "The name of the person to be checked",
+          "maxLength": 35,
+          "type": "string"
+        },
+        "personalId": {
+          "description": "The personal identification card number of the receiving person",
+          "maxLength": 18,
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "type": "object"
+    },
+    "NoRedirectionService": {
+      "default": false,
+      "description": "This is an additional service to the S2S product which cannot be redirected\n",
+      "title": "DPD No Direction",
+      "type": "boolean"
+    },
+    "NotificationService": {
+      "default": false,
+      "description": "Private shipment with predict notifications and 1HP\n\nEnable this service to send notifications about the delivery times to your customers.\n",
+      "title": "Notification",
+      "type": "boolean"
+    },
+    "PaymentType": {
+      "description": "CASH - Payment by cash\n\nCASH_OR_CARD - Payment by cash or card\n",
+      "enum": [
+        "Cash",
+        "CashOrCard"
+      ],
+      "type": "string"
+    },
+    "PersonalIdentificationService": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/IDCheck"
+        }
+      ],
+      "description": "Delivery with personal identification using the ID-Check method.\n\nThe receiver will have to provide an identification card matching the information provided here.\n\nIf you have selected a pickup point delivery service, then the identification will be conducted at the pickup point.\n\n**Limitations**\n\nThe personal identification service is only available when the delivery to department is not requested:\n\nSee the service table for more info.\n",
+      "title": "Personal identification"
+    },
+    "PickupPointID": {
+      "description": "Uniquely identifies a pickup point\n\nAlso internally used by DPD\n",
+      "type": "string"
+    },
+    "PickupPointService": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/PickupPointID"
+        },
+        {
+          "description": "You can use this service to order a delivery to a specified pickup point\n\nSet this value to the ID of the pickup point you want the shipment to be delivered to.\n",
+          "title": "Pickup point delivery"
+        }
+      ]
+    },
+    "ShipmentExample": {
+      "properties": {
+        "services": {
+          "$ref": "#/$defs/ShipmentServices"
+        }
+      },
+      "required": [
+        "services"
+      ],
+      "type": "object"
+    },
+    "ShipmentServices": {
+      "properties": {
+        "notification": {
+          "$ref": "#/$defs/NotificationService"
+        },
+        "airExpress": {
+          "$ref": "#/$defs/AirExpressService"
+        },
+        "dpdTimeGuarantee": {
+          "$ref": "#/$defs/DPDTimeGuaranteeService"
+        },
+        "dpdGuarantee": {
+          "$ref": "#/$defs/DPDGuaranteeService"
+        },
+        "swap": {
+          "$ref": "#/$defs/SwapService"
+        },
+        "dpdPneu": {
+          "$ref": "#/$defs/DPDPneuService"
+        },
+        "cashOnDelivery": {
+          "$ref": "#/$defs/CashOnDeliveryService_1"
+        },
+        "pickupPoint": {
+          "$ref": "#/$defs/PickupPointService"
+        },
+        "departmentDelivery": {
+          "$ref": "#/$defs/DepartmentDeliveryService"
+        },
+        "personalIdentification": {
+          "$ref": "#/$defs/PersonalIdentificationService"
+        },
+        "dpdReturn": {
+          "$ref": "#/$defs/DPDReturnService"
+        },
+        "shopToShop": {
+          "$ref": "#/$defs/ShopToShopService"
+        },
+        "shopToHome": {
+          "$ref": "#/$defs/ShopToHomeService"
+        },
+        "ddtl": {
+          "$ref": "#/$defs/DedicatedDirectTruckLoadService"
+        },
+        "noRedirection": {
+          "$ref": "#/$defs/NoRedirectionService"
+        }
+      },
+      "type": "object"
+    },
+    "ShipmentType": {
+      "description": "A type of the shipment. The type has impact on validations of sender/receiver, selected services, parcel numbers assigning and routing.\n",
+      "enum": [
+        "Standard",
+        "Collection",
+        "ThirdPartyCollection",
+        "Import",
+        "ThirdPartyStandard",
+        "Return"
+      ],
+      "type": "string"
+    },
+    "ShippingService": {
+      "properties": {
+        "id": {
+          "type": "number"
+        },
+        "limitations": {
+          "$ref": "#/$defs/ShippingService_limitations"
+        },
+        "code": {
+          "type": "string"
+        },
+        "additionalCode": {
+          "$ref": "#/$defs/AdditionalCode"
+        },
+        "text": {
+          "type": "string"
+        },
+        "combination": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "mark": {
+          "type": "string"
+        },
+        "backVariant": {
+          "$ref": "#/$defs/ShippingService_backVariant"
+        }
+      },
+      "required": [
+        "code",
+        "combination",
+        "example",
+        "id",
+        "limitations",
+        "prefix"
+      ],
+      "type": "object"
+    },
+    "ShippingService_backVariant": {
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "additionalCode": {
+          "$ref": "#/$defs/AdditionalCode"
+        },
+        "text": {
+          "type": "string"
+        },
+        "combination": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        },
+        "mark": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "combination",
+        "prefix"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations": {
+      "properties": {
+        "weightLimit": {
+          "$ref": "#/$defs/ShippingService_limitations_weightLimit"
+        },
+        "noSameCountry": {
+          "type": "boolean"
+        },
+        "supportedShipmentTypes": {
+          "items": {
+            "$ref": "#/$defs/ShipmentType"
+          },
+          "type": "array"
+        },
+        "mpsDisabled": {
+          "$ref": "#/$defs/ShippingService_limitations_mpsDisabled"
+        },
+        "requiredContactInfo": {
+          "$ref": "#/$defs/ShippingService_limitations_requiredContactInfo"
+        },
+        "printing": {
+          "type": "string"
+        },
+        "countryLimitations": {
+          "$ref": "#/$defs/ShippingService_limitations_countryLimitations"
+        }
+      },
+      "required": [
+        "supportedShipmentTypes",
+        "weightLimit"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations_countryLimitations": {
+      "properties": {
+        "origin": {
+          "$ref": "#/$defs/ShippingService_limitations_countryLimitations_origin"
+        },
+        "destination": {
+          "$ref": "#/$defs/ShippingService_limitations_countryLimitations_origin"
+        }
+      },
+      "type": "object"
+    },
+    "ShippingService_limitations_countryLimitations_origin": {
+      "properties": {
+        "mode": {
+          "type": "string"
+        },
+        "countries": {
+          "$ref": "#/$defs/ShippingService_limitations_countryLimitations_origin_countries"
+        }
+      },
+      "required": [
+        "countries",
+        "mode"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations_countryLimitations_origin_countries": {
+      "properties": {
+        "isoAlpha2": {
+          "items": {
+            "$ref": "#/$defs/CountryAlpha2"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "isoAlpha2"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations_mpsDisabled": {
+      "oneOf": [
+        {
+          "type": "boolean"
+        },
+        {
+          "$ref": "#/$defs/ShippingService_limitations_mpsDisabled_oneOf"
+        }
+      ]
+    },
+    "ShippingService_limitations_mpsDisabled_oneOf": {
+      "properties": {
+        "timeFrames": {
+          "items": {
+            "$ref": "#/$defs/ShippingService_limitations_mpsDisabled_oneOf_timeFrames_inner"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "timeFrames"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations_mpsDisabled_oneOf_timeFrames_inner": {
+      "properties": {
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "from",
+        "to"
+      ],
+      "type": "object"
+    },
+    "ShippingService_limitations_requiredContactInfo": {
+      "properties": {
+        "oneOf": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "allOf": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "type": "object"
+    },
+    "ShippingService_limitations_weightLimit": {
+      "properties": {
+        "maxWeightGrams": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "maxWeightGrams"
+      ],
+      "type": "object"
+    },
+    "ShopToHomeService": {
+      "default": false,
+      "description": "A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier\n\nThe package is delivered to an arbitrary address.\n",
+      "title": "DPD Shop to Home",
+      "type": "boolean"
+    },
+    "ShopToShopService": {
+      "default": false,
+      "description": "A special service where a standard parcel is sent from a pickup point instead of being pickup up by a courier\n\nThe package is also always delivered to a pickup point\n",
+      "title": "DPD Shop to Shop",
+      "type": "boolean"
+    },
+    "SwapService": {
+      "description": "Swap shipment - Parcels exchanged one for another",
+      "title": "Swap",
+      "type": "boolean"
+    }
+  }
+}

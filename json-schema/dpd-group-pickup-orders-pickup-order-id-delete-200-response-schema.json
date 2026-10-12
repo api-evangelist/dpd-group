@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-pickup-orders-pickup-order-id-delete-200-response-schema.json",
+  "title": "_pickup_orders__pickupOrderId__delete_200_response",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-pickup-orders-api-openapi.yml#/components/schemas/_pickup_orders__pickupOrderId__delete_200_response",
+  "properties": {
+    "pickupId": {
+      "$ref": "#/$defs/PickupOrderID"
+    }
+  },
+  "required": [
+    "pickupId"
+  ],
+  "type": "object",
+  "$defs": {
+    "PickupOrderID": {
+      "description": "This ID is used in the API to uniquely identify a pickup order.\n\nThe user is able to order a pickup for a shipment on one of the customer addresses.  \nDPD will pick the shipment up on the address specified by the user and transfer it to the DPD depot for further processing.  \nThe user is also able to order a regular pickup, in that case the user is usually not using this API to create new shipments.\n",
+      "type": "number"
+    }
+  }
+}

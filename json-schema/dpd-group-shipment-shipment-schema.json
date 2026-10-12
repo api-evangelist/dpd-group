@@ -1,0 +1,1044 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-shipment-shipment-schema.json",
+  "title": "shipment.Shipment",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-shipping-api-openapi.yml#/components/schemas/shipment.Shipment",
+  "type": "object",
+  "properties": {
+    "return": {
+      "$ref": "#/$defs/shipment.ModelReturn"
+    },
+    "shipmentInfos": {
+      "$ref": "#/$defs/shipment.ShipmentInfos"
+    },
+    "customsReference": {
+      "type": "string",
+      "description": "Consignment number for the customs point of view."
+    },
+    "sendingDepot": {
+      "type": "string"
+    },
+    "mpsCompleteDelivery": {
+      "type": "string",
+      "description": "Values :   * `s0` - Reserved for the future usage (default)   * `s1` - No complete delivery (MPS incomplete)   * `s2` - Complete delivery (MPS complete). It is mandatory for COD  ",
+      "enum": [
+        "s0",
+        "s1",
+        "s2"
+      ]
+    },
+    "mpsCompleteDeliveryLabel": {
+      "type": "string",
+      "description": "Defines if the label for complete delivery is printed for pickup. Default value is false."
+    },
+    "customerReferenceNumbers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "customerBillingReference": {
+      "type": "string",
+      "description": "Customer reference for billing or clearing"
+    },
+    "cifcost": {
+      "$ref": "#/$defs/shipment.Cifcost"
+    },
+    "numberOfParcels": {
+      "type": "string",
+      "description": "Number of parcels per shipment. A 0 value is acceptable in some BUs and will trigger an open multi-piece shipment, with automated or manual consolidation"
+    },
+    "sender": {
+      "$ref": "#/$defs/shipment.Sender"
+    },
+    "receiver": {
+      "$ref": "#/$defs/shipment.Receiver"
+    },
+    "international": {
+      "$ref": "#/$defs/shipment.International"
+    },
+    "person": {
+      "$ref": "#/$defs/shipment.Person"
+    },
+    "parcel": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/shipment.Parcel"
+      }
+    },
+    "pickup": {
+      "$ref": "#/$defs/shipment.Pickup"
+    },
+    "delivery": {
+      "$ref": "#/$defs/shipment.Delivery"
+    },
+    "payerType": {
+      "type": "string",
+      "description": "* `S` : Sender * `R` : Receiver * `3` : 3rd party ",
+      "enum": [
+        "S",
+        "R",
+        "3"
+      ]
+    },
+    "documents": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/shipment.Document"
+      }
+    },
+    "shippingDate": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "required": [
+    "numberOfParcels",
+    "parcel",
+    "receiver",
+    "sender"
+  ],
+  "$defs": {
+    "shipment.Address": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "Company Name"
+        },
+        "name1": {
+          "type": "string",
+          "description": "Name"
+        },
+        "name2": {
+          "type": "string",
+          "description": "Name"
+        },
+        "street": {
+          "type": "string",
+          "description": "Street"
+        },
+        "houseNumber": {
+          "type": "string",
+          "description": "House number (could be included into in the address field and not set)."
+        },
+        "addressLine2": {
+          "type": "string",
+          "description": "Address Line 2"
+        },
+        "addressLine3": {
+          "type": "string",
+          "description": "Address Line 3"
+        },
+        "interphoneName": {
+          "type": "string",
+          "description": "Name on the interphone"
+        },
+        "floor": {
+          "type": "string",
+          "description": "Information on the floor (e.g. if located in a huge office building)"
+        },
+        "doorCode": {
+          "type": "string",
+          "description": "A code to open the door . It is possible to input 3 different codes separated by a /"
+        },
+        "building": {
+          "type": "string",
+          "description": "Information of the building (e.g. when located on a big campus)."
+        },
+        "department": {
+          "type": "string",
+          "description": "Information on the department (e.g. when located in a huge office-building with different departments on the same floor)."
+        },
+        "country": {
+          "type": "string",
+          "description": "country (ISO 3166). All three ISO standards will be accepted: * ISO 3166-1: 2 Alpha Numerical Characters * ISO 3166-1: 3 Alpha Numerical Characters * ISO 3166-1: 3 Numerical Characters "
+        },
+        "state": {
+          "type": "string",
+          "description": "State within the country, e.g. CA for California."
+        },
+        "zipCode": {
+          "type": "string",
+          "description": "Destination zipcode of the parcel"
+        },
+        "city": {
+          "type": "string",
+          "description": "city"
+        },
+        "siteId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Used for all address types."
+        },
+        "siteType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Site type can be used in conjunction with countryId and siteName to find unique site. Used for addresses of type 1 (local address)."
+        },
+        "siteName": {
+          "type": "string",
+          "description": "SPEEDY specificity. Site type can be used in conjunction with countryId and siteName to find unique site. Used for all address types."
+        },
+        "streetId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Street identifier. If not provided, but street type and street name are provided - the system will try to find unique match by them in site. Used for addresses of type 1 (local address)."
+        },
+        "streetType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Street type. Used for addresses of type 1 (local address)."
+        },
+        "complexId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Complex identifier. If not provided, but complex type and complex name are provided - the system will try to find unique match by them in site. Used for addresses of type 1 (local address)."
+        },
+        "complexType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Complex type. Used for addresses of type 1 (local address)."
+        },
+        "complexName": {
+          "type": "string",
+          "description": "SPEEDY specificity. Complex name. Used for addresses of type 1 (local address)."
+        },
+        "blockNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Block No. Used for addresses of type 1 (local address)."
+        },
+        "entranceNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Entrance. Used for addresses of type 1 (local address)."
+        },
+        "apartmentNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Apartment. Used for addresses of type 1 (local address)."
+        },
+        "poiId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Point of interest identifier. Used for addresses of type 1 (local address)."
+        }
+      }
+    },
+    "shipment.Amount": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "description": "The number of decimal will depend of the currency (it could be from 0 to three digit)."
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency code (ISO 4217 alpha 3)"
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ]
+    },
+    "shipment.Cifcost": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "format": "float",
+          "description": "The number of decimal will depend of the currency (it could be from 0 to three digit)."
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency code (ISO 4217 alpha 3)"
+        }
+      },
+      "required": [
+        "amount",
+        "currency"
+      ]
+    },
+    "shipment.Cod": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/shipment.Amount"
+        },
+        "collectType": {
+          "type": "string",
+          "description": "Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU)   * Values with uppercase are accepted as well: S0, S1, S2, S3, S9 "
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Intended use"
+        },
+        "bankCode": {
+          "type": "string",
+          "description": "Bank Code"
+        },
+        "bankName": {
+          "type": "string",
+          "description": "Bank Name"
+        },
+        "bankAccountNumber": {
+          "type": "string",
+          "description": "Bank account number"
+        },
+        "bankAccountName": {
+          "type": "string",
+          "description": "Account holder"
+        },
+        "iban": {
+          "type": "string",
+          "description": "International account number"
+        },
+        "bic": {
+          "type": "string",
+          "description": "Bank Code"
+        }
+      },
+      "required": [
+        "amount"
+      ]
+    },
+    "shipment.ContactDetails": {
+      "type": "object",
+      "properties": {
+        "contactPerson": {
+          "type": "string",
+          "description": "Name of the person to contact"
+        },
+        "phone1": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "phone2": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "fax": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address"
+        }
+      }
+    },
+    "shipment.CustomerInfos": {
+      "type": "object",
+      "properties": {
+        "customerAccountNumber": {
+          "type": "string",
+          "description": "BU’s Internal Customer’s Account Number"
+        },
+        "customerSubAccountNumber": {
+          "type": "string",
+          "description": "Customer number SUBID"
+        },
+        "customerID": {
+          "type": "string",
+          "description": "BU’s internal Unique Customer ID/Identifier"
+        },
+        "originalCustomerId": {
+          "type": "string",
+          "description": "Original customer ID for Integration Customers in certain DPD Business Units"
+        }
+      }
+    },
+    "shipment.Delivery": {
+      "type": "object",
+      "properties": {
+        "dateFrom": {
+          "type": "string",
+          "format": "date"
+        },
+        "dateTo": {
+          "type": "string",
+          "format": "date"
+        },
+        "timeFrom": {
+          "type": "string"
+        },
+        "timeTo": {
+          "type": "string"
+        },
+        "timeSlotTariff": {
+          "type": "string"
+        }
+      }
+    },
+    "shipment.Dimensions": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        }
+      }
+    },
+    "shipment.Document": {
+      "type": "object",
+      "properties": {
+        "documentType": {
+          "type": "string"
+        },
+        "creationDateTime": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "shipment.Hazardous": {
+      "type": "object",
+      "properties": {
+        "classCode": {
+          "type": "string",
+          "description": "Substance identification: Classification code"
+        },
+        "identificationClass": {
+          "type": "string",
+          "description": "Substance identification: Class"
+        },
+        "substanceWeight": {
+          "type": "string",
+          "description": "Net weight of the hazardous substance in Grams."
+        },
+        "factor": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Factor of the substance"
+        },
+        "notOtherwiseSpecified": {
+          "type": "string",
+          "description": "Not else named"
+        },
+        "packingGroup": {
+          "type": "string",
+          "description": "Substance identification: Packing group"
+        },
+        "subsidiaryRisk": {
+          "type": "string",
+          "description": "Substance sub-danger"
+        },
+        "description": {
+          "type": "string",
+          "description": "Substance description"
+        },
+        "hazardousWeight": {
+          "type": "string",
+          "description": "Total weight of the hazardous articles in Grams."
+        },
+        "tunnelRestrictionCode": {
+          "type": "string",
+          "description": "Tunnel restriction code"
+        },
+        "identificationUnNo": {
+          "type": "string",
+          "description": "Substance identification: UN-No."
+        },
+        "packingCode": {
+          "type": "string",
+          "description": "Packing code (see PACKINGCODE). Mandatory in case of hazardous parcel"
+        }
+      }
+    },
+    "shipment.Insurance": {
+      "type": "object",
+      "properties": {
+        "insuranceAmount": {
+          "$ref": "#/$defs/shipment.Amount"
+        },
+        "insuranceParcelContent": {
+          "type": "string",
+          "description": "Description of parcel for insurance"
+        }
+      }
+    },
+    "shipment.InterInvoiceLine": {
+      "type": "object",
+      "properties": {
+        "invoicePosition": {
+          "type": "string",
+          "description": "Line number of the invoice"
+        },
+        "quantityOfItems": {
+          "type": "string",
+          "description": "Quantity of items per article or invoice line even for low / mid / high value or any type of customer"
+        },
+        "content": {
+          "type": "string",
+          "description": "Content (Depending of the destination system. Could be cut by some system to the first 35 characters)"
+        },
+        "amountOfPosition": {
+          "type": "number",
+          "format": "float"
+        },
+        "manufacturedCountry": {
+          "type": "string"
+        },
+        "netWeight": {
+          "type": "string",
+          "description": "Total weight of the articles in the current line, excluding packaging, in grams."
+        },
+        "grossWeight": {
+          "type": "string",
+          "description": "Total weight of the articles including packaging in the current line, in grams."
+        },
+        "customerProductCode": {
+          "type": "string",
+          "description": "Internal Customer product code"
+        },
+        "productDescription": {
+          "type": "string",
+          "description": "Short description of the product"
+        },
+        "fabricComposition": {
+          "type": "string",
+          "description": "Description of fabric composition"
+        },
+        "importTarifCode": {
+          "type": "string"
+        },
+        "exportTarifCode": {
+          "type": "string"
+        },
+        "goodsWebPage": {
+          "type": "string",
+          "format": "uri"
+        },
+        "parcelRank": {
+          "type": "string",
+          "description": "Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank"
+        }
+      }
+    },
+    "shipment.International": {
+      "type": "object",
+      "properties": {
+        "parcelType": {
+          "type": "string",
+          "description": "Parcel type within the shipment. Different parcel types can't be mixed into one shipment * `D` : Document  * `P` : Non-Doc "
+        },
+        "customsAmount": {
+          "$ref": "#/$defs/shipment.Amount"
+        },
+        "customsAmountEx": {
+          "$ref": "#/$defs/shipment.Amount"
+        },
+        "customsTerms": {
+          "type": "string",
+          "description": "Parcel type within the shipment Different parcel types can't be mixed into one shipment * `s01` : DAP, not cleared * `s02` : DDP, delivered duty paid (incl. duties and excl. taxes) * `s03` : DDP, delivered duty paid (incl. duties and taxes) * `s05` : ex works (EXW) * `s06` : DAP * `s07` : DAP & DDP enhanced, Duty and taxes were pre-paid by the receiver' ",
+          "enum": [
+            "s01",
+            "s02",
+            "s03",
+            "s04",
+            "s05",
+            "s06",
+            "s07"
+          ]
+        },
+        "customsPaper": {
+          "type": "string",
+          "description": "Accompanying documents e.g. A | G | B Separator is \"|\" (a pipe) in case of multiple invoice documents * `A` : commercial invoice * `B` : pro forma invoice * `C` : export declaration * `D` : EUR1 * `E` : EUR2 * `F` : ATR * `G` : delivery note * `H` : third party billing * `I` : T1 document ",
+          "enum": [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+            "G",
+            "H",
+            "I"
+          ]
+        },
+        "clearanceStatus": {
+          "type": "string",
+          "description": "Values:   * `N` : No  * `F` : Free  * `E` : Export Cleared  * `T` : Transit Cleared  * `I` : Import Cleared  * `H` : Hybrid ",
+          "enum": [
+            "N",
+            "F",
+            "E",
+            "T",
+            "I",
+            "H"
+          ]
+        },
+        "customsHighLowValue": {
+          "type": "string",
+          "description": "(H)igh, (M)id (above 22€ and below 150€), (L)ow.  * `H` : High  * `M` : Medium   * `L` : Low  ",
+          "enum": [
+            "H",
+            "M",
+            "L"
+          ]
+        },
+        "customsInvoice": {
+          "type": "string",
+          "description": "Invoice number Separator is \"|\" (a pipe) in case of multiple invoice numbers"
+        },
+        "customsInvoiceDates": {
+          "type": "array",
+          "description": "Invoice dates",
+          "items": {
+            "type": "string",
+            "format": "date"
+          }
+        },
+        "importer": {
+          "$ref": "#/$defs/shipment.InternationalImporter"
+        },
+        "mrn": {
+          "type": "string",
+          "description": "MRN of the electronic export declaration Remarks: The \"|\" is the separator between two MRN."
+        },
+        "exporter": {
+          "$ref": "#/$defs/shipment.InternationalExporter"
+        },
+        "numberOfArticles": {
+          "type": "string",
+          "description": "This is the real number of commodities (ImportTarifCode / ExportTarifCode). The number of Interinvoicelines must equal the NumberOfArticles"
+        },
+        "destinationCountryRegistration": {
+          "type": "string",
+          "description": "Destination country registration information : Registration number or FDA If destination is DPD UK : Applies to B2B and B2C (Not applicable for C2C) shipments with a goods value under £135 (Excludes shipping cost) and if the Incoterm is not DDP. This is expected to come into force March 19, however no official communication from HMRC yet."
+        },
+        "exportReason": {
+          "type": "string",
+          "description": "Reason for export  * `s01` : sale  * `s02` : return/replacement  * `s03` : gift ",
+          "enum": [
+            "s01",
+            "s02",
+            "s03"
+          ]
+        },
+        "interInvoiceLines": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/shipment.InterInvoiceLine"
+          }
+        },
+        "shipmentContent": {
+          "type": "string",
+          "description": "A detailed description of the overall contents of the consignement (UK->EU export only)"
+        }
+      }
+    },
+    "shipment.InternationalExporter": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        },
+        "eori": {
+          "type": "string"
+        }
+      }
+    },
+    "shipment.InternationalImporter": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        },
+        "gln": {
+          "type": "string",
+          "description": "GLN number (Global location number)"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "customerDefermentNumber": {
+          "type": "string",
+          "description": "Customer deferment number with can be used for duty tax collection"
+        },
+        "eori": {
+          "type": "string",
+          "description": "EORI number, dependency of the customs export regime."
+        }
+      }
+    },
+    "shipment.LegalEntity": {
+      "type": "object",
+      "properties": {
+        "businessType": {
+          "type": "string",
+          "description": "Business Type:   * `P` : PRIVATE   * `B` : BUSINESS ",
+          "enum": [
+            "P",
+            "B"
+          ]
+        },
+        "eori": {
+          "type": "string"
+        },
+        "vatNumber": {
+          "type": "string"
+        },
+        "taxIdType": {
+          "type": "string",
+          "description": "Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) ",
+          "enum": [
+            "P",
+            "C"
+          ]
+        },
+        "taxIdValue": {
+          "type": "string",
+          "description": "Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled"
+        },
+        "webSite": {
+          "type": "string",
+          "format": "uri"
+        },
+        "FiscalVatRepresentant": {
+          "type": "string",
+          "description": "Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known"
+        }
+      }
+    },
+    "shipment.MaskedSender": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        }
+      }
+    },
+    "shipment.Message": {
+      "type": "object",
+      "properties": {
+        "messageType": {
+          "type": "string",
+          "description": "Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` ",
+          "enum": [
+            "EMAIL",
+            "PHONE",
+            "SMS",
+            "APP"
+          ]
+        },
+        "messageDestination": {
+          "type": "string",
+          "description": "Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: \"+international country numberphone number\" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX' "
+        },
+        "messageLanguage": {
+          "type": "string",
+          "description": "Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. "
+        },
+        "messageDestType": {
+          "type": "string",
+          "description": "Destination stakeholder of the notification: * `s0` : Receiver / Consignee (default if not provided) * `s1` : Sender / Consignor * `s2` : Requester * `s3` : Other ",
+          "enum": [
+            "s0",
+            "s1",
+            "s2",
+            "s3"
+          ]
+        },
+        "senderCompany": {
+          "type": "string"
+        }
+      }
+    },
+    "shipment.ModelReturn": {
+      "type": "object",
+      "properties": {
+        "customerInfos": {
+          "$ref": "#/$defs/shipment.CustomerInfos"
+        },
+        "address": {
+          "$ref": "#/$defs/shipment.Address",
+          "description": "return Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "depot": {
+          "type": "string",
+          "description": "GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative"
+        }
+      }
+    },
+    "shipment.Parcel": {
+      "type": "object",
+      "properties": {
+        "parcelInfos": {
+          "$ref": "#/$defs/shipment.ParcelInfos"
+        },
+        "parcelRank": {
+          "type": "string",
+          "description": "Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank"
+        },
+        "senderParcelRefs": {
+          "type": "array",
+          "description": "List of sender parcels references",
+          "items": {
+            "type": "string"
+          }
+        },
+        "partnerParcelRefs": {
+          "type": "array",
+          "description": "Partner´s own parcel reference field",
+          "items": {
+            "type": "string"
+          }
+        },
+        "insurance": {
+          "$ref": "#/$defs/shipment.Insurance"
+        },
+        "hazardousLimitedQuantities": {
+          "type": "boolean",
+          "description": "Limited quantities of hazardous goods parcel value. "
+        },
+        "hazardousPackingCode": {
+          "type": "string",
+          "description": "Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing "
+        },
+        "parcelContent": {
+          "type": "string",
+          "description": "Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English"
+        },
+        "cod": {
+          "$ref": "#/$defs/shipment.Cod"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/shipment.Message"
+          }
+        },
+        "hazardous": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/shipment.Hazardous"
+          }
+        },
+        "reference": {
+          "type": "string",
+          "description": "Field used only by PL customers to transmit the reference associated with the parcel number."
+        }
+      }
+    },
+    "shipment.ParcelInfos": {
+      "type": "object",
+      "properties": {
+        "parcelNumber": {
+          "type": "string",
+          "description": "Parcel number."
+        },
+        "parcelNumberCcKey": {
+          "type": "string",
+          "description": "Control character key compute from the parcel number."
+        },
+        "dimensions": {
+          "$ref": "#/$defs/shipment.Dimensions"
+        },
+        "weight": {
+          "type": "string"
+        }
+      }
+    },
+    "shipment.Person": {
+      "type": "object",
+      "properties": {
+        "personalDeliveryType": {
+          "type": "string",
+          "description": "Personal delivery type:  * `s1` : department delivery (without personal identification)  * `s2` : personal delivery with personal identification (IDCheck)  * `s3` : personal delivery without personal identification at PUDO (e.g. Direct PUDO delivery)  * `s4` : personal delivery with personal identification at PUDO (e.g. Direct PUDO delivery)  * `s5` : personal delivery with personal identification at PUDO plus ID-Check (e.g. Direct PUDO delivery)  * `s6` : personal delivery with personal identification (ID Check) and recording of the ID. ",
+          "enum": [
+            "s1",
+            "s2",
+            "s3",
+            "s4",
+            "s5",
+            "s6"
+          ]
+        },
+        "personalAuthorizedName": {
+          "type": "string"
+        },
+        "phone1": {
+          "type": "string"
+        },
+        "phone2": {
+          "type": "string"
+        },
+        "personalIdNumber": {
+          "type": "string",
+          "description": "Real consignee's personal identification number."
+        },
+        "personalDateOfBirth": {
+          "type": "string",
+          "format": "date"
+        },
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "type": "string",
+          "description": "Recipient contact person. Could be different of the consignee's name"
+        },
+        "fax": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "gln": {
+          "type": "string",
+          "description": "GLN number (Global location number)"
+        },
+        "comment": {
+          "type": "string"
+        }
+      }
+    },
+    "shipment.Pickup": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "fromTime": {
+          "type": "string"
+        },
+        "toTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "date"
+      ]
+    },
+    "shipment.Receiver": {
+      "type": "object",
+      "properties": {
+        "customerInfos": {
+          "$ref": "#/$defs/shipment.CustomerInfos"
+        },
+        "pudoId": {
+          "type": "string",
+          "description": "ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number' "
+        },
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "legalEntity": {
+          "$ref": "#/$defs/shipment.LegalEntity"
+        }
+      }
+    },
+    "shipment.Sender": {
+      "type": "object",
+      "properties": {
+        "customerInfos": {
+          "$ref": "#/$defs/shipment.CustomerInfos"
+        },
+        "pudoId": {
+          "type": "string",
+          "description": "ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number' "
+        },
+        "addressId": {
+          "type": "string",
+          "description": "sender AddressId (for CZ, SK, SPEEDY, BALTICS)"
+        },
+        "address": {
+          "$ref": "#/$defs/shipment.Address"
+        },
+        "contact": {
+          "$ref": "#/$defs/shipment.ContactDetails"
+        },
+        "comment": {
+          "type": "string"
+        },
+        "gln": {
+          "type": "string",
+          "description": "GLN number (Global location number)"
+        },
+        "accountOwner": {
+          "type": "string",
+          "description": "Define the owner of the customer account customer. This owner is responsible to bill the parcel."
+        },
+        "legalEntity": {
+          "$ref": "#/$defs/shipment.LegalEntity"
+        },
+        "maskedSender": {
+          "$ref": "#/$defs/shipment.MaskedSender"
+        }
+      }
+    },
+    "shipment.ShipmentInfos": {
+      "type": "object",
+      "properties": {
+        "shipmentId": {
+          "type": "string",
+          "description": "Shipment ID Could be the ID of the first parcel of the list (master ID) or could be another ID specially created for that."
+        },
+        "shipmentIdCKey": {
+          "type": "string",
+          "description": "Control character key compute from the shipmentId"
+        },
+        "productCode": {
+          "type": "string",
+          "description": "DPD Product used for the shipment (\"101\" for DPD CLASSIC, ...)"
+        },
+        "serviceCode": {
+          "type": "string",
+          "description": "Additional local service code, needed only in certain Business Units"
+        },
+        "additionalServiceCode": {
+          "type": "string",
+          "description": "DPD Additional Service required for specific services, describing first and last mile handling"
+        },
+        "dimensions": {
+          "$ref": "#/$defs/shipment.Dimensions"
+        },
+        "weight": {
+          "type": "string",
+          "description": "Weight in grams units (e.g. 3000 equals 3kg)"
+        },
+        "exWorksDelivery": {
+          "type": "boolean",
+          "description": "Specific field for DPD DE. Specifies if the recipient has to pay the consignment."
+        }
+      },
+      "required": [
+        "productCode"
+      ]
+    }
+  }
+}

@@ -1,0 +1,16 @@
+generated: '2026-10-13'
+method: none
+source:
+- https://zapier.com/apps/dpd-group/integrations
+- https://n8n.io/integrations/dpd-group/
+- https://composio.dev/toolkits/dpd-group
+- https://monid.ai/tools/dpd-group
+checked:
+- https://composio.dev/toolkits/dpd-group
+- https://monid.ai/tools/dpd-group
+- https://n8n.io/integrations/dpd-group/
+- https://zapier.com/apps/dpd-group/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []

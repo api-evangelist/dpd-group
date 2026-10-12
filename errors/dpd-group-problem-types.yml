@@ -1,0 +1,61 @@
+generated: '2026-10-13'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/dpd-group-countries-api-openapi.yml
+- openapi/dpd-group-customers-api-openapi.yml
+- openapi/dpd-group-me-api-openapi.yml
+- openapi/dpd-group-parcels-api-openapi.yml
+- openapi/dpd-group-pickup-orders-api-openapi.yml
+- openapi/dpd-group-shipments-api-openapi.yml
+- openapi/dpd-group-shipping-api-openapi.yml
+- openapi/dpd-group-shipping-services-api-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: Error
+coverage:
+  operations: 23
+  statuses_declared: 6
+problems:
+- status: 400
+  title: Bad Request
+  description: The request was invalid due to malformed input or incorrect usage.
+  operations: 16
+  media_types:
+  - application/json
+  schema: Error
+- status: 401
+  title: Unauthorized
+  description: The API token provided has expired or it is not valid
+  operations: 22
+  media_types:
+  - application/json
+  schema: Error
+- status: 404
+  title: Not Found
+  description: Parcel with the specified id does not exist
+  operations: 7
+  media_types: []
+  schema: null
+- status: 408
+  title: Request Timeout
+  description: Request Timeout. Took too long to respond.
+  operations: 11
+  media_types:
+  - application/json
+  schema: Error
+- status: 409
+  title: Conflict
+  description: Concurrent request conflicted with the current request
+  operations: 3
+  media_types:
+  - application/json
+  schema: Error
+- status: 500
+  title: Internal Server Error
+  description: Uncaught server error - Issue is on our side
+  operations: 23
+  media_types:
+  - application/json
+  schema: Error

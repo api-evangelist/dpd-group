@@ -1,0 +1,1130 @@
+{
+  "@context": {
+    "@vocab": "https://dpd.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "dpd": "https://dpd.com/schema#",
+    "Country_codInfo": "dpd:Country_codInfo",
+    "currency": {
+      "@id": "dpd:currency",
+      "@type": "@id"
+    },
+    "maxAmountCents": {
+      "@id": "dpd:maxAmountCents",
+      "@type": "xsd:decimal"
+    },
+    "cardMaxAmountCents": {
+      "@id": "dpd:cardMaxAmountCents",
+      "@type": "xsd:decimal"
+    },
+    "Error": "dpd:Error",
+    "code": {
+      "@id": "dpd:code",
+      "@type": "xsd:string"
+    },
+    "message": {
+      "@id": "dpd:message",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "dpd:description",
+      "@type": "@id"
+    },
+    "Country": "dpd:Country",
+    "localizedName": {
+      "@id": "dpd:localizedName",
+      "@type": "xsd:string"
+    },
+    "numericCode": {
+      "@id": "dpd:numericCode",
+      "@type": "@id"
+    },
+    "alpha2Code": {
+      "@id": "dpd:alpha2Code",
+      "@type": "@id"
+    },
+    "alpha3Code": {
+      "@id": "dpd:alpha3Code",
+      "@type": "@id"
+    },
+    "codInfo": {
+      "@id": "dpd:codInfo",
+      "@type": "@id"
+    },
+    "CountryIdent_oneOf_2": "dpd:CountryIdent_oneOf_2",
+    "isoNumeric": {
+      "@id": "dpd:isoNumeric",
+      "@type": "@id"
+    },
+    "Address": "dpd:Address",
+    "street": {
+      "@id": "dpd:street",
+      "@type": "@id"
+    },
+    "postalCode": {
+      "@id": "dpd:postalCode",
+      "@type": "@id"
+    },
+    "city": {
+      "@id": "dpd:city",
+      "@type": "@id"
+    },
+    "houseNumber": {
+      "@id": "dpd:houseNumber",
+      "@type": "@id"
+    },
+    "country": {
+      "@id": "dpd:country",
+      "@type": "@id"
+    },
+    "SubjectInfo": "dpd:SubjectInfo",
+    "name1": {
+      "@id": "dpd:name1",
+      "@type": "@id"
+    },
+    "name2": {
+      "@id": "dpd:name2",
+      "@type": "@id"
+    },
+    "contact": {
+      "@id": "dpd:contact",
+      "@type": "@id"
+    },
+    "CountryIdent_oneOf": "dpd:CountryIdent_oneOf",
+    "isoAlpha3": {
+      "@id": "dpd:isoAlpha3",
+      "@type": "@id"
+    },
+    "SubjectInfo_contact": "dpd:SubjectInfo_contact",
+    "person": {
+      "@id": "dpd:person",
+      "@type": "xsd:string"
+    },
+    "phone": {
+      "@id": "dpd:phone",
+      "@type": "@id"
+    },
+    "email": {
+      "@id": "dpd:email",
+      "@type": "@id"
+    },
+    "CountryIdent_oneOf_1": "dpd:CountryIdent_oneOf_1",
+    "isoAlpha2": {
+      "@id": "dpd:isoAlpha2",
+      "@type": "@id"
+    },
+    "Customer": "dpd:Customer",
+    "DSW": {
+      "@id": "dpd:DSW",
+      "@type": "@id"
+    },
+    "isActive": {
+      "@id": "dpd:isActive",
+      "@type": "xsd:boolean"
+    },
+    "id": {
+      "@id": "dpd:id",
+      "@type": "@id"
+    },
+    "CustomerAddress": "dpd:CustomerAddress",
+    "it4emId": {
+      "@id": "dpd:it4emId",
+      "@type": "@id"
+    },
+    "info": {
+      "@id": "dpd:info",
+      "@type": "@id"
+    },
+    "address": {
+      "@id": "dpd:address"
+    },
+    "Me_customers_inner": "dpd:Me_customers_inner",
+    "customer": {
+      "@id": "dpd:customer",
+      "@type": "@id"
+    },
+    "addresses": {
+      "@id": "dpd:addresses",
+      "@container": "@list"
+    },
+    "Me": "dpd:Me",
+    "userAccount": {
+      "@id": "dpd:userAccount",
+      "@type": "@id"
+    },
+    "customers": {
+      "@id": "dpd:customers",
+      "@container": "@list"
+    },
+    "UserAccount": "dpd:UserAccount",
+    "apiKey": {
+      "@id": "dpd:apiKey",
+      "@type": "xsd:string"
+    },
+    "accountNote": {
+      "@id": "dpd:accountNote",
+      "@type": "xsd:string"
+    },
+    "Receiver": "dpd:Receiver",
+    "CashOnDeliveryWithAccount": "dpd:CashOnDeliveryWithAccount",
+    "amountCents": {
+      "@id": "dpd:amountCents",
+      "@type": "@id"
+    },
+    "payment": {
+      "@id": "dpd:payment",
+      "@type": "@id"
+    },
+    "account": {
+      "@id": "dpd:account",
+      "@type": "@id"
+    },
+    "variableSymbol": {
+      "@id": "dpd:variableSymbol",
+      "@type": "xsd:string"
+    },
+    "ZPLPrintProperties": "dpd:ZPLPrintProperties",
+    "barcodeLayout": {
+      "@id": "dpd:barcodeLayout",
+      "@type": "xsd:string"
+    },
+    "DropoffCodes_pin": "dpd:DropoffCodes_pin",
+    "value": {
+      "@id": "dpd:value",
+      "@type": "xsd:string"
+    },
+    "expiresAt": {
+      "@id": "dpd:expiresAt",
+      "@type": "@id"
+    },
+    "LabelData_delivery": "dpd:LabelData_delivery",
+    "contactPerson": {
+      "@id": "dpd:contactPerson",
+      "@type": "@id"
+    },
+    "countryAlpha2": {
+      "@id": "dpd:countryAlpha2",
+      "@type": "@id"
+    },
+    "pickupPoint": {
+      "@id": "dpd:pickupPoint",
+      "@type": "@id"
+    },
+    "LabelData": "dpd:LabelData",
+    "delivery": {
+      "@id": "dpd:delivery",
+      "@type": "@id"
+    },
+    "origin": {
+      "@id": "dpd:origin",
+      "@type": "@id"
+    },
+    "parcel": {
+      "@id": "dpd:parcel",
+      "@type": "@id"
+    },
+    "parcelCount": {
+      "@id": "dpd:parcelCount",
+      "@type": "xsd:decimal"
+    },
+    "routing": {
+      "@id": "dpd:routing",
+      "@type": "@id"
+    },
+    "service": {
+      "@id": "dpd:service",
+      "@type": "@id"
+    },
+    "barCode": {
+      "@id": "dpd:barCode",
+      "@type": "xsd:string"
+    },
+    "barCodeText": {
+      "@id": "dpd:barCodeText",
+      "@type": "xsd:string"
+    },
+    "cod": {
+      "@id": "dpd:cod",
+      "@type": "@id"
+    },
+    "departmentDelivery": {
+      "@id": "dpd:departmentDelivery",
+      "@type": "@id"
+    },
+    "personalIdentification": {
+      "@id": "dpd:personalIdentification",
+      "@type": "@id"
+    },
+    "RoutingData": "dpd:RoutingData",
+    "dispatchDepot": {
+      "@id": "dpd:dispatchDepot",
+      "@type": "@id"
+    },
+    "destinationDepot": {
+      "@id": "dpd:destinationDepot",
+      "@type": "@id"
+    },
+    "LabelData_origin": "dpd:LabelData_origin",
+    "sender": {
+      "@id": "dpd:sender",
+      "@type": "@id"
+    },
+    "DropoffCodes": "dpd:DropoffCodes",
+    "pin": {
+      "@id": "dpd:pin",
+      "@type": "@id"
+    },
+    "aztec": {
+      "@id": "dpd:aztec",
+      "@type": "@id"
+    },
+    "RoutingData_destinationDepot_depotNumbers": "dpd:RoutingData_destinationDepot_depotNumbers",
+    "longNumber": {
+      "@id": "dpd:longNumber",
+      "@type": "xsd:string"
+    },
+    "shortNumber": {
+      "@id": "dpd:shortNumber",
+      "@type": "xsd:string"
+    },
+    "ZPLPrintTypeInput": "dpd:ZPLPrintTypeInput",
+    "printType": {
+      "@id": "dpd:printType",
+      "@type": "xsd:string"
+    },
+    "printProperties": {
+      "@id": "dpd:printProperties",
+      "@type": "@id"
+    },
+    "TrackingResult_parcelInfo_routing": "dpd:TrackingResult_parcelInfo_routing",
+    "main": {
+      "@id": "dpd:main",
+      "@type": "@id"
+    },
+    "back": {
+      "@id": "dpd:back",
+      "@type": "@id"
+    },
+    "DropoffCodes_aztec": "dpd:DropoffCodes_aztec",
+    "format": {
+      "@id": "dpd:format",
+      "@type": "@id"
+    },
+    "LabelData_origin_sender": "dpd:LabelData_origin_sender",
+    "LabelData_service": "dpd:LabelData_service",
+    "combination": {
+      "@id": "dpd:combination",
+      "@type": "@id"
+    },
+    "additionalCode": {
+      "@id": "dpd:additionalCode",
+      "@type": "@id"
+    },
+    "mark": {
+      "@id": "dpd:mark",
+      "@type": "xsd:string"
+    },
+    "text": {
+      "@id": "dpd:text",
+      "@type": "xsd:string"
+    },
+    "DropOffCodesInput_aztec": "dpd:DropOffCodesInput_aztec",
+    "DispatchDepot": "dpd:DispatchDepot",
+    "depotNumbers": {
+      "@id": "dpd:depotNumbers",
+      "@type": "@id"
+    },
+    "DeclaredSender": "dpd:DeclaredSender",
+    "A4PrintProperties": "dpd:A4PrintProperties",
+    "pageSize": {
+      "@id": "dpd:pageSize",
+      "@type": "xsd:string"
+    },
+    "labelsPerPage": {
+      "@id": "dpd:labelsPerPage",
+      "@type": "xsd:decimal"
+    },
+    "labelsOffset": {
+      "@id": "dpd:labelsOffset",
+      "@type": "xsd:decimal"
+    },
+    "TrackingResult_parcelInfo": "dpd:TrackingResult_parcelInfo",
+    "receiver": {
+      "@id": "dpd:receiver",
+      "@type": "@id"
+    },
+    "declaredSender": {
+      "@id": "dpd:declaredSender",
+      "@type": "@id"
+    },
+    "pickupPointId": {
+      "@id": "dpd:pickupPointId",
+      "@type": "@id"
+    },
+    "serviceDesignation": {
+      "@id": "dpd:serviceDesignation",
+      "@type": "@id"
+    },
+    "parcelId": {
+      "@id": "dpd:parcelId",
+      "@type": "@id"
+    },
+    "parcelNumber": {
+      "@id": "dpd:parcelNumber",
+      "@type": "@id"
+    },
+    "ParcelIdent_oneOf": "dpd:ParcelIdent_oneOf",
+    "DepartmentDeliveryService": "dpd:DepartmentDeliveryService",
+    "building": {
+      "@id": "dpd:building",
+      "@type": "xsd:string"
+    },
+    "floor": {
+      "@id": "dpd:floor",
+      "@type": "xsd:string"
+    },
+    "department": {
+      "@id": "dpd:department",
+      "@type": "xsd:string"
+    },
+    "PaymentType": "dpd:PaymentType",
+    "TrackingInput": "dpd:TrackingInput",
+    "parcels": {
+      "@id": "dpd:parcels",
+      "@container": "@list"
+    },
+    "DispatchDepot_depotNumbers": "dpd:DispatchDepot_depotNumbers",
+    "TrackingResult": "dpd:TrackingResult",
+    "parcelInfo": {
+      "@id": "dpd:parcelInfo",
+      "@type": "@id"
+    },
+    "parcelEvents": {
+      "@id": "dpd:parcelEvents",
+      "@container": "@list"
+    },
+    "CodAccount_international": "dpd:CodAccount_international",
+    "IBAN": {
+      "@id": "dpd:IBAN",
+      "@type": "xsd:string"
+    },
+    "BIC": {
+      "@id": "dpd:BIC",
+      "@type": "xsd:string"
+    },
+    "LabelData_delivery_pickupPoint": "dpd:LabelData_delivery_pickupPoint",
+    "pudoId": {
+      "@id": "dpd:pudoId",
+      "@type": "@id"
+    },
+    "name": {
+      "@id": "dpd:name",
+      "@type": "@id"
+    },
+    "IDCheck": "dpd:IDCheck",
+    "personalId": {
+      "@id": "dpd:personalId",
+      "@type": "xsd:string"
+    },
+    "PDFPrintTypeInput": "dpd:PDFPrintTypeInput",
+    "CodAccount_domestic": "dpd:CodAccount_domestic",
+    "bankCode": {
+      "@id": "dpd:bankCode",
+      "@type": "xsd:string"
+    },
+    "bankName": {
+      "@id": "dpd:bankName",
+      "@type": "xsd:string"
+    },
+    "accountNumber": {
+      "@id": "dpd:accountNumber",
+      "@type": "xsd:string"
+    },
+    "accountName": {
+      "@id": "dpd:accountName",
+      "@type": "xsd:string"
+    },
+    "Parcel": "dpd:Parcel",
+    "parcelNumbers": {
+      "@id": "dpd:parcelNumbers",
+      "@type": "@id"
+    },
+    "references": {
+      "@id": "dpd:references",
+      "@type": "@id"
+    },
+    "insurance": {
+      "@id": "dpd:insurance",
+      "@type": "@id"
+    },
+    "isPrinted": {
+      "@id": "dpd:isPrinted",
+      "@type": "xsd:boolean"
+    },
+    "weightGrams": {
+      "@id": "dpd:weightGrams",
+      "@type": "@id"
+    },
+    "CodAccount": "dpd:CodAccount",
+    "domestic": {
+      "@id": "dpd:domestic",
+      "@type": "@id"
+    },
+    "international": {
+      "@id": "dpd:international",
+      "@type": "@id"
+    },
+    "LabelData_parcel_references": "dpd:LabelData_parcel_references",
+    "ref1": {
+      "@id": "dpd:ref1",
+      "@type": "@id"
+    },
+    "ref2": {
+      "@id": "dpd:ref2",
+      "@type": "@id"
+    },
+    "Sender": "dpd:Sender",
+    "LabelData_cod": "dpd:LabelData_cod",
+    "amount": {
+      "@id": "dpd:amount",
+      "@type": "xsd:string"
+    },
+    "StandardPrintTypeInput": "dpd:StandardPrintTypeInput",
+    "ParcelReferences": "dpd:ParcelReferences",
+    "ref3": {
+      "@id": "dpd:ref3",
+      "@type": "@id"
+    },
+    "ref4": {
+      "@id": "dpd:ref4",
+      "@type": "@id"
+    },
+    "Insurance": "dpd:Insurance",
+    "ParcelIdent_oneOf_1": "dpd:ParcelIdent_oneOf_1",
+    "A6PrintProperties": "dpd:A6PrintProperties",
+    "ServiceDesignation": "dpd:ServiceDesignation",
+    "prefix": {
+      "@id": "dpd:prefix",
+      "@type": "xsd:string"
+    },
+    "LabelData_parcel": "dpd:LabelData_parcel",
+    "parcelNo": {
+      "@id": "dpd:parcelNo",
+      "@type": "@id"
+    },
+    "parcelNoCheck": {
+      "@id": "dpd:parcelNoCheck",
+      "@type": "xsd:string"
+    },
+    "index": {
+      "@id": "dpd:index",
+      "@type": "xsd:decimal"
+    },
+    "weightKilograms": {
+      "@id": "dpd:weightKilograms",
+      "@type": "xsd:string"
+    },
+    "AztecFormats": "dpd:AztecFormats",
+    "DropOffCodesInput": "dpd:DropOffCodesInput",
+    "TrackingResult_parcelEvents_inner": "dpd:TrackingResult_parcelEvents_inner",
+    "status": {
+      "@id": "dpd:status",
+      "@type": "@id"
+    },
+    "additionalInfo": {
+      "@id": "dpd:additionalInfo",
+      "@type": "xsd:string"
+    },
+    "createdAt": {
+      "@id": "dpd:createdAt",
+      "@type": "xsd:string"
+    },
+    "Routing": "dpd:Routing",
+    "routingText": {
+      "@id": "dpd:routingText",
+      "@type": "@id"
+    },
+    "DSORT": {
+      "@id": "dpd:DSORT",
+      "@type": "@id"
+    },
+    "OSORT": {
+      "@id": "dpd:OSORT",
+      "@type": "@id"
+    },
+    "SSORT": {
+      "@id": "dpd:SSORT",
+      "@type": "@id"
+    },
+    "TrackingResult_parcelEvents_inner_service": "dpd:TrackingResult_parcelEvents_inner_service",
+    "Depot": "dpd:Depot",
+    "ParcelNumbers": "dpd:ParcelNumbers",
+    "TrackingResult_parcelEvents_inner_status": "dpd:TrackingResult_parcelEvents_inner_status",
+    "statusCode": {
+      "@id": "dpd:statusCode",
+      "@type": "xsd:string"
+    },
+    "RoutingData_destinationDepot": "dpd:RoutingData_destinationDepot",
+    "AddressPickupOrderSpecs": "dpd:AddressPickupOrderSpecs",
+    "customerAddress": {
+      "@id": "dpd:customerAddress",
+      "@type": "@id"
+    },
+    "date": {
+      "@id": "dpd:date",
+      "@type": "@id"
+    },
+    "note": {
+      "@id": "dpd:note",
+      "@type": "@id"
+    },
+    "StatusCode": "dpd:StatusCode",
+    "CollectionPickupOrderResponse": "dpd:CollectionPickupOrderResponse",
+    "_pickup_orders__pickupOrderId__delete_200_response": "dpd:_pickup_orders__pickupOrderId__delete_200_response",
+    "pickupId": {
+      "@id": "dpd:pickupId",
+      "@type": "@id"
+    },
+    "ArbitraryAddressPickupOrderSpecs_arbitraryAddress": "dpd:ArbitraryAddressPickupOrderSpecs_arbitraryAddress",
+    "ArbitraryAddressPickupOrderSpecs": "dpd:ArbitraryAddressPickupOrderSpecs",
+    "arbitraryAddress": {
+      "@id": "dpd:arbitraryAddress",
+      "@type": "@id"
+    },
+    "CustomerAddressIdent_oneOf": "dpd:CustomerAddressIdent_oneOf",
+    "PickupOrder": "dpd:PickupOrder",
+    "specs": {
+      "@id": "dpd:specs",
+      "@type": "@id"
+    },
+    "statusText": {
+      "@id": "dpd:statusText",
+      "@type": "@id"
+    },
+    "ParcelPickupOrderSpecs": "dpd:ParcelPickupOrderSpecs",
+    "CustomerIdent_oneOf": "dpd:CustomerIdent_oneOf",
+    "dsw": {
+      "@id": "dpd:dsw",
+      "@type": "@id"
+    },
+    "CustomerAddressIdent_oneOf_1": "dpd:CustomerAddressIdent_oneOf_1",
+    "CustomerIdent_oneOf_1": "dpd:CustomerIdent_oneOf_1",
+    "DetailedUnionError": "dpd:DetailedUnionError",
+    "option": {
+      "@id": "dpd:option",
+      "@type": "xsd:decimal"
+    },
+    "issues": {
+      "@id": "dpd:issues",
+      "@container": "@list"
+    },
+    "Shipment_services": "dpd:Shipment_services",
+    "serviceCode": {
+      "@id": "dpd:serviceCode",
+      "@type": "@id"
+    },
+    "serviceCombination": {
+      "@id": "dpd:serviceCombination",
+      "@type": "@id"
+    },
+    "selectedServices": {
+      "@id": "dpd:selectedServices",
+      "@type": "@id"
+    },
+    "NewShipmentError": "dpd:NewShipmentError",
+    "Payer": "dpd:Payer",
+    "DetailedError": "dpd:DetailedError",
+    "path": {
+      "@id": "dpd:path",
+      "@type": "xsd:string"
+    },
+    "unionErrors": {
+      "@id": "dpd:unionErrors",
+      "@container": "@list"
+    },
+    "ShipmentServices": "dpd:ShipmentServices",
+    "notification": {
+      "@id": "dpd:notification",
+      "@type": "@id"
+    },
+    "airExpress": {
+      "@id": "dpd:airExpress",
+      "@type": "@id"
+    },
+    "dpdTimeGuarantee": {
+      "@id": "dpd:dpdTimeGuarantee",
+      "@type": "@id"
+    },
+    "dpdGuarantee": {
+      "@id": "dpd:dpdGuarantee",
+      "@type": "@id"
+    },
+    "swap": {
+      "@id": "dpd:swap",
+      "@type": "@id"
+    },
+    "dpdPneu": {
+      "@id": "dpd:dpdPneu",
+      "@type": "@id"
+    },
+    "cashOnDelivery": {
+      "@id": "dpd:cashOnDelivery",
+      "@type": "@id"
+    },
+    "dpdReturn": {
+      "@id": "dpd:dpdReturn",
+      "@type": "@id"
+    },
+    "shopToShop": {
+      "@id": "dpd:shopToShop",
+      "@type": "@id"
+    },
+    "shopToHome": {
+      "@id": "dpd:shopToHome",
+      "@type": "@id"
+    },
+    "ddtl": {
+      "@id": "dpd:ddtl",
+      "@type": "@id"
+    },
+    "noRedirection": {
+      "@id": "dpd:noRedirection",
+      "@type": "@id"
+    },
+    "DeliveryOptions": "dpd:DeliveryOptions",
+    "completeness": {
+      "@id": "dpd:completeness",
+      "@type": "@id"
+    },
+    "ShipmentReferences": "dpd:ShipmentReferences",
+    "Address_1": "dpd:Address_1",
+    "NewShipment_parcels_inner": "dpd:NewShipment_parcels_inner",
+    "backParcelNumber": {
+      "@id": "dpd:backParcelNumber"
+    },
+    "additionalServices": {
+      "@id": "dpd:additionalServices",
+      "@type": "@id"
+    },
+    "NewShipment": "dpd:NewShipment",
+    "deliveryOptions": {
+      "@id": "dpd:deliveryOptions",
+      "@type": "@id"
+    },
+    "shipmentType": {
+      "@id": "dpd:shipmentType",
+      "@type": "@id"
+    },
+    "payer": {
+      "@id": "dpd:payer",
+      "@type": "@id"
+    },
+    "source": {
+      "@id": "dpd:source",
+      "@type": "@id"
+    },
+    "services": {
+      "@id": "dpd:services",
+      "@type": "@id"
+    },
+    "DetailedUnionError_issues_inner": "dpd:DetailedUnionError_issues_inner",
+    "Completeness": "dpd:Completeness",
+    "Source": "dpd:Source",
+    "systemId": {
+      "@id": "dpd:systemId",
+      "@type": "xsd:string"
+    },
+    "DPDTimeGuaranteeService": "dpd:DPDTimeGuaranteeService",
+    "Shipment": "dpd:Shipment",
+    "ShipmentType": "dpd:ShipmentType",
+    "NewShipment_parcels_inner_additionalServices": "dpd:NewShipment_parcels_inner_additionalServices",
+    "International": "dpd:International",
+    "parcelType": {
+      "@id": "dpd:parcelType",
+      "@type": "xsd:string"
+    },
+    "customsAmount": {
+      "@id": "dpd:customsAmount",
+      "@type": "@id"
+    },
+    "customsAmountEx": {
+      "@id": "dpd:customsAmountEx",
+      "@type": "@id"
+    },
+    "customsTerms": {
+      "@id": "dpd:customsTerms",
+      "@type": "xsd:string"
+    },
+    "customsPaper": {
+      "@id": "dpd:customsPaper",
+      "@type": "xsd:string"
+    },
+    "clearanceStatus": {
+      "@id": "dpd:clearanceStatus",
+      "@type": "xsd:string"
+    },
+    "customsHighLowValue": {
+      "@id": "dpd:customsHighLowValue",
+      "@type": "xsd:string"
+    },
+    "customsInvoice": {
+      "@id": "dpd:customsInvoice",
+      "@type": "xsd:string"
+    },
+    "customsInvoiceDates": {
+      "@id": "dpd:customsInvoiceDates",
+      "@container": "@list"
+    },
+    "importer": {
+      "@id": "dpd:importer",
+      "@type": "@id"
+    },
+    "mrn": {
+      "@id": "dpd:mrn",
+      "@type": "xsd:string"
+    },
+    "exporter": {
+      "@id": "dpd:exporter",
+      "@type": "@id"
+    },
+    "numberOfArticles": {
+      "@id": "dpd:numberOfArticles",
+      "@type": "xsd:string"
+    },
+    "destinationCountryRegistration": {
+      "@id": "dpd:destinationCountryRegistration",
+      "@type": "xsd:string"
+    },
+    "exportReason": {
+      "@id": "dpd:exportReason",
+      "@type": "xsd:string"
+    },
+    "interInvoiceLines": {
+      "@id": "dpd:interInvoiceLines",
+      "@container": "@list"
+    },
+    "shipmentContent": {
+      "@id": "dpd:shipmentContent",
+      "@type": "xsd:string"
+    },
+    "label.Shipment": "dpd:label.Shipment",
+    "shipmentId": {
+      "@id": "dpd:shipmentId",
+      "@type": "xsd:string"
+    },
+    "shipment.Cifcost": "dpd:shipment.Cifcost",
+    "Delivery": "dpd:Delivery",
+    "dateFrom": {
+      "@id": "dpd:dateFrom",
+      "@type": "xsd:date"
+    },
+    "dateTo": {
+      "@id": "dpd:dateTo",
+      "@type": "xsd:date"
+    },
+    "timeFrom": {
+      "@id": "dpd:timeFrom",
+      "@type": "xsd:string"
+    },
+    "timeTo": {
+      "@id": "dpd:timeTo",
+      "@type": "xsd:string"
+    },
+    "timeSlotTariff": {
+      "@id": "dpd:timeSlotTariff",
+      "@type": "xsd:string"
+    },
+    "shipment.ContactDetails": "dpd:shipment.ContactDetails",
+    "phone1": {
+      "@id": "dpd:phone1",
+      "@type": "xsd:string"
+    },
+    "phone2": {
+      "@id": "dpd:phone2",
+      "@type": "xsd:string"
+    },
+    "fax": {
+      "@id": "dpd:fax",
+      "@type": "xsd:string"
+    },
+    "Cifcost": "dpd:Cifcost",
+    "colreq.Error": "dpd:colreq.Error",
+    "errorCode": {
+      "@id": "dpd:errorCode",
+      "@type": "xsd:string"
+    },
+    "errorMessage": {
+      "@id": "dpd:errorMessage",
+      "@type": "xsd:string"
+    },
+    "errorOrigin": {
+      "@id": "dpd:errorOrigin",
+      "@type": "xsd:string"
+    },
+    "debugList": {
+      "@id": "dpd:debugList",
+      "@container": "@list"
+    },
+    "Collection": "dpd:Collection",
+    "requestId": {
+      "@id": "dpd:requestId",
+      "@type": "xsd:string"
+    },
+    "collectionInfos": {
+      "@id": "dpd:collectionInfos",
+      "@type": "@id"
+    },
+    "customerReferenceNumbers": {
+      "@id": "dpd:customerReferenceNumbers",
+      "@container": "@list"
+    },
+    "collectionPoint": {
+      "@id": "dpd:collectionPoint",
+      "@type": "@id"
+    },
+    "pickup": {
+      "@id": "dpd:pickup",
+      "@type": "@id"
+    },
+    "colreq.Dimensions": "dpd:colreq.Dimensions",
+    "length": {
+      "@id": "dpd:length",
+      "@type": "xsd:integer"
+    },
+    "width": {
+      "@id": "dpd:width",
+      "@type": "xsd:integer"
+    },
+    "height": {
+      "@id": "dpd:height",
+      "@type": "xsd:integer"
+    },
+    "Pickup": "dpd:Pickup",
+    "fromTime": {
+      "@id": "dpd:fromTime",
+      "@type": "xsd:string"
+    },
+    "toTime": {
+      "@id": "dpd:toTime",
+      "@type": "xsd:string"
+    },
+    "pickupscheduling.Dimensions": "dpd:pickupscheduling.Dimensions",
+    "pickupscheduling.Response": "dpd:pickupscheduling.Response",
+    "scheduledPickupResponse": {
+      "@id": "dpd:scheduledPickupResponse",
+      "@container": "@list"
+    },
+    "shipment.ModelReturn": "dpd:shipment.ModelReturn",
+    "customerInfos": {
+      "@id": "dpd:customerInfos",
+      "@type": "@id"
+    },
+    "comment": {
+      "@id": "dpd:comment",
+      "@type": "xsd:string"
+    },
+    "depot": {
+      "@id": "dpd:depot",
+      "@type": "xsd:string"
+    },
+    "shipment.ParcelInfos": "dpd:shipment.ParcelInfos",
+    "parcelNumberCcKey": {
+      "@id": "dpd:parcelNumberCcKey",
+      "@type": "xsd:string"
+    },
+    "dimensions": {
+      "@id": "dpd:dimensions",
+      "@type": "@id"
+    },
+    "weight": {
+      "@id": "dpd:weight",
+      "@type": "xsd:string"
+    },
+    "shipment.International": "dpd:shipment.International",
+    "pickupscheduling.Pickup": "dpd:pickupscheduling.Pickup",
+    "shipment.ParcelBarcode": "dpd:shipment.ParcelBarcode",
+    "barcode": {
+      "@id": "dpd:barcode",
+      "@type": "xsd:string"
+    },
+    "reference": {
+      "@id": "dpd:reference",
+      "@type": "xsd:string"
+    },
+    "shipment.ShipmentResponse": "dpd:shipment.ShipmentResponse",
+    "warningMessage": {
+      "@id": "dpd:warningMessage",
+      "@type": "xsd:string"
+    },
+    "parcelIds": {
+      "@id": "dpd:parcelIds",
+      "@container": "@list"
+    },
+    "networkShipmentId": {
+      "@id": "dpd:networkShipmentId",
+      "@type": "xsd:string"
+    },
+    "networkParcelIds": {
+      "@id": "dpd:networkParcelIds",
+      "@container": "@list"
+    },
+    "parcelBarcodes": {
+      "@id": "dpd:parcelBarcodes",
+      "@container": "@list"
+    },
+    "label": {
+      "@id": "dpd:label",
+      "@type": "@id"
+    },
+    "qrcode": {
+      "@id": "dpd:qrcode",
+      "@type": "@id"
+    },
+    "others": {
+      "@id": "dpd:others",
+      "@container": "@list"
+    },
+    "LegalEntity": "dpd:LegalEntity",
+    "businessType": {
+      "@id": "dpd:businessType",
+      "@type": "xsd:string"
+    },
+    "eori": {
+      "@id": "dpd:eori",
+      "@type": "xsd:string"
+    },
+    "vatNumber": {
+      "@id": "dpd:vatNumber",
+      "@type": "xsd:string"
+    },
+    "taxIdType": {
+      "@id": "dpd:taxIdType",
+      "@type": "xsd:string"
+    },
+    "taxIdValue": {
+      "@id": "dpd:taxIdValue",
+      "@type": "xsd:string"
+    },
+    "webSite": {
+      "@id": "dpd:webSite",
+      "@type": "@id"
+    },
+    "FiscalVatRepresentant": {
+      "@id": "dpd:FiscalVatRepresentant",
+      "@type": "xsd:string"
+    },
+    "PickupSchedule": "dpd:PickupSchedule",
+    "shipmentNumbers": {
+      "@id": "dpd:shipmentNumbers",
+      "@container": "@list"
+    },
+    "numberOfParcels": {
+      "@id": "dpd:numberOfParcels",
+      "@type": "xsd:integer"
+    },
+    "addressId": {
+      "@id": "dpd:addressId",
+      "@type": "xsd:string"
+    },
+    "pickupAddress": {
+      "@id": "dpd:pickupAddress",
+      "@type": "@id"
+    },
+    "pickupContact": {
+      "@id": "dpd:pickupContact",
+      "@type": "@id"
+    },
+    "pickupWeight": {
+      "@id": "dpd:pickupWeight",
+      "@type": "xsd:string"
+    },
+    "parcelMaxWeight": {
+      "@id": "dpd:parcelMaxWeight",
+      "@type": "xsd:string"
+    },
+    "parcelMaxDimensions": {
+      "@id": "dpd:parcelMaxDimensions",
+      "@type": "@id"
+    },
+    "sendingDepot": {
+      "@id": "dpd:sendingDepot",
+      "@type": "xsd:string"
+    },
+    "messages": {
+      "@id": "dpd:messages",
+      "@container": "@list"
+    },
+    "shipment.MaskedSender": "dpd:shipment.MaskedSender",
+    "colreq.Collection": "dpd:colreq.Collection",
+    "pickupscheduling.Error": "dpd:pickupscheduling.Error",
+    "shipment.InterInvoiceLine": "dpd:shipment.InterInvoiceLine",
+    "invoicePosition": {
+      "@id": "dpd:invoicePosition",
+      "@type": "xsd:string"
+    },
+    "quantityOfItems": {
+      "@id": "dpd:quantityOfItems",
+      "@type": "xsd:string"
+    },
+    "content": {
+      "@id": "dpd:content",
+      "@type": "xsd:string"
+    },
+    "amountOfPosition": {
+      "@id": "dpd:amountOfPosition",
+      "@type": "xsd:decimal"
+    },
+    "manufacturedCountry": {
+      "@id": "dpd:manufacturedCountry",
+      "@type": "xsd:string"
+    },
+    "netWeight": {
+      "@id": "dpd:netWeight",
+      "@type": "xsd:string"
+    },
+    "grossWeight": {
+      "@id": "dpd:grossWeight",
+      "@type": "xsd:string"
+    },
+    "customerProductCode": {
+      "@id": "dpd:customerProductCode",
+      "@type": "xsd:string"
+    },
+    "productDescription": {
+      "@id": "dpd:productDescription",
+      "@type": "xsd:string"
+    },
+    "fabricComposition": {
+      "@id": "dpd:fabricComposition",
+      "@type": "xsd:string"
+    },
+    "importTarifCode": {
+      "@id": "dpd:importTarifCode",
+      "@type": "xsd:string"
+    },
+    "exportTarifCode": {
+      "@id": "dpd:exportTarifCode",
+      "@type": "xsd:string"
+    },
+    "goodsWebPage": {
+      "@id": "dpd:goodsWebPage",
+      "@type": "@id"
+    },
+    "parcelRank": {
+      "@id": "dpd:parcelRank",
+      "@type": "xsd:string"
+    }
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "DPD Group API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects DPD Group's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-13) from openapi/dpd-group-countries-api-openapi.yml, openapi/dpd-group-customers-api-openapi.yml, openapi/dpd-group-me-api-openapi.yml.",
+  "dcterms:created": "2026-10-13",
+  "dcterms:source": [
+    "openapi/dpd-group-countries-api-openapi.yml",
+    "openapi/dpd-group-customers-api-openapi.yml",
+    "openapi/dpd-group-me-api-openapi.yml",
+    "openapi/dpd-group-parcels-api-openapi.yml",
+    "openapi/dpd-group-pickup-orders-api-openapi.yml"
+  ]
+}

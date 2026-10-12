@@ -1,0 +1,32 @@
+generated: '2026-10-13'
+method: derived
+source: openapi/dpd-group-countries-api-openapi.yml, openapi/dpd-group-customers-api-openapi.yml,
+  openapi/dpd-group-me-api-openapi.yml, openapi/dpd-group-parcels-api-openapi.yml, openapi/dpd-group-pickup-orders-api-openapi.yml,
+  openapi/dpd-group-shipments-api-openapi.yml, openapi/dpd-group-shipping-api-openapi.yml, openapi/dpd-group-shipping-services-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  description: "Every account will receive its unique API key.  \nThis key is used to uniquely\
+    \ identify your account."
+  sources:
+  - openapi/dpd-group-countries-api-openapi.yml
+  - openapi/dpd-group-customers-api-openapi.yml
+  - openapi/dpd-group-me-api-openapi.yml
+  - openapi/dpd-group-parcels-api-openapi.yml
+  - openapi/dpd-group-pickup-orders-api-openapi.yml
+  - openapi/dpd-group-shipments-api-openapi.yml
+  - openapi/dpd-group-shipping-services-api-openapi.yml
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  sources:
+  - openapi/dpd-group-shipping-api-openapi.yml

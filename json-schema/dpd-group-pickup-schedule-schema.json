@@ -1,0 +1,321 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-pickup-schedule-schema.json",
+  "title": "PickupSchedule",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-shipping-api-openapi.yml#/components/schemas/PickupSchedule",
+  "type": "object",
+  "properties": {
+    "customerInfos": {
+      "$ref": "#/$defs/CustomerInfos"
+    },
+    "shipmentNumbers": {
+      "type": "array",
+      "description": "List of Shipment numbers for the Pickup",
+      "items": {
+        "type": "string"
+      }
+    },
+    "parcelNumbers": {
+      "type": "array",
+      "description": "List of Parcel Numbers for the PickUp",
+      "items": {
+        "type": "string"
+      }
+    },
+    "pickup": {
+      "$ref": "#/$defs/Pickup"
+    },
+    "numberOfParcels": {
+      "type": "integer",
+      "format": "int32",
+      "description": "Quantity (Number) of Parcels"
+    },
+    "addressId": {
+      "type": "string",
+      "description": "AddressId"
+    },
+    "pickupAddress": {
+      "$ref": "#/$defs/Address"
+    },
+    "pickupContact": {
+      "$ref": "#/$defs/ContactDetails"
+    },
+    "pickupWeight": {
+      "type": "string",
+      "description": "Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of all the parcels that will picked up"
+    },
+    "parcelMaxWeight": {
+      "type": "string",
+      "description": "Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of the heaviest parcel"
+    },
+    "parcelMaxDimensions": {
+      "$ref": "#/$defs/Dimensions"
+    },
+    "comment": {
+      "type": "string"
+    },
+    "references": {
+      "type": "array",
+      "description": "Reference of the pickup request, defined by the customer",
+      "items": {
+        "type": "string"
+      }
+    },
+    "sendingDepot": {
+      "type": "string",
+      "description": "GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative"
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Message"
+      }
+    }
+  },
+  "$defs": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "companyName": {
+          "type": "string",
+          "description": "Company Name"
+        },
+        "name1": {
+          "type": "string",
+          "description": "Name"
+        },
+        "name2": {
+          "type": "string",
+          "description": "Name"
+        },
+        "street": {
+          "type": "string",
+          "description": "Street"
+        },
+        "houseNumber": {
+          "type": "string",
+          "description": "House number (could be included into in the address field and not set)."
+        },
+        "addressLine2": {
+          "type": "string",
+          "description": "Address Line 2"
+        },
+        "addressLine3": {
+          "type": "string",
+          "description": "Address Line 3"
+        },
+        "interphoneName": {
+          "type": "string",
+          "description": "Name on the interphone"
+        },
+        "floor": {
+          "type": "string",
+          "description": "Information on the floor (e.g. if located in a huge office building)"
+        },
+        "doorCode": {
+          "type": "string",
+          "description": "A code to open the door . It is possible to input 3 different codes separated by a /"
+        },
+        "building": {
+          "type": "string",
+          "description": "Information of the building (e.g. when located on a big campus)."
+        },
+        "department": {
+          "type": "string",
+          "description": "Information on the department (e.g. when located in a huge office-building with different departments on the same floor)."
+        },
+        "country": {
+          "type": "string",
+          "description": "country (ISO 3166). All three ISO standards will be accepted: * ISO 3166-1: 2 Alpha Numerical Characters * ISO 3166-1: 3 Alpha Numerical Characters * ISO 3166-1: 3 Numerical Characters "
+        },
+        "state": {
+          "type": "string",
+          "description": "State within the country, e.g. CA for California."
+        },
+        "zipCode": {
+          "type": "string",
+          "description": "Destination zipcode of the parcel"
+        },
+        "city": {
+          "type": "string",
+          "description": "city"
+        },
+        "siteId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Used for all address types."
+        },
+        "siteType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Site type can be used in conjunction with countryId and siteName to find unique site. Used for addresses of type 1 (local address)."
+        },
+        "siteName": {
+          "type": "string",
+          "description": "SPEEDY specificity. Site type can be used in conjunction with countryId and siteName to find unique site. Used for all address types."
+        },
+        "streetId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Street identifier. If not provided, but street type and street name are provided - the system will try to find unique match by them in site. Used for addresses of type 1 (local address)."
+        },
+        "streetType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Street type. Used for addresses of type 1 (local address)."
+        },
+        "complexId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Complex identifier. If not provided, but complex type and complex name are provided - the system will try to find unique match by them in site. Used for addresses of type 1 (local address)."
+        },
+        "complexType": {
+          "type": "string",
+          "description": "SPEEDY specificity. Complex type. Used for addresses of type 1 (local address)."
+        },
+        "complexName": {
+          "type": "string",
+          "description": "SPEEDY specificity. Complex name. Used for addresses of type 1 (local address)."
+        },
+        "blockNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Block No. Used for addresses of type 1 (local address)."
+        },
+        "entranceNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Entrance. Used for addresses of type 1 (local address)."
+        },
+        "apartmentNo": {
+          "type": "string",
+          "description": "SPEEDY specificity. Apartment. Used for addresses of type 1 (local address)."
+        },
+        "poiId": {
+          "type": "integer",
+          "format": "int32",
+          "description": "SPEEDY specificity. Point of interest identifier. Used for addresses of type 1 (local address)."
+        }
+      }
+    },
+    "ContactDetails": {
+      "type": "object",
+      "properties": {
+        "contactPerson": {
+          "type": "string",
+          "description": "Name of the person to contact"
+        },
+        "phone1": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "phone2": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "fax": {
+          "type": "string",
+          "description": "Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.' "
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address"
+        }
+      }
+    },
+    "CustomerInfos": {
+      "type": "object",
+      "properties": {
+        "customerAccountNumber": {
+          "type": "string",
+          "description": "BU’s Internal Customer’s Account Number"
+        },
+        "customerSubAccountNumber": {
+          "type": "string",
+          "description": "Customer number SUBID"
+        },
+        "customerID": {
+          "type": "string",
+          "description": "BU’s internal Unique Customer ID/Identifier"
+        },
+        "originalCustomerId": {
+          "type": "string",
+          "description": "Original customer ID for Integration Customers in certain DPD Business Units"
+        }
+      }
+    },
+    "Dimensions": {
+      "type": "object",
+      "properties": {
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Dimmension in cm units"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "properties": {
+        "messageType": {
+          "type": "string",
+          "description": "Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` ",
+          "enum": [
+            "EMAIL",
+            "PHONE",
+            "SMS",
+            "APP"
+          ]
+        },
+        "messageDestination": {
+          "type": "string",
+          "description": "Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: \"+international country numberphone number\" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX' "
+        },
+        "messageLanguage": {
+          "type": "string",
+          "description": "Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. "
+        },
+        "messageDestType": {
+          "type": "string",
+          "description": "Destination stakeholder of the notification: * `s0` : Receiver / Consignee (default if not provided) * `s1` : Sender / Consignor * `s2` : Requester * `s3` : Other ",
+          "enum": [
+            "s0",
+            "s1",
+            "s2",
+            "s3"
+          ]
+        },
+        "senderCompany": {
+          "type": "string"
+        }
+      }
+    },
+    "Pickup": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "fromTime": {
+          "type": "string"
+        },
+        "toTime": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "date"
+      ]
+    }
+  }
+}

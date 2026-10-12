@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-parcel-schema.json",
+  "title": "Parcel",
+  "description": "For more info about parcels see the [Parcel Number](#/ParcelNo)",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/Parcel",
+  "properties": {
+    "parcelNumbers": {
+      "$ref": "#/$defs/ParcelNumbers"
+    },
+    "references": {
+      "$ref": "#/$defs/ParcelReferences"
+    },
+    "insurance": {
+      "$ref": "#/$defs/Insurance"
+    },
+    "isPrinted": {
+      "description": "Are the labels for this parcel already printed?",
+      "type": "boolean"
+    },
+    "weightGrams": {
+      "$ref": "#/$defs/ParcelWeight"
+    },
+    "id": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "id",
+    "isPrinted",
+    "parcelNumbers"
+  ],
+  "type": "object",
+  "$defs": {
+    "Currency": {
+      "description": "Currency in the ISO 4217 format",
+      "maxLength": 3,
+      "minLength": 3,
+      "type": "string"
+    },
+    "Insurance": {
+      "properties": {
+        "amountCents": {
+          "description": "Units of the specified currency in cents.\nFor example 125 units of CZK is 1.25 CZK.\n",
+          "type": "number"
+        },
+        "currency": {
+          "$ref": "#/$defs/Currency"
+        }
+      },
+      "required": [
+        "amountCents",
+        "currency"
+      ],
+      "type": "object"
+    },
+    "ParcelNo": {
+      "description": "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n",
+      "maxLength": 14,
+      "minLength": 14,
+      "type": "string"
+    },
+    "ParcelNumbers": {
+      "properties": {
+        "main": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ParcelNo"
+            },
+            {
+              "description": "Parcel number for a standard/collection parcel"
+            }
+          ]
+        },
+        "back": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/ParcelNo"
+            },
+            {
+              "description": "Parcel number assigned only to back parcels (in Swap service)"
+            }
+          ]
+        }
+      },
+      "title": "Parcel numbers",
+      "type": "object"
+    },
+    "ParcelReference1": {
+      "description": "A reference is an internal information for your use cases.\nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n\nThis reference is printed on the parcel label.\nIt is shortened to 14/17 characters when printed on the label.\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "ParcelReference2": {
+      "description": "A reference is an internal information for your use cases.\nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n\nThis reference is printed on the parcel label.\nThis is shortened do 14/17 characters when printed on the label.\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "ParcelReference3": {
+      "description": "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "ParcelReference4": {
+      "description": "Additional information for your use cases.  \nYou can use this (for instance) to correlate the parcel with your internal system IDs.\n",
+      "maxLength": 35,
+      "type": "string"
+    },
+    "ParcelReferences": {
+      "description": "A reference is an internal information for your use cases.",
+      "properties": {
+        "ref1": {
+          "$ref": "#/$defs/ParcelReference1"
+        },
+        "ref2": {
+          "$ref": "#/$defs/ParcelReference2"
+        },
+        "ref3": {
+          "$ref": "#/$defs/ParcelReference3"
+        },
+        "ref4": {
+          "$ref": "#/$defs/ParcelReference4"
+        }
+      },
+      "title": "Parcel references",
+      "type": "object"
+    },
+    "ParcelWeight": {
+      "description": "Weight of the parcel in grams\nE.g 1500 represents 1.5 kg.\n",
+      "type": "number"
+    }
+  }
+}

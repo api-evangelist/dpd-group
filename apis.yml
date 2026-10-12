@@ -1,0 +1,414 @@
+aid: dpd-group
+
+name: DPD Group
+
+description: DPD Group (part of Geopost) is a European parcel delivery network. Its business units publish shipping APIs including the DPD Group
+  META-API Shipment REST API, the DPD Czech Republic GeoAPI, and SOAP web services from DPD Germany, DPD Belgium/Luxembourg and DPD Poland for
+  shipment creation, labels, tracking, pickups and parcel shop lookup.
+
+type: Index
+
+access: 3rd-Party
+
+created: '2026-10-13'
+
+modified: '2026-10-13'
+
+position: Consuming
+
+tags:
+- Logistics
+- Parcels
+- Shipping
+- Tracking
+- Carriers
+
+url: https://raw.githubusercontent.com/api-evangelist/dpd-group/refs/heads/main/apis.yml
+
+specificationVersion: '0.23'
+
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+
+common:
+- type: AgenticAccess
+  url: agentic-access/dpd-group-agentic-access.yml
+- type: Spectral
+  url: rules/dpd-group-rules.yml
+- type: JSONLD
+  url: json-ld/dpd-group-context.jsonld
+- type: Vocabulary
+  url: vocabulary/dpd-group-vocabulary.yml
+- type: DataModel
+  url: data-model/dpd-group-data-model.yml
+- type: ErrorCatalog
+  url: errors/dpd-group-problem-types.yml
+- type: Conformance
+  url: conformance/dpd-group-conformance.yml
+- type: Hosts
+  url: hosts/dpd-group-hosts.yml
+- type: Vendors
+  url: vendors/dpd-group-vendors.yml
+- type: DomainSecurity
+  url: security/dpd-group-domain-security.yml
+- type: Authentication
+  url: authentication/dpd-group-authentication.yml
+- type: Website
+  url: https://www.dpd.com
+- type: Portal
+  url: https://esolutions.dpd.com/entwickler.aspx
+- type: Documentation
+  url: https://nst-preprod.dpsin.dpdgroup.com/api/docs/
+- type: PrivacyPolicy
+  url: https://www.geopost.com/en/data-privacy-policy/
+- type: TermsOfService
+  url: https://www.geopost.com/en/legal-and-copyright-notice-disclaimer-dispute-settlement/
+
+apis:
+- aid: dpd-group:geoapi-countries
+  name: DPD Geo Countries API
+  description: Lists countries supported by DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-countries-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-country-schema.json
+- aid: dpd-group:geoapi-customers
+  name: DPD Geo Customers API
+  description: Retrieves customer and address data for the authenticated DPD CZ account. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-customers-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-customer-address-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-customer-schema.json
+- aid: dpd-group:geoapi-me
+  name: DPD Geo Me API
+  description: Returns details about the authenticated GeoAPI user. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-me-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-me-schema.json
+- aid: dpd-group:geoapi-parcels
+  name: DPD Geo Parcels API
+  description: Retrieves parcel details, tracking and labels from DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-parcels-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-parcel-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-tracking-result-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-label-binary-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-label-script-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-dropoff-codes-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-parcels-labels-post-request-schema.json
+- aid: dpd-group:geoapi-pickup-orders
+  name: DPD Geo Pickup Orders API
+  description: Creates and manages pickup orders with DPD CZ. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-pickup-orders-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-pickup-order-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-new-pickup-order-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-pickup-orders-pickup-order-id-delete-200-response-schema.json
+- aid: dpd-group:geoapi-shipments
+  name: DPD Geo Shipments API
+  description: Creates shipments in DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-shipments-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-new-shipment-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipment-schema.json
+- aid: dpd-group:geoapi-shipping-services
+  name: DPD Geo Shipping Services API
+  description: Lists DPD CZ shipping services available to the account. Part of DPD Czech Republic GeoAPI (v1).
+  baseURL: https://geoapi.dpd.cz/v1
+  humanURL: https://geoapi.dpd.cz/v1
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-shipping-services-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v1-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v1.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipping-service-list-schema.json
+- aid: dpd-group:geoapi-v2
+  name: DPD GeoAPI v2
+  description: Version 2 of the DPD Czech Republic GeoAPI for shipments, parcels, pickups and labels.
+  baseURL: https://geoapi.dpd.cz/v2
+  humanURL: https://geoapi.dpd.cz/v2
+  tags:
+  - Shipping
+  - Logistics
+  - Parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/dpd-cz-geoapi-v2-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-cz-geoapi-v2.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-successful-tracking-result-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-tracking-result-item-schema.json
+- aid: dpd-group:meta-api-shipping
+  name: DPD META-API Shipment
+  description: DPD Group META-API for creating shipments, generating labels and managing parcels across DPD Group business units.
+  baseURL: https://api.dpdgroup.com
+  humanURL: https://api.dpdgroup.com
+  tags:
+  - Shipping
+  - Labels
+  - Logistics
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-shipping-api-openapi.yml
+  - type: OpenAPI
+    url: openapi/_original/dpd-group-meta-api-shipping-openapi.json
+  - type: PostmanCollection
+    url: collections/dpd-group-meta-api-shipping.postman_collection.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipment-shipment-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipment-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-pickupscheduling-pickup-schedule-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-pickup-schedule-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipment-shipment-response-schema.json
+  - type: JSONSchema
+    url: json-schema/dpd-group-shipment-response-schema.json
+- aid: dpd-group:dpd-belux-endofdayservicev10
+  name: DPD Belgium/Luxembourg endofdayservicev10 SOAP Service
+  description: DPD Belgium/Luxembourg SOAP web service (endofdayservicev10) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://wsshipper.dpd.be/soap/Services/EndOfDayService/V1_0
+  humanURL: https://wsshipper.dpd.be/soap/Services/EndOfDayService/V1_0?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-belux-endofdayservicev10.wsdl
+- aid: dpd-group:dpd-belux-loginservicev21
+  name: DPD Belgium/Luxembourg loginservicev21 SOAP Service
+  description: DPD Belgium/Luxembourg SOAP web service (loginservicev21) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://wsshipper.dpd.be/soap/services/LoginService/V2_1
+  humanURL: https://wsshipper.dpd.be/soap/services/LoginService/V2_1?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-belux-loginservicev21.wsdl
+- aid: dpd-group:dpd-belux-parcellifecycleservicev20
+  name: DPD Belgium/Luxembourg parcellifecycleservicev20 SOAP Service
+  description: DPD Belgium/Luxembourg SOAP web service (parcellifecycleservicev20) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://wsshipper.dpd.be/soap/services/ParcelLifeCycleService/V2_0
+  humanURL: https://wsshipper.dpd.be/soap/services/ParcelLifeCycleService/V2_0?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-belux-parcellifecycleservicev20.wsdl
+- aid: dpd-group:dpd-belux-parcelshopfinderservicev50
+  name: DPD Belgium/Luxembourg parcelshopfinderservicev50 SOAP Service
+  description: DPD Belgium/Luxembourg SOAP web service (parcelshopfinderservicev50) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://wsshipper.dpd.be/soap/services/ParcelShopFinderService/V5_0
+  humanURL: https://wsshipper.dpd.be/soap/services/ParcelShopFinderService/V5_0?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-belux-parcelshopfinderservicev50.wsdl
+- aid: dpd-group:dpd-belux-shipmentservicev34
+  name: DPD Belgium/Luxembourg shipmentservicev34 SOAP Service
+  description: DPD Belgium/Luxembourg SOAP web service (shipmentservicev34) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://wsshipper.dpd.be/soap/services/ShipmentService/V3_4/
+  humanURL: https://wsshipper.dpd.be/soap/services/ShipmentService/V3_4/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-belux-shipmentservicev34.wsdl
+- aid: dpd-group:dpd-de-depotdataservice-v1_0
+  name: DPD Germany depotdataservice-v1_0 SOAP Service
+  description: DPD Germany SOAP web service (depotdataservice-v1_0) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/DepotDataService/V1_0/
+  humanURL: https://public-ws.dpd.com/services/DepotDataService/V1_0/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-depotdataservice-v1_0.wsdl
+- aid: dpd-group:dpd-de-loginservice-v2_0
+  name: DPD Germany loginservice-v2_0 SOAP Service
+  description: DPD Germany SOAP web service (loginservice-v2_0) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/LoginService/V2_0/
+  humanURL: https://public-ws.dpd.com/services/LoginService/V2_0/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-loginservice-v2_0.wsdl
+- aid: dpd-group:dpd-de-parcellifecycleservice-v2_0
+  name: DPD Germany parcellifecycleservice-v2_0 SOAP Service
+  description: DPD Germany SOAP web service (parcellifecycleservice-v2_0) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/ParcelLifeCycleService/V2_0/
+  humanURL: https://public-ws.dpd.com/services/ParcelLifeCycleService/V2_0/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-parcellifecycleservice-v2_0.wsdl
+- aid: dpd-group:dpd-de-parcelshopfinderservice-v5_0
+  name: DPD Germany parcelshopfinderservice-v5_0 SOAP Service
+  description: DPD Germany SOAP web service (parcelshopfinderservice-v5_0) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/ParcelShopFinderService/V5_0/
+  humanURL: https://public-ws.dpd.com/services/ParcelShopFinderService/V5_0/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-parcelshopfinderservice-v5_0.wsdl
+- aid: dpd-group:dpd-de-shipmentservice-v3_2
+  name: DPD Germany shipmentservice-v3_2 SOAP Service
+  description: DPD Germany SOAP web service (shipmentservice-v3_2) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/ShipmentService/V3_2/
+  humanURL: https://public-ws.dpd.com/services/ShipmentService/V3_2/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-shipmentservice-v3_2.wsdl
+- aid: dpd-group:dpd-de-shipmentservice-v4_4
+  name: DPD Germany shipmentservice-v4_4 SOAP Service
+  description: DPD Germany SOAP web service (shipmentservice-v4_4) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/ShipmentService/V4_4/
+  humanURL: https://public-ws.dpd.com/services/ShipmentService/V4_4/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-shipmentservice-v4_4.wsdl
+- aid: dpd-group:dpd-de-shipmentservice-v4_5
+  name: DPD Germany shipmentservice-v4_5 SOAP Service
+  description: DPD Germany SOAP web service (shipmentservice-v4_5) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://public-ws.dpd.com/services/ShipmentService/V4_5/
+  humanURL: https://public-ws.dpd.com/services/ShipmentService/V4_5/?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-de-shipmentservice-v4_5.wsdl
+- aid: dpd-group:dpd-pl-package-obj-services
+  name: DPD Poland package-obj-services SOAP Service
+  description: DPD Poland SOAP web service (package-obj-services) for DPD shipping, tracking and parcel shop data.
+  baseURL: https://dpdservices.dpd.com.pl/DPDPackageObjServicesService/DPDPackageObjServices
+  humanURL: https://dpdservices.dpd.com.pl/DPDPackageObjServicesService/DPDPackageObjServices?wsdl
+  tags:
+  - Shipping
+  - SOAP
+  - Logistics
+  properties:
+  - type: WSDL
+    url: wsdl/dpd-pl-package-obj-services.wsdl

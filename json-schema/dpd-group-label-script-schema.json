@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/dpd-group/main/json-schema/dpd-group-label-script-schema.json",
+  "title": "LabelScript",
+  "description": "A script in a txt format that can be sent to the printer.  \nIt can contain instructions for single label or multiple labels.  \nSupported formats are ZPL and EPL.\n",
+  "x-generated": "2026-10-13",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/dpd-group-parcels-api-openapi.yml#/components/schemas/LabelScript",
+  "type": "string"
+}
