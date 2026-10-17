@@ -49,7 +49,7 @@
     "dpd-group-meta-api-shipping-openapi.json: declared missing tag: login",
     "dpd-group-meta-api-shipping-openapi.json: declared missing tag: pickupsched",
     "dpd-group-meta-api-shipping-openapi.json: multi-axis tagging (5 tags, 1 first tags, 1.75x duplication over 8 operations) \u2014 split on first tag, 6 operations narrowed",
-    "apis.yml register: no-apis-yml"
+    "apis.yml register: written (+0 apis, 21 total)"
   ],
   "skipped": [
     "_original/dpd-cz-geoapi-v2-openapi.json: archived document superseded by a larger archived document",

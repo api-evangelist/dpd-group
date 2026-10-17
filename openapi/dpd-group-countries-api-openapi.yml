@@ -43,28 +43,11 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Country_codInfo:
-      description: Info about COD (Cash On Delivery) services for a country
-      properties:
-        currency:
-          $ref: '#/components/schemas/Currency'
-        maxAmountCents:
-          description: 'Maximum allowed COD amount for this country
-
-
-            Represented in cents of the given currency
-
-            '
-          type: number
-        cardMaxAmountCents:
-          description: 'Maximum allowed COD amount for card payments for this country
-
-
-            Represented in cents of the given currency
-
-            '
-          type: number
-      type: object
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
     Error_description:
       oneOf:
       - type: string
@@ -77,17 +60,6 @@ components:
 
           '
         type: object
-    Currency:
-      description: Currency in the ISO 4217 format
-      example: CZK
-      maxLength: 3
-      minLength: 3
-      type: string
-    CountryAlpha2:
-      description: Country ISO Alpha-2 code
-      maxLength: 2
-      minLength: 2
-      type: string
     Error:
       properties:
         code:
@@ -100,6 +72,12 @@ components:
       - code
       - message
       type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
     CountryNumeric:
       description: Country ISO numeric code
       example: '203'
@@ -126,11 +104,33 @@ components:
       - localizedName
       - numericCode
       type: object
-    CountryAlpha3:
-      description: Country ISO Alpha-3 code
-      maxLength: 3
-      minLength: 3
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
       type: string
+    Country_codInfo:
+      description: Info about COD (Cash On Delivery) services for a country
+      properties:
+        currency:
+          $ref: '#/components/schemas/Currency'
+        maxAmountCents:
+          description: 'Maximum allowed COD amount for this country
+
+
+            Represented in cents of the given currency
+
+            '
+          type: number
+        cardMaxAmountCents:
+          description: 'Maximum allowed COD amount for card payments for this country
+
+
+            Represented in cents of the given currency
+
+            '
+          type: number
+      type: object
   securitySchemes:
     ApiKeyAuth:
       description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."
