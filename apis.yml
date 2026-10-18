@@ -18,6 +18,12 @@ position: Consuming
 
 tags:
 - Logistics
+- Parcel
+- Shipping
+- Tracking
+- Carrier
+tags_raw:
+- Logistics
 - Parcels
 - Shipping
 - Tracking
@@ -74,6 +80,10 @@ apis:
   tags:
   - Shipping
   - Logistics
+  - Parcel
+  tags_raw:
+  - Shipping
+  - Logistics
   - Parcels
   properties:
   - type: OpenAPI
@@ -92,6 +102,10 @@ apis:
   baseURL: https://geoapi.dpd.cz/v1
   humanURL: https://geoapi.dpd.cz/v1
   tags:
+  - Shipping
+  - Logistics
+  - Parcel
+  tags_raw:
   - Shipping
   - Logistics
   - Parcels
@@ -115,6 +129,10 @@ apis:
   tags:
   - Shipping
   - Logistics
+  - Parcel
+  tags_raw:
+  - Shipping
+  - Logistics
   - Parcels
   properties:
   - type: OpenAPI
@@ -133,6 +151,10 @@ apis:
   baseURL: https://geoapi.dpd.cz/v1
   humanURL: https://geoapi.dpd.cz/v1
   tags:
+  - Shipping
+  - Logistics
+  - Parcel
+  tags_raw:
   - Shipping
   - Logistics
   - Parcels
@@ -163,6 +185,10 @@ apis:
   tags:
   - Shipping
   - Logistics
+  - Parcel
+  tags_raw:
+  - Shipping
+  - Logistics
   - Parcels
   properties:
   - type: OpenAPI
@@ -185,6 +211,10 @@ apis:
   tags:
   - Shipping
   - Logistics
+  - Parcel
+  tags_raw:
+  - Shipping
+  - Logistics
   - Parcels
   properties:
   - type: OpenAPI
@@ -204,6 +234,10 @@ apis:
   baseURL: https://geoapi.dpd.cz/v1
   humanURL: https://geoapi.dpd.cz/v1
   tags:
+  - Shipping
+  - Logistics
+  - Parcel
+  tags_raw:
   - Shipping
   - Logistics
   - Parcels
