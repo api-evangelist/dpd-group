@@ -1,0 +1,1893 @@
+openapi: 3.2.0
+info:
+  title: DPDServices Packages Parcels Tag API
+  description: '# DPDServices
+
+
+    The purpose of this document is to describe the functionality and utilization of Web Service interfaces for the use of DPD clients. The solution provided offers a universal (independent of the client''s system) tool for transmitting information between client systems and DPD. The following Web Service methods are available:
+
+
+    - Validation of shipment data and assignment of waybill numbers
+
+    - Generation of waybill labels
+
+    - Generation of receipt protocols and data notification
+
+    - Courier booking
+
+    - Postal code lookup
+
+    - Courier availability check
+
+    - Validation of return shipment data with predefined waybill numbers and notification
+
+
+    Each Web Service method call is authorized by a login and password and marked with one of three error-handling policies:
+
+
+    - Termination of processing upon encountering the first error
+
+    - Ignoring shipments with incorrect data
+
+    - Termination of processing upon encountering the first error and cancellation of processed shipments before the error occurred. (This option is available only in some Web Service methods)
+
+
+    A client integrated with DPD Poland through this solution can be assured of the compliance of prepared shipments with the current standard, which implies an improvement in the efficiency and reliability of services offered by our courier company. ## Environments
+
+
+    **Production environment:**
+
+    Production services are available at: https://dpdservices.dpd.com.pl
+
+
+    **Demo environment:**
+
+    Demo services are available at: https://dpdservicesdemo.dpd.com.pl
+
+
+    To access the DEMO environment, you will need the following login credentials:
+
+
+    - **Login:** test
+
+    - **Password:** thetu4Ee
+
+    - **Master FID:** 1495
+
+
+    ## Authentication
+
+
+    All endpoints require of **Basic Authentication** and the **x-dpd-fid: {{masterfid}}** header:
+
+
+    -->
+
+
+    ## Configuration of Login and Password
+
+
+    The complete configuration of a user account authorized to use the web service is carried out in DPD Poland''s systems after prior agreements with the client. # Available Services
+
+
+    Within the scope of generating a waybill, it''s possible to include services that modify various aspects related to parcel delivery. Depending on whether the parcel will be delivered domestically or internationally, the list of services will differ. Some services require specific conditions that must be met to be used. Validation of certain services may also exclude their simultaneous use. ### Services
+
+
+    | Service Code | Service | Domestic / International | Notes |
+
+    |-------------------------|---------------------------------------------------|--------------------------|-----------------------------------|
+
+    | B2C | B2C | `domestic` | Required Attributes:
+
+    `VALUE` - e.g. ''10:00-13:00'' |
+
+    | CARRY_IN | Carry in | `domestic` | |
+
+    | COD * | Cash on delivery | `domestic`
+
+    `international` | Currencies - only PLN, EUR, RON, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | CUD | Return shipment | `domestic` | |
+
+    | DECLARED_VALUE | Declared value | `domestic`
+
+    `international` | Shipment insurance. Currencies - only PLN, CHF, EUR, NOK, SEK, USD, GBP, HUF, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | DIGITAL_LABEL ** | Digital label service | `domestic` | Only for single-package shipments |
+
+    | DPD_EXPRESS | Air transport | `international` | |
+
+    | DPD_FOOD | Food transportation service | `domestic` | Only for specified postal codes
+
+    Required Attributes:
+
+    `LIMIT_DATE` - product''s expiration date (ISO-8601 format), which must not be less than 2 business days e.g. ''2039-12-31'' |
+
+    | DPD_LQ * | ADR transportation service | `domestic`
+
+    `international` | Dangerous shipment: ADR weight required |
+
+    | DPD_NEXT_DAY | Delivery on next day | `domestic` | |
+
+    | DPD_PICKUP | Parcel delivery service to the PUDO point | `domestic`
+
+    `international` | Only for specified postal codes
+
+    Required Attributes:
+
+    `PUDO` - e.g.'
+  version: 5.27.0
+  x-logo:
+    url: /redoc-ui/DPD_logo.svg
+servers:
+- url: https://dpdservices.dpd.com.pl
+  description: Generated server url
+security:
+- basicAuth: []
+tags:
+- name: packagesParcelsTag
+  x-displayName: Packages, Parcels, Waybills
+paths:
+  /public/shipment/v1/generatePackagesNumbers:
+    post:
+      tags:
+      - packagesParcelsTag
+      summary: Create packages and parcels
+      description: 'Creates packages and parcels. Generates waybill numbers to identify packages and parcels.
+
+        Defines the sender and recipient for package. Provides additional services to created packages and parcels.
+
+
+        The method accepts the following input parameters:
+
+        - Shipment and parcel list data (optionally with reference numbers client) that are subject to validation. Dimensions are given in centimeters, a weight in kilograms.
+
+        - Generation policy (error handling)
+
+
+        The following operations are performed on the DPD system side:
+
+        - Validation of submitted data
+
+        - Validation of package dimensions
+
+        - Generating waybill numbers for parcels
+
+
+        The method returns:
+
+        - A session with a list of shipments and parcels with assigned shipping numbers, customer reference numbers and validation statuses
+
+        - Unique identifier of the DPD system'
+      operationId: generatePackagesNumbers
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GeneratePackagesNumbersRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneratePackagesNumbersResponse'
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GeneratePackagesNumbersResponse'
+  /public/shipment/v1/generateInternationalPackageNumbers:
+    post:
+      tags:
+      - packagesParcelsTag
+      summary: Create international return packages and parcels to PL (sent at PickUp point)
+      description: 'Creates international return packages and parcels to PL, that will be sent from the PickUp point.
+
+        Generates waybill numbers to identify packages and parcels. Provides additional service - PUDO_RETURN.
+
+
+        This method accepts the following input parameters:
+
+
+        - Data of a list of shipments and parcels (optionally with customer reference numbers) subject to validation. Dimensions are provided in centimeters, and weight in kilograms.
+
+        - Sender and recipient data for the shipment
+
+
+        On the DPD system side, the following operations are performed:
+
+
+        - Validation of the submitted data
+
+        - Generation of waybill numbers for parcels
+
+
+        The method returns:
+
+
+        - A session with a list of shipments and parcels with assigned waybill numbers, customer reference numbers, and validation statuses
+
+        - A unique identifier from the DPD system'
+      operationId: generateInternationalPackageNumbers
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateInternationalPackageNumbersRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateInternationalPackageNumbersResponse'
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+  /public/shipment/v1/generateShipment:
+    post:
+      tags:
+      - packagesParcelsTag
+      summary: Create packages and parcels (predefined waybill numbers)
+      description: 'Creates packages and parcels for predefined waybill numbers to identify packages and parcels.
+
+        Defines the sender and recipient for package. Provides additional services to created packages and parcels.
+
+        Generates label. Advises parcels.'
+      operationId: generateShipment
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateShipmentRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateShipmentResponse'
+  /public/shipment/v1/appendParcelsToPackage:
+    post:
+      tags:
+      - packagesParcelsTag
+      summary: Add parcel to existing package
+      description: 'Adds parcel to existing package. Generates waybill for added parcel.
+
+
+        This method accepts the following input parameters:
+
+
+        - Parcel data to be added to a shipment, including:
+
+        - Data for locating the shipment
+
+        - Data about the new parcel
+
+
+        On the DPD system side, the following operations are performed:
+
+
+        - Check the client''s authorization to add a specific type of event
+
+        - Add a parcel to an existing shipment
+
+
+        The method returns:
+
+
+        - Status of the executed operation
+
+        - Waybill of the newly added parcel
+
+        - Exception for incorrect input data
+
+        - Exception if the client lacks authorization to use the service
+
+        - Exception if the client has provided return shipment data (adding parcels to return shipments is restricted)'
+      operationId: appendParcelsToPackage
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppendParcelsToPackageRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppendParcelsToPackageResponse'
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+components:
+  schemas:
+    GenerationPolicy:
+      type: string
+      description: 'Method of generating packages and parcels. Possible values:
+
+        - STOP_ON_FIRST_ERROR - generating of parcels is interrupted in the case of the first encountered error. Packages and shipments created up to the first error will be returned.
+
+        - IGNORE_ERRORS - no parcel generation interruption in case of validation error
+
+        - ALL_OR_NOTHING - all packages will be returned or none if there is an error.
+
+        '
+      enum:
+      - STOP_ON_FIRST_ERROR
+      - IGNORE_ERRORS
+      - ALL_OR_NOTHING
+    AppendParcel:
+      maxLength: 10
+      minLength: 1
+      required:
+      - content
+      - weight
+      type: object
+      properties:
+        reference:
+          maxLength: 150
+          minLength: 0
+          type: string
+          description: A technical unique parcel reference (e.g. a database guid)
+        weight:
+          maximum: 700
+          minimum: 0.01
+          type: number
+          description: In Poland, the maximum weight is 700.00 kg, the minimum is 0.01 kg. Abroad, the maximum weight is 315.00 kg, the minimum is 0.01 kg. For shipments with a pallet service, the minimum weight is 315 kg. Accuracy to two decimal places is accepted.
+        sizeX:
+          maximum: 999
+          minimum: 1
+          type: number
+          description: Dimension X of the package expressed in centimeters
+        sizeY:
+          maximum: 999
+          minimum: 1
+          type: number
+          description: Dimension Y of the package expressed in centimeters
+        sizeZ:
+          maximum: 999
+          minimum: 1
+          type: number
+          description: Dimension Z of the package expressed in centimeters
+        content:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Parcel content. The content field is required for international shipments. For domestic shipments it is optional.
+        customerData1:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 1
+        customerData2:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 2
+        customerData3:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 3
+      description: Parcels
+    ShipmentParcel:
+      maximum: 100
+      minimum: 1
+      required:
+      - weight
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique parcel reference (e.g. a database guid)
+        weight:
+          maximum: 1000
+          minimum: 0.01
+          type: number
+          description: In Poland, the maximum weight is 700.00 kg, the minimum is 0.01 kg. Abroad, the maximum weight is 315.00 kg, the minimum is 0.01 kg. For shipments with a pallet service, the minimum weight is 315 kg. Accuracy to two decimal places is accepted.
+        weightAdr:
+          maximum: 700
+          minimum: 0.0
+          type: number
+          description: The maximum weight ADR is parcel weight, the minimum is 0.00 kg.
+        sizeX:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension X of the package expressed in centimeters
+        sizeY:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension Y of the package expressed in centimeters
+        sizeZ:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension Z of the package expressed in centimeters
+        content:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Parcel content. The content field is required for international shipments. For domestic shipments it is optional.
+        customerData1:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 1
+        customerData2:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 2
+        customerData3:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 3
+        waybill:
+          type: string
+          description: Predefined waybill number
+      description: Parcels
+    SecurityErrorEnum:
+      type: string
+      description: 'Allowed values:
+
+        - MISSING_PERMISSION - The user does not have sufficient permissions
+
+        '
+      enum:
+      - MISSING_PERMISSION
+    OutputDocFormat:
+      type: string
+      description: 'Allowed values:
+
+        - PDF - pdf
+
+        - EPL - epl
+
+        - ZPL - zpl
+
+        - XML - xml
+
+        '
+      enum:
+      - PDF
+      - EPL
+      - ZPL
+      - XML
+    MultiPackageGenerationStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - successful package creation
+
+        - UNKNOWN_ERROR - unknown error
+
+        - INCORRECT_DATA - incorrect data
+
+        - DISABLED_API - disabled API
+
+        - ERROR_NO_FID_PERMISSION - missing permissions for FID
+
+        - DUPLICATED_PACKAGE_REFERENCE - duplicated package reference. Use unique package reference value.
+
+        - DUPLICATED_PARCEL_REFERENCE - duplicated parcel reference. Use unique parcel reference value.
+
+        - NOT_PROCESSED - not processed
+
+        - DISALLOWED_FID - fid is disallowed
+
+        - DUPLICATED_ALTERNATIVE_PARCEL_NUMBER - duplicated alternative parcel number. Use unique value.
+
+        '
+      enum:
+      - OK
+      - UNKNOWN_ERROR
+      - INCORRECT_DATA
+      - DISABLED_API
+      - ERROR_NO_FID_PERMISSION
+      - DUPLICATED_PACKAGE_REFERENCE
+      - DUPLICATED_PARCEL_REFERENCE
+      - NOT_PROCESSED
+      - DISALLOWED_FID
+      - DUPLICATED_ALTERNATIVE_PARCEL_NUMBER
+    GenerateInternationalPackageNumbersResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/MultiPackagesGenerationStatus'
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        beginTime:
+          type: string
+          description: Session start in ISO-8601 format in UTC zone.
+          format: date-time
+        endTime:
+          type: string
+          description: Session end in ISO-8601 format in UTC zone.
+          format: date-time
+        packages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PackageResponse'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    ParcelValidationInfoGPN:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/ParcelValidationErrorCodeGPN'
+        info:
+          type: string
+          description: Additional error information
+      description: Validation information
+    PudoReceiver:
+      required:
+      - countryCode
+      - name
+      type: object
+      properties:
+        company:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name
+          example: DPD Polska Sp. z o.o.
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name
+          example: Jan Kowalski
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Two character country code in ISO ALPHA-2 format
+          example: PL
+        phone:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional phone number
+          example: '48732121245'
+        email:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional email
+          example: dpd@dpd.com.pl
+      description: Receiver data
+    Error401:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SecurityErrorEnum'
+    ParcelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status
+        reference:
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Parcel waybill
+      description: Parcels
+    PackageValidationErrorCodeGPN:
+      type: string
+      description: "    Allowed values:\n    RECEIVER_COUNTRY_CODE_NOT_FOUND - Receiver country code not found\n    SENDER_COUNTRY_CODE_NOT_FOUND - Sender country code not found\n    INCORRECT_SENDER_POSTAL_CODE - Incorrect sender postal code\n    INCORRECT_RECEIVER_POSTAL_CODE - Incorrect receiver postal code\n    INCORRECT_RECEIVER_ADDRESS - Incorrect receiver address\n    INCORRECT_RECEIVER_CITY - Incorrect receiver city\n    TIME0930_IS_UNAVAILABLE_FOR_POSTAL_CODE - TIME 09:30 is unavailable for postal code\n    TIME1200_IS_UNAVAILABLE_FOR_POSTAL_CODE - TIME 12:00 is unavailable for postal code\n    NEXT_DAY_IS_UNAVAILABLE_FOR_POSTAL_CODE - DPD_NEXT_DAY service is unavailable for postal code\n    SATURDAY_IS_UNAVAILABLE_FOR_POSTAL_CODE - SATURDAY service is unavailable for postal code\n    INTERNATIONAL_IS_UNAVAILABLE_FOR_POSTAL_CODE - INTERNATIONAL service is unavailable for postal code\n    TIME_FIXED_IS_UNAVAILABLE_FOR_POSTAL_CODE - TIME_FIXED service is unavailable for postal code\n    TIME_FIXED_IS_OUT_OF_RANGE - TIME_FIXED service is out of range\n    DPD_TODAY_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_TODAY service is not available for postal code\n    PALETTE_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - PALETTE service is not available for postal code\n    PALETTE_EXCEEDED_DIMENSION_80X120X170 - Parcel exceeded dimension 80x120x170 with PALETTE service\n    PALETTE_EXCEEDED_DIMENSION_80X120X220 - Parcel exceeded dimension 80x120x220 with PALETTE service\n    B2C_INCORRECT_VALUE_RANGE - B2C incorrect value range\n    CLASSIC_SERVICE_IS_UNAVAILABLE - CLASSIC service is unavailable\n    SELF_COLLECTION_SERVICE_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT - SELF_COLLECTION service is not available for international shipment\n    DEDICATED_DELIVERY_SERVICE_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT - DEDICATED_DELIVERY service is not available for international shipment\n    DUTY_SERVICE_UNAVAILABLE_FOR_RECIPIENT_COUNTRY_CODE - DUTY service is not available for recipient country code\n    SERVICE_IS_UNAVAILABLE - Service is unavailable\n    VALUE_INCORRECT - Value is incorrect\n    INCORRECT_PUDO - incorrect pudo\n    DPD_FOOD_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_FOOD service is not available for postal code\n    DPD_FOOD_AND_0930_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_FOOD service and TIME0930 is not available for postal code\n    DPD_FOOD_AND_1200_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_FOOD service and TIME1200 is not available for postal code\n    DPD_FOOD_AND_DPD_PICKUP_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_FOOD service and DPD_PICKUP is not available for postal code\n    DPD_FOOD_AND_DPD_TODAY_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - DPD_FOOD service and DPD_TODAY is not available for postal code\n    DIGITAL_LABEL_IS_NOT_AVAILABLE_FOR_FID - DIGITAL_LABEL service is not available for given customer\n    DPD_PICKUP_IS_NOT_AVAILABLE_FOR_PUDO - DPD_PICKUP service is not available for PUDO\n    COD_DEDICATED_ACCOUNT_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT - COD dedicated account service is not available for international shipment\n    DPD_FOOD_IS_NOT_SUPPORTED_BY_PUDO - DPD_FOOD service is not supported by PUDO\n    DPD_FOOD_SERVICE_HAS_INCORRECT_LIMIT_DATE - DPD_FOOD service has incorrect limit date\n    INACTIVE_PUDO - Selected PUDO is inactive\n    COD_CURRENCY_ONLY_EUR_AVAILABLE_FOR_COUNTRY - COD service currency is only EUR available for selected country\n    COD_IS_NOT_AVAILABLE_FOR_POSTAL_CODE - COD service is unavailable for select postal code\n    COD_SERVICE_INTERNATIONAL_AVAILABLE_FOR_SINGLE_PARCEL_SHIPMENT - International COD service is available only for single parcel shipment\n    INCORRECT_DATE_FORMAT - incorrect date format\n    SERVICES_NOT_SUPPORTED_BY_PUDO - some of the selected services are not supported by PUDO\n    INCORRECT_COUNTRY_FOR_SERVICE - Incorrect country code for the service\n    INCORRECT_COUNTRY - Incorrect sender or receiver country code\n    ALLEGRO_DELIVERY_SERVICE_HAS_INCORRECT_ALLEGRO_PARCEL_NUMBER - ALLEGRO_DELIVERY service has incorrect allegro parcel number\n    ALLEGRO_DELIVERY_SERVICE_REQUIRED_ALLEGRO_PARCEL_NUMBER - ALLEGRO_DELIVERY service required allegro parcel number\n    ...\n"
+      enum:
+      - RECEIVER_COUNTRY_CODE_NOT_FOUND
+      - SENDER_COUNTRY_CODE_NOT_FOUND
+      - INCORRECT_SENDER_POSTAL_CODE
+      - INCORRECT_RECEIVER_POSTAL_CODE
+      - INCORRECT_RECEIVER_ADDRESS
+      - INCORRECT_RECEIVER_CITY
+      - TIME0930_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - TIME1200_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - NEXT_DAY_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - SATURDAY_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - INTERNATIONAL_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - TIME_FIXED_IS_UNAVAILABLE_FOR_POSTAL_CODE
+      - TIME_FIXED_IS_OUT_OF_RANGE
+      - DPD_TODAY_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - PALETTE_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - PALETTE_EXCEEDED_DIMENSION_80X120X170
+      - PALETTE_EXCEEDED_DIMENSION_80X120X220
+      - B2C_INCORRECT_VALUE_RANGE
+      - CLASSIC_SERVICE_IS_UNAVAILABLE
+      - SELF_COLLECTION_SERVICE_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT
+      - DEDICATED_DELIVERY_SERVICE_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT
+      - DUTY_SERVICE_UNAVAILABLE_FOR_RECIPIENT_COUNTRY_CODE
+      - SERVICE_IS_UNAVAILABLE
+      - VALUE_INCORRECT
+      - INCORRECT_PUDO
+      - DPD_FOOD_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - DPD_FOOD_AND_0930_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - DPD_FOOD_AND_1200_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - DPD_FOOD_AND_DPD_PICKUP_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - DPD_FOOD_AND_DPD_TODAY_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - DIGITAL_LABEL_IS_NOT_AVAILABLE_FOR_FID
+      - DPD_PICKUP_IS_NOT_AVAILABLE_FOR_PUDO
+      - COD_DEDICATED_ACCOUNT_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT
+      - DPD_FOOD_IS_NOT_SUPPORTED_BY_PUDO
+      - DPD_FOOD_SERVICE_HAS_INCORRECT_LIMIT_DATE
+      - INACTIVE_PUDO
+      - COD_CURRENCY_ONLY_EUR_AVAILABLE_FOR_COUNTRY
+      - COD_CURRENCY_NOT_AVAILABLE_FOR_COUNTRY
+      - DUTY_SERVICE_REQUIRED_FOR_DPD_CLASSIC_GB
+      - COD_IS_NOT_AVAILABLE_FOR_POSTAL_CODE
+      - COD_SERVICE_UNAVAILABLE_FOR_INTERNATIONAL_SHIPMENT
+      - COD_SERVICE_INTERNATIONAL_AVAILABLE_FOR_SINGLE_PARCEL_SHIPMENT
+      - INCORRECT_DATE_FORMAT
+      - ERROR_INCORRECT_CHARS
+      - SERVICES_NOT_SUPPORTED_BY_PUDO
+      - INCORRECT_COUNTRY_FOR_SERVICE
+      - INCORRECT_COUNTRY
+      - ALLEGRO_DELIVERY_SERVICE_HAS_INCORRECT_ALLEGRO_PARCEL_NUMBER
+      - ALLEGRO_DELIVERY_SERVICE_REQUIRED_ALLEGRO_PARCEL_NUMBER
+      - PARTNER_PICKUP_SERVICE_HAS_INCORRECT_PARTNER_PARCEL_NUMBER
+      - PARTNER_PICKUP_SERVICE_REQUIRED_PARTNER_PARCEL_NUMBER
+      - PARTNER_PICKUP_SERVICE_HAS_INCORRECT_PARTNER_NAME
+      - PARTNER_PICKUP_SERVICE_REQUIRED_PARTNER_NAME
+      - PARTNER_PICKUP_SERVICE_HAS_INCORRECT_PARTNER_TECH_VALUE
+      - PARTNER_PICKUP_SERVICE_REQUIRED_PARTNER_TECH_VALUE
+      - INCORRECT_PAYER_FID
+      - COD_EXPRESS_SERVICE_NOT_AVAILABLE_FOR_COUNTRY
+    GenerateShipmentStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - label successfully printed.
+
+        - NOT_FOUND - not found.
+
+        - UNKNOWN_ERROR - unknown error.
+
+        - DISABLED_API - API is disabled.
+
+        - ERROR_NO_FID_PERMISSION - missing permissions for FID.
+
+        - PARCEL_LIMIT_EXCEEDED - parcel limit is exceeded.
+
+        - WAYBILL_NUMBER_OUTSIDE_THE_ALLOWED_RANGE - waybill number outside range fo FID. Use allowed number.
+
+        - DUPLICATE_WAYBILL_NUMBER - duplicated waybill number.
+
+        - DUPLICATED_PACKAGE_SEARCH_KEY - duplicated package reference. Use unique package reference value.
+
+        - DUPLICATED_PARCEL_SEARCH_KEY - duplicated parcel reference. Use unique parcel reference value.
+
+        - NOT_PROCESSED - not processed.
+
+        - INCORRECT_DATA - incorrect data.
+
+        - DISALLOWED_FID - fid is disallowed.
+
+        '
+      enum:
+      - OK
+      - NOT_FOUND
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - ERROR_NO_FID_PERMISSION
+      - PARCEL_LIMIT_EXCEEDED
+      - WAYBILL_NUMBER_OUTSIDE_THE_ALLOWED_RANGE
+      - DUPLICATE_WAYBILL_NUMBER
+      - DUPLICATED_PACKAGE_SEARCH_KEY
+      - DUPLICATED_PARCEL_SEARCH_KEY
+      - NOT_PROCESSED
+      - INCORRECT_DATA
+      - DISALLOWED_FID
+    InternationalReceiver:
+      required:
+      - address
+      - city
+      - postalCode
+      type: object
+      properties:
+        company:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name
+          example: DPD Polska Sp. z o.o.
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name
+          example: Jan Kowalski
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Address
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: City
+          example: Warszawa
+        postalCode:
+          maxLength: 10
+          minLength: 4
+          type: string
+          description: Postal code
+          example: '01354'
+        phone:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional phone number
+          example: '48732121245'
+        email:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional email
+          example: dpd@dpd.com.pl
+      description: Receiver data
+    MultiPackagesGenerationStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - successful package creation
+
+        - UNKNOWN_ERROR - unknown error
+
+        - INCORRECT_DATA - incorrect data
+
+        - DISABLED_API - disabled API
+
+        - ERROR_NO_FID_PERMISSION - missing permissions for FID
+
+        - DUPLICATED_PACKAGE_REFERENCE - duplicated package reference. Use unique package reference value.
+
+        - DUPLICATED_PARCEL_REFERENCE - duplicated parcel reference. Use unique parcel reference value.
+
+        - NOT_PROCESSED - not processed
+
+        - DISALLOWED_FID - fid is disallowed
+
+        '
+      enum:
+      - OK
+      - UNKNOWN_ERROR
+      - INCORRECT_DATA
+      - DISABLED_API
+      - ERROR_NO_FID_PERMISSION
+      - DUPLICATED_PACKAGE_REFERENCE
+      - DUPLICATED_PARCEL_REFERENCE
+      - NOT_PROCESSED
+      - DISALLOWED_FID
+    Parcel:
+      maximum: 100
+      minimum: 1
+      required:
+      - weight
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique parcel reference (e.g. a database guid)
+        weight:
+          maximum: 1000
+          minimum: 0.01
+          type: number
+          description: In Poland, the maximum weight is 700.00 kg, the minimum is 0.01 kg. Abroad, the maximum weight is 315.00 kg, the minimum is 0.01 kg. For shipments with a pallet service, the minimum weight is 315 kg. Accuracy to two decimal places is accepted.
+          example: 10
+        weightAdr:
+          maximum: 700
+          minimum: 0.0
+          type: number
+          description: The maximum weight ADR is parcel weight, the minimum is 0.00 kg.
+          example: 0
+        sizeX:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension X of the package expressed in centimeters
+          example: 11
+        sizeY:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension Y of the package expressed in centimeters
+          example: 12
+        sizeZ:
+          maximum: 300
+          minimum: 1
+          type: number
+          description: Dimension Z of the package expressed in centimeters
+          example: 13
+        content:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Parcel content. The content field is required for international shipments. For domestic shipments it is optional.
+        customerData1:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 1
+        customerData2:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 2
+        customerData3:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 3
+      description: Parcels
+    SenderOrReceiver:
+      required:
+      - address
+      - city
+      - countryCode
+      - postalCode
+      type: object
+      properties:
+        company:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name
+          example: DPD Polska Sp. z o.o.
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name
+          example: Jan Kowalski
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Address
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: City
+          example: Warszawa
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Two character country code in ISO ALPHA-2 format
+          example: PL
+        postalCode:
+          maxLength: 10
+          minLength: 4
+          type: string
+          description: Postal code
+          example: '01354'
+        phone:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional phone number
+          example: '48732121245'
+        email:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional email
+          example: dpd@dpd.com.pl
+      description: Sender data
+    AppendParcelsToPackageStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - parcel added to package
+
+        - INCORRECT_DATA - incorrect request
+
+        - PACKAGE_NOT_FOUND - cannot find package
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - disabled API
+
+        - APPENDING_PARCELS_TO_RETURN_PACKAGE_NOT_ALLOWED - appending parcels to return package not allowed
+
+        - APPENDING_PARCELS_TO_SHIPMENT_PACKAGE_NOT_ALLOWED - appending parcels to shipment package not allowed
+
+        - PROTOCOL_GENERATED - protocol already generated
+
+        '
+      enum:
+      - OK
+      - INCORRECT_DATA
+      - PACKAGE_NOT_FOUND
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - APPENDING_PARCELS_TO_RETURN_PACKAGE_NOT_ALLOWED
+      - APPENDING_PARCELS_TO_SHIPMENT_PACKAGE_NOT_ALLOWED
+      - PROTOCOL_GENERATED
+    PackageResponseGPN:
+      required:
+      - parcels
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PackageGenerationStatusGPN'
+        reference:
+          type: string
+          description: Package reference
+        validationInfo:
+          type: array
+          description: Package validation information
+          items:
+            $ref: '#/components/schemas/PackageValidationInfoGPN'
+        parcels:
+          type: array
+          description: Generated parcels
+          items:
+            $ref: '#/components/schemas/ParcelResponseGPN'
+      description: Each of packages generation status
+    Errors:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          description: Error list
+          items:
+            $ref: '#/components/schemas/Error'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    ParcelResponseGPN:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ParcelGenerationStatusGPN'
+        reference:
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Waybill
+        validationInfo:
+          type: array
+          description: Validation information
+          items:
+            $ref: '#/components/schemas/ParcelValidationInfoGPN'
+      description: Generated parcels
+    ParcelValidationErrorCodeGPN:
+      type: string
+      description: 'Allowed values:
+
+        - INCORRECT_WEIGHT - incorrect weight,
+
+        - PALETTE_EXCEEDED_DIMENSION_80X120X170 - Parcel exceeded dimension 80x120x170 with PALETTE service
+
+        - PALETTE_EXCEEDED_DIMENSION_80X120X180 - Parcel exceeded dimension 80x120x180 with PALETTE service
+
+        - PALETTE_EXCEEDED_DIMENSION_80X120X220 - Parcel exceeded dimension 80x120x220 with PALETTE service
+
+        - SIZE_X_OUT_OF_RANGE - size X is out of range
+
+        - SIZE_Y_OUT_OF_RANGE - size Y is out of range
+
+        - SIZE_Z_OUT_OF_RANGE - size Z is out of range
+
+        - SIZE_SUM_OUT_OF_RANGE - sum of sizes is out of range
+
+        - PARCEL_EXCEEDED_DIMENSION_38X41X64 - Parcel exceeded dimension 38x41x64
+
+        '
+      enum:
+      - INCORRECT_WEIGHT
+      - PALETTE_EXCEEDED_DIMENSION_80X120X170
+      - PALETTE_EXCEEDED_DIMENSION_80X120X180
+      - PALETTE_EXCEEDED_DIMENSION_80X120X220
+      - SIZE_X_OUT_OF_RANGE
+      - SIZE_Y_OUT_OF_RANGE
+      - SIZE_Z_OUT_OF_RANGE
+      - SIZE_SUM_OUT_OF_RANGE
+      - PALLET_NOT_SET_FOR_COUNTRY
+      - PARCEL_EXCEEDED_DIMENSION_38X41X64
+    InvalidFields:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          description: Field name
+        info:
+          type: string
+          description: Error description
+        status:
+          type: string
+          description: Status
+      description: Invalid fields
+    InternationalSender:
+      required:
+      - address
+      - city
+      - countryCode
+      - postalCode
+      type: object
+      properties:
+        company:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name
+          example: DPD Polska Sp. z o.o.
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name
+          example: Jan Kowalski
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Address
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: City
+          example: Warszawa
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Two character country code in ISO ALPHA-2 format
+          example: PL
+        postalCode:
+          maxLength: 10
+          minLength: 4
+          type: string
+          description: Postal code
+          example: '01354'
+        phone:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional phone number
+          example: '48732121245'
+        email:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional email
+          example: dpd@dpd.com.pl
+      description: Sender data
+    TransportService:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/ServiceCode'
+        attributes:
+          type: array
+          description: Service parameter
+          items:
+            $ref: '#/components/schemas/Attribute'
+      description: Additional services
+    GenerateShipmentRequest:
+      required:
+      - format
+      - generationPolicy
+      - langCode
+      - outputDocFormat
+      - outputType
+      - packages
+      type: object
+      properties:
+        generationPolicy:
+          $ref: '#/components/schemas/ShipmentGenerationPolicy'
+        packages:
+          maxLength: 30
+          minLength: 1
+          maxItems: 30
+          minItems: 1
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/SingleShipmentPackage'
+        langCode:
+          type: string
+          description: Language code
+        outputDocFormat:
+          $ref: '#/components/schemas/OutputDocFormat'
+        format:
+          $ref: '#/components/schemas/LabelFormat'
+        outputType:
+          $ref: '#/components/schemas/OutputLabelType'
+        variant:
+          $ref: '#/components/schemas/LabelVariant'
+    LabelVariant:
+      type: string
+      description: 'Label variant. Allowed values:
+
+        - STANDARD - standard
+
+        - APOLLO - apollo
+
+        - RUCH - ruch
+
+        '
+      enum:
+      - STANDARD
+      - APOLLO
+      - RUCH
+      - HIGH_RES
+    PickupErrorDetail:
+      type: string
+      description: 'Allowed values:
+
+        - INCORRECT_VALUE - incorrect value
+
+        - NOT_FOUND - not found
+
+        - INCORRECT_PICKUP_TIME - incorrect pickup time
+
+        - INCORRECT_CHECKSUM - incorrect checksum
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        - VALIDATION - validation
+
+        - ORDER_NUMBER_ERROR - order number error
+
+        - ORDER_CLOSED_STATUS - order closed status
+
+        - INCORRECT_STATUS - incorrect status
+
+        '
+      enum:
+      - INCORRECT_VALUE
+      - NOT_FOUND
+      - INCORRECT_PICKUP_TIME
+      - INCORRECT_CHECKSUM
+      - SERVICE_UNAVAILABLE
+      - VALIDATION
+      - ORDER_NUMBER_ERROR
+      - ORDER_CLOSED_STATUS
+      - INCORRECT_STATUS
+    LabelFormat:
+      type: string
+      description: 'Allowed values:
+
+        - A4 - A4
+
+        - LBL_PRINTER - lbl printer
+
+        '
+      enum:
+      - A4
+      - LBL_PRINTER
+    GenerateInternationalPackageNumbersRequest:
+      required:
+      - packages
+      type: object
+      properties:
+        packages:
+          maxLength: 10
+          minLength: 1
+          maxItems: 10
+          minItems: 1
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/SingleInternationalPackage'
+    ShipmentGenerationPolicy:
+      type: string
+      description: 'Method of generating packages and parcels. Possible values:
+
+        - STOP_ON_FIRST_ERROR - generating of parcels is interrupted in the case of the first encountered error. Packages and shipments created up to the first error will be returned.
+
+        - IGNORE_ERRORS - no parcel generation interruption in case of validation error
+
+        - ALL_OR_NOTHING - all packages will be returned or none if there is an error.
+
+        '
+      enum:
+      - STOP_ON_FIRST_ERROR
+      - IGNORE_ERRORS
+      - ALL_OR_NOTHING
+    GeneratePackagesNumbersResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/MultiPackageGenerationStatus'
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        beginTime:
+          type: string
+          description: Session start in ISO-8601 format in UTC zone.
+          format: date-time
+        endTime:
+          type: string
+          description: Session end in ISO-8601 format in UTC zone.
+          format: date-time
+        packages:
+          type: array
+          description: Each of packages generation status
+          items:
+            $ref: '#/components/schemas/PackageResponseGPN'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    AppendParcelsToPackageResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/AppendParcelsToPackageStatus'
+        parcels:
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/ParcelResponse'
+        invalidFields:
+          type: array
+          description: Invalid fields
+          items:
+            $ref: '#/components/schemas/InvalidFields'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PackageGenerationStatusGPN:
+      type: string
+      description: 'Allowed values:
+
+        - OK - package created successfully
+
+        - INCORRECT_DATA - incorrect data
+
+        - NOT_PROCESSED - not processed
+
+        - DUPLICATED_ALTERNATIVE_PARCEL_NUMBER - duplicated alternative parcel number
+
+        '
+      enum:
+      - OK
+      - INCORRECT_DATA
+      - NOT_PROCESSED
+      - DUPLICATED_ALTERNATIVE_PARCEL_NUMBER
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PickupErrorDetail'
+        description:
+          type: string
+          description: Error description
+        fields:
+          type: string
+          description: Field with error
+      description: Errors list
+    ParcelGenerationStatusGPN:
+      type: string
+      description: 'Allowed values:
+
+        - OK - parcel created successfully
+
+        - INCORRECT_DATA - incorrect data
+
+        - NOT_PROCESSED - not processed
+
+        '
+      enum:
+      - OK
+      - INCORRECT_DATA
+      - NOT_PROCESSED
+    PackageValidationInfoGPN:
+      type: object
+      properties:
+        errorCode:
+          $ref: '#/components/schemas/PackageValidationErrorCodeGPN'
+        info:
+          type: string
+          description: Additional information
+      description: Package validation information
+    AppendParcelsToPackageRequest:
+      required:
+      - parcels
+      - searchCriteria
+      type: object
+      properties:
+        searchCriteria:
+          $ref: '#/components/schemas/SearchCriteria'
+        parcels:
+          maxLength: 10
+          minLength: 1
+          maxItems: 10
+          minItems: 1
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/AppendParcel'
+    PackageResponse:
+      required:
+      - parcels
+      - statusInfo
+      type: object
+      properties:
+        statusInfo:
+          $ref: '#/components/schemas/StatusInfo'
+        parcels:
+          type: array
+          description: Printed parcels
+          items:
+            $ref: '#/components/schemas/ParcelResponse'
+      description: Packages
+    Attribute:
+      type: object
+      properties:
+        code:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Service parameter code
+          example: VALUE
+        value:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Service parameter value
+          example: '12:00'
+      description: Service parameter
+    SingleInternationalPackage:
+      maxLength: 10
+      minLength: 1
+      required:
+      - parcels
+      - payerFID
+      - receiver
+      - sender
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique package reference (e.g. a database guid)
+        receiver:
+          $ref: '#/components/schemas/InternationalReceiver'
+        sender:
+          $ref: '#/components/schemas/InternationalSender'
+        payerFID:
+          type: integer
+          description: Payer fid
+          format: int32
+          example: 9999
+        ref1:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref2:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref3:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        parcels:
+          maximum: 100
+          minimum: 1
+          maxItems: 100
+          minItems: 1
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/InternationalParcel'
+      description: Packages
+    SessionResponse:
+      required:
+      - statusInfo
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        statusInfo:
+          $ref: '#/components/schemas/StatusInfo'
+        packages:
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/PackageResponse'
+      description: Session
+    GeneratePackagesNumbersRequest:
+      required:
+      - generationPolicy
+      - packages
+      type: object
+      properties:
+        generationPolicy:
+          $ref: '#/components/schemas/GenerationPolicy'
+        packages:
+          maxLength: 30
+          minLength: 1
+          maxItems: 30
+          minItems: 1
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/SinglePackage'
+    SearchCriteria:
+      type: object
+      properties:
+        reference:
+          maxLength: 150
+          minLength: 1
+          type: string
+          description: Reference ID provided by the customer
+        waybill:
+          maxLength: 50
+          minLength: 6
+          type: string
+          description: Waybill
+      description: Search criteria
+    SingleShipmentPackage:
+      maxLength: 30
+      minLength: 1
+      required:
+      - parcels
+      - payerFID
+      - sender
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique package reference (e.g. a database guid)
+        receiver:
+          $ref: '#/components/schemas/SenderOrReceiver'
+        pudoReceiver:
+          $ref: '#/components/schemas/PudoReceiver'
+        sender:
+          $ref: '#/components/schemas/SenderOrReceiver'
+        payerFID:
+          type: integer
+          description: Payer fid
+          format: int32
+          example: 9999
+        ref1:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref2:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref3:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        services:
+          type: array
+          description: Additional services
+          items:
+            $ref: '#/components/schemas/TransportService'
+        parcels:
+          maximum: 100
+          minimum: 1
+          maxItems: 100
+          minItems: 1
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/ShipmentParcel'
+      description: Packages
+    InternationalParcel:
+      maximum: 100
+      minimum: 1
+      required:
+      - weight
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique parcel reference (e.g. a database guid)
+        weight:
+          maximum: 31.5
+          minimum: 0.01
+          type: number
+          description: The maximum weight is 31.5 kg, the minimum is 0.01 kg
+        sizeX:
+          maximum: 300
+          minimum: 0
+          type: number
+          description: Dimension X of the package expressed in centimeters
+        sizeY:
+          maximum: 300
+          minimum: 0
+          type: number
+          description: Dimension Y of the package expressed in centimeters
+        sizeZ:
+          maximum: 300
+          minimum: 0
+          type: number
+          description: Dimension Z of the package expressed in centimeters
+        content:
+          maxLength: 300
+          minLength: 0
+          type: string
+          description: Parcel content
+        customerData1:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 1
+        customerData2:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 2
+        customerData3:
+          maxLength: 200
+          minLength: 0
+          type: string
+          description: Customer data 3
+      description: Parcels
+    ServiceCode:
+      type: string
+      description: '<br>List of available services can be found in the section <a href="#section/Available-Services"><b>Available Services</b></a><br>
+
+        '
+      example: TIME_FIXED
+      enum:
+      - DECLARED_VALUE
+      - COD
+      - CUD
+      - ROD
+      - HAND_DELIVERY
+      - SELF_COLLECTION
+      - PRIVATE_PERSON
+      - CARRY_IN
+      - DUTY
+      - PALETTE
+      - DOX
+      - DPD_EXPRESS
+      - TIRES
+      - TIRES_EXPORT
+      - DPD_PICKUP
+      - DPD_FOOD
+      - TIME0930
+      - TIME1200
+      - B2C
+      - TIME_FIXED
+      - SATURDAY
+      - INTERNATIONAL
+      - DPD_NEXT_DAY
+      - DPD_TODAY
+      - DPD_LQ
+      - DIGITAL_LABEL
+      - PUDO_TO_SEND
+      - ALLEGRO_DELIVERY
+      - PARTNER_PICKUP
+    SinglePackage:
+      maxLength: 30
+      minLength: 1
+      required:
+      - parcels
+      - payerFID
+      - sender
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: A technical unique package reference (e.g. a database guid)
+        receiver:
+          $ref: '#/components/schemas/SenderOrReceiver'
+        pudoReceiver:
+          $ref: '#/components/schemas/PudoReceiver'
+        sender:
+          $ref: '#/components/schemas/SenderOrReceiver'
+        payerFID:
+          type: integer
+          description: Payer fid
+          format: int32
+          example: 9999
+        ref1:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref2:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        ref3:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Ref 1
+        services:
+          type: array
+          description: Additional services
+          items:
+            $ref: '#/components/schemas/TransportService'
+        parcels:
+          maximum: 100
+          minimum: 1
+          maxItems: 100
+          minItems: 1
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/Parcel'
+      description: Packages
+    StatusInfo:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PackagesPickupCallStatus'
+        errorDetails:
+          type: array
+          description: Errors list
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+      description: Pickup call update order status
+    OutputLabelType:
+      type: string
+      description: 'Allowed values:
+
+        - BIC3 - BIC3
+
+        - EXTENDED - Extended
+
+        - RETURN - Return*
+
+
+
+        *Available only for international returns
+
+        '
+      enum:
+      - BIC3
+      - EXTENDED
+      - RETURN
+    GenerateShipmentResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GenerateShipmentStatus'
+        documentData:
+          type: string
+          description: Base64 encoded byte array with label content
+          format: byte
+        session:
+          $ref: '#/components/schemas/SessionResponse'
+        documentId:
+          type: string
+          description: Printed document id
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PackagesPickupCallStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - correct order change
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - disabled API
+
+        - DISALLOWED_FID - disallowed fid
+
+        - VALIDATION_ERROR - validation error
+
+        - NOT_FOUND - not found
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        '
+      enum:
+      - OK
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - DISALLOWED_FID
+      - VALIDATION_ERROR
+      - NOT_FOUND
+      - SERVICE_UNAVAILABLE
+    Error:
+      required:
+      - code
+      - rejectedValue
+      - userMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code with the error category (group)
+        subCode:
+          type: string
+          description: Error code
+        userMessage:
+          type: string
+          description: Error code description
+          example: Receiver postal code is required
+        rejectedValue:
+          type: string
+          description: Invalid value
+        field:
+          type: string
+          description: Full path of the field that contains the error
+          example: receiver.postalCode
+      description: Error list
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-tagGroups:
+- name: API's
+  tags:
+  - postalCodeTag
+  - packagesParcelsTag
+  - labelsProtocolsTag
+  - courierOrderTag
+  - returnParcelTag
+  - dropOffPinTag

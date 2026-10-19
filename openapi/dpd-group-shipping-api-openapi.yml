@@ -698,171 +698,34 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    colreq.Insurance:
-      type: object
-      properties:
-        insuranceAmount:
-          $ref: '#/components/schemas/colreq.Amount'
-        insuranceParcelContent:
-          type: string
-          description: Description of parcel for insurance
-    colreq.CollectionInfos:
-      type: object
-      properties:
-        serviceCode:
-          type: string
-          description: 'SEUR specificity. Possible values: 1, 31'
-        dimensions:
-          $ref: '#/components/schemas/colreq.Dimensions'
-        weight:
-          type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg)
-        productCode:
-          type: string
-          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
-    CollectionInfos:
-      type: object
-      properties:
-        serviceCode:
-          type: string
-          description: 'SEUR specificity. Possible values: 1, 31'
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-        weight:
-          type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg)
-        productCode:
-          type: string
-          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
-    pickupscheduling.Dimensions:
-      type: object
-      properties:
-        length:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        width:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        height:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-    LegalEntity:
-      type: object
-      properties:
-        businessType:
-          type: string
-          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
-          enum:
-          - P
-          - B
-        eori:
-          type: string
-        vatNumber:
-          type: string
-        taxIdType:
-          type: string
-          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
-          enum:
-          - P
-          - C
-        taxIdValue:
-          type: string
-          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
-        webSite:
-          type: string
-          format: uri
-        FiscalVatRepresentant:
-          type: string
-          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
-    shipment.ParcelBarcode:
-      type: object
-      properties:
-        parcel:
-          type: string
-          description: Parcel number.
-        barcode:
-          type: string
-        reference:
-          type: string
-    Amount:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: The number of decimal will depend of the currency (it could be from 0 to three digit).
-          example: 48.831
-        currency:
-          type: string
-          description: Currency code (ISO 4217 alpha 3)
-      required:
-      - amount
-      - currency
-    pickupscheduling.ContactDetails:
-      type: object
-      properties:
-        contactPerson:
-          type: string
-          description: Name of the person to contact
-        phone1:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        phone2:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        fax:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        email:
-          type: string
-          description: Email address
-    MaskedSender:
+    InternationalExporter:
       type: object
       properties:
         address:
           $ref: '#/components/schemas/Address'
         contact:
           $ref: '#/components/schemas/ContactDetails'
-    QrCode:
+        eori:
+          type: string
+    InternationalImporter:
       type: object
       properties:
-        base64Data:
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+        gln:
           type: string
-          description: qr code data base64 encoded
-        media-type:
+          description: GLN number (Global location number)
+        vatNumber:
           type: string
-          description: format of the label
-        pincode:
+        customerDefermentNumber:
           type: string
-          description: pin code
-    label.LabelResponse:
-      type: object
-      properties:
-        label:
-          $ref: '#/components/schemas/label.Label'
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/label.Debug'
-    shipment.Delivery:
-      type: object
-      properties:
-        dateFrom:
+          description: Customer deferment number with can be used for duty tax collection
+        eori:
           type: string
-          format: date
-        dateTo:
-          type: string
-          format: date
-        timeFrom:
-          type: string
-        timeTo:
-          type: string
-        timeSlotTariff:
-          type: string
-    shipment.Cifcost:
+          description: EORI number, dependency of the customs export regime.
+    shipment.Amount:
       type: object
       properties:
         amount:
@@ -876,88 +739,98 @@ components:
       required:
       - amount
       - currency
-    shipment.Person:
+    shipment.InterInvoiceLine:
       type: object
       properties:
-        personalDeliveryType:
+        invoicePosition:
           type: string
-          description: 'Personal delivery type:  * `s1` : department delivery (without personal identification)  * `s2` : personal delivery with personal identification (IDCheck)  * `s3` : personal delivery without personal identification at PUDO (e.g. Direct PUDO delivery)  * `s4` : personal delivery with personal identification at PUDO (e.g. Direct PUDO delivery)  * `s5` : personal delivery with personal identification at PUDO plus ID-Check (e.g. Direct PUDO delivery)  * `s6` : personal delivery with personal identification (ID Check) and recording of the ID. '
-          enum:
-          - s1
-          - s2
-          - s3
-          - s4
-          - s5
-          - s6
-        personalAuthorizedName:
+          description: Line number of the invoice
+        quantityOfItems:
           type: string
-        phone1:
+          description: Quantity of items per article or invoice line even for low / mid / high value or any type of customer
+        content:
           type: string
-        phone2:
+          description: Content (Depending of the destination system. Could be cut by some system to the first 35 characters)
+        amountOfPosition:
+          type: number
+          format: float
+        manufacturedCountry:
           type: string
-        personalIdNumber:
+        netWeight:
           type: string
-          description: Real consignee's personal identification number.
-        personalDateOfBirth:
+          description: Total weight of the articles in the current line, excluding packaging, in grams.
+        grossWeight:
           type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/shipment.Address'
-        contact:
+          description: Total weight of the articles including packaging in the current line, in grams.
+        customerProductCode:
           type: string
-          description: Recipient contact person. Could be different of the consignee's name
-        fax:
+          description: Internal Customer product code
+        productDescription:
           type: string
-        email:
+          description: Short description of the product
+        fabricComposition:
           type: string
-        gln:
+          description: Description of fabric composition
+        importTarifCode:
           type: string
-          description: GLN number (Global location number)
+        exportTarifCode:
+          type: string
+        goodsWebPage:
+          type: string
+          format: uri
+        parcelRank:
+          type: string
+          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
+    pickupscheduling.PickupSchedule:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/pickupscheduling.CustomerInfos'
+        shipmentNumbers:
+          type: array
+          description: List of Shipment numbers for the Pickup
+          items:
+            type: string
+        parcelNumbers:
+          type: array
+          description: List of Parcel Numbers for the PickUp
+          items:
+            type: string
+        pickup:
+          $ref: '#/components/schemas/pickupscheduling.Pickup'
+        numberOfParcels:
+          type: integer
+          format: int32
+          description: Quantity (Number) of Parcels
+        addressId:
+          type: string
+          description: AddressId
+        pickupAddress:
+          $ref: '#/components/schemas/pickupscheduling.Address'
+        pickupContact:
+          $ref: '#/components/schemas/pickupscheduling.ContactDetails'
+        pickupWeight:
+          type: string
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of all the parcels that will picked up
+        parcelMaxWeight:
+          type: string
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of the heaviest parcel
+        parcelMaxDimensions:
+          $ref: '#/components/schemas/pickupscheduling.Dimensions'
         comment:
           type: string
-    colreq.LegalEntity:
-      type: object
-      properties:
-        businessType:
+        references:
+          type: array
+          description: Reference of the pickup request, defined by the customer
+          items:
+            type: string
+        sendingDepot:
           type: string
-          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
-          enum:
-          - P
-          - B
-        eori:
-          type: string
-        vatNumber:
-          type: string
-        taxIdType:
-          type: string
-          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
-          enum:
-          - P
-          - C
-        taxIdValue:
-          type: string
-          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
-        FiscalVatRepresentant:
-          type: string
-          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
-    colreq.ContactDetails:
-      type: object
-      properties:
-        contactPerson:
-          type: string
-          description: Name of the person to contact
-        phone1:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        phone2:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        fax:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        email:
-          type: string
-          description: Email address
+          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickupscheduling.Message'
     shipment.Label:
       type: object
       properties:
@@ -971,49 +844,169 @@ components:
         pincode:
           type: string
           description: BALTICS specificity
-    colreq.Receiver:
+    Parcel:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/colreq.CustomerInfos'
-        pudoId:
+        parcelInfos:
+          $ref: '#/components/schemas/ParcelInfos'
+        parcelRank:
           type: string
-          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
-        address:
-          $ref: '#/components/schemas/colreq.Address'
-        addressId:
+          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
+        senderParcelRefs:
+          type: array
+          description: List of sender parcels references
+          items:
+            type: string
+        partnerParcelRefs:
+          type: array
+          description: Partner´s own parcel reference field
+          items:
+            type: string
+        insurance:
+          $ref: '#/components/schemas/Insurance'
+        hazardousLimitedQuantities:
+          type: boolean
+          description: 'Limited quantities of hazardous goods parcel value. '
+        hazardousPackingCode:
           type: string
-          description: receiver AddressId
-        contact:
-          $ref: '#/components/schemas/colreq.ContactDetails'
-        comment:
+          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
+        parcelContent:
           type: string
-        gln:
+          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
+        cod:
+          $ref: '#/components/schemas/Cod'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+        hazardous:
+          type: array
+          items:
+            $ref: '#/components/schemas/Hazardous'
+        reference:
           type: string
-          description: GLN number (Global location number)
-        legalEntity:
-          $ref: '#/components/schemas/colreq.LegalEntity'
-    Insurance:
+          description: Field used only by PL customers to transmit the reference associated with the parcel number.
+    colreq.Collection:
       type: object
       properties:
-        insuranceAmount:
-          $ref: '#/components/schemas/Amount'
-        insuranceParcelContent:
+        requestId:
           type: string
-          description: Description of parcel for insurance
-    pickupscheduling.CustomerInfos:
+          description: The order of collection request.
+        collectionInfos:
+          $ref: '#/components/schemas/colreq.CollectionInfos'
+        customerReferenceNumbers:
+          type: array
+          items:
+            type: string
+        collectionPoint:
+          $ref: '#/components/schemas/colreq.CollectionPoint'
+        customer:
+          $ref: '#/components/schemas/colreq.Customer'
+        receiver:
+          $ref: '#/components/schemas/colreq.Receiver'
+        parcel:
+          $ref: '#/components/schemas/colreq.Parcel'
+        pickup:
+          $ref: '#/components/schemas/colreq.Pickup'
+      required:
+      - collectionPoint
+      - parcel
+      - receiver
+    shipment.ParcelBarcode:
       type: object
       properties:
-        customerAccountNumber:
+        parcel:
           type: string
-          description: BU’s Internal Customer’s Account Number
-        customerSubAccountNumber:
+          description: Parcel number.
+        barcode:
           type: string
-          description: Customer number SUBID
-        customerID:
+        reference:
           type: string
-          description: BU’s internal Unique Customer ID/Identifier
-    Receiver:
+    QrCode:
+      type: object
+      properties:
+        base64Data:
+          type: string
+          description: qr code data base64 encoded
+        media-type:
+          type: string
+          description: format of the label
+        pincode:
+          type: string
+          description: pin code
+    colreq.Parcel:
+      type: object
+      properties:
+        parcelInfos:
+          $ref: '#/components/schemas/colreq.ParcelInfos'
+        parcelRank:
+          type: string
+          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
+        senderParcelRefs:
+          type: array
+          description: List of sender parcels references
+          items:
+            type: string
+        partnerParcelRefs:
+          type: array
+          description: Partner´s own parcel reference field
+          items:
+            type: string
+        insurance:
+          $ref: '#/components/schemas/colreq.Insurance'
+        hazardousLimitedQuantities:
+          type: boolean
+          description: 'Limited quantities of hazardous goods parcel value. '
+        hazardousPackingCode:
+          type: string
+          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
+        parcelContent:
+          type: string
+          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
+        cod:
+          $ref: '#/components/schemas/colreq.Cod'
+    pickupscheduling.Message:
+      type: object
+      properties:
+        messageType:
+          type: string
+          description: 'Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` '
+          enum:
+          - EMAIL
+          - PHONE
+          - SMS
+          - APP
+        messageDestination:
+          type: string
+          description: 'Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: "+international country numberphone number" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX'' '
+        messageLanguage:
+          type: string
+          description: 'Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. '
+        senderCompany:
+          type: string
+    pickupscheduling.Pickup:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        fromTime:
+          type: string
+        toTime:
+          type: string
+      required:
+      - date
+    ParcelBarcode:
+      type: object
+      properties:
+        parcel:
+          type: string
+          description: Parcel number.
+        barcode:
+          type: string
+        reference:
+          type: string
+    Sender:
       type: object
       properties:
         customerInfos:
@@ -1021,14 +1014,25 @@ components:
         pudoId:
           type: string
           description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
+        addressId:
+          type: string
+          description: sender AddressId (for CZ, SK, SPEEDY, BALTICS)
         address:
           $ref: '#/components/schemas/Address'
         contact:
           $ref: '#/components/schemas/ContactDetails'
         comment:
           type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        accountOwner:
+          type: string
+          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
         legalEntity:
           $ref: '#/components/schemas/LegalEntity'
+        maskedSender:
+          $ref: '#/components/schemas/MaskedSender'
     shipment.Address:
       type: object
       properties:
@@ -1120,28 +1124,39 @@ components:
           type: integer
           format: int32
           description: SPEEDY specificity. Point of interest identifier. Used for addresses of type 1 (local address).
-    CollectionPoint:
+    pickupscheduling.Debug:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/CustomerInfos'
-        address:
-          $ref: '#/components/schemas/Address'
-        addressId:
+        request:
           type: string
-          description: sender AddressId
-        contact:
-          $ref: '#/components/schemas/ContactDetails'
-        comment:
+        response:
           type: string
-        gln:
+        methodName:
           type: string
-          description: GLN number (Global location number)
-        accountOwner:
+    shipment.Insurance:
+      type: object
+      properties:
+        insuranceAmount:
+          $ref: '#/components/schemas/shipment.Amount'
+        insuranceParcelContent:
           type: string
-          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
-        legalEntity:
-          $ref: '#/components/schemas/LegalEntity'
+          description: Description of parcel for insurance
+    label.Debug:
+      type: object
+      properties:
+        request:
+          type: string
+        response:
+          type: string
+        methodName:
+          type: string
+    label.Label:
+      type: object
+      properties:
+        base64Data:
+          type: string
+        mediaType:
+          type: string
     colreq.ParcelInfos:
       type: object
       properties:
@@ -1155,414 +1170,6 @@ components:
           $ref: '#/components/schemas/colreq.Dimensions'
         weight:
           type: string
-    label.Debug:
-      type: object
-      properties:
-        request:
-          type: string
-        response:
-          type: string
-        methodName:
-          type: string
-    pickupscheduling.Pickup:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        fromTime:
-          type: string
-        toTime:
-          type: string
-      required:
-      - date
-    colreq.Amount:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: The number of decimal will depend of the currency (it could be from 0 to three digit).
-          example: 48.831
-        currency:
-          type: string
-          description: Currency code (ISO 4217 alpha 3)
-      required:
-      - amount
-      - currency
-    InternationalExporter:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/Address'
-        contact:
-          $ref: '#/components/schemas/ContactDetails'
-        eori:
-          type: string
-    International:
-      type: object
-      properties:
-        parcelType:
-          type: string
-          description: 'Parcel type within the shipment. Different parcel types can''t be mixed into one shipment * `D` : Document  * `P` : Non-Doc '
-        customsAmount:
-          $ref: '#/components/schemas/Amount'
-        customsAmountEx:
-          $ref: '#/components/schemas/Amount'
-        customsTerms:
-          type: string
-          description: 'Parcel type within the shipment Different parcel types can''t be mixed into one shipment * `s01` : DAP, not cleared * `s02` : DDP, delivered duty paid (incl. duties and excl. taxes) * `s03` : DDP, delivered duty paid (incl. duties and taxes) * `s05` : ex works (EXW) * `s06` : DAP * `s07` : DAP & DDP enhanced, Duty and taxes were pre-paid by the receiver'' '
-          enum:
-          - s01
-          - s02
-          - s03
-          - s04
-          - s05
-          - s06
-          - s07
-        customsPaper:
-          type: string
-          description: 'Accompanying documents e.g. A | G | B Separator is "|" (a pipe) in case of multiple invoice documents * `A` : commercial invoice * `B` : pro forma invoice * `C` : export declaration * `D` : EUR1 * `E` : EUR2 * `F` : ATR * `G` : delivery note * `H` : third party billing * `I` : T1 document '
-          enum:
-          - A
-          - B
-          - C
-          - D
-          - E
-          - F
-          - G
-          - H
-          - I
-        clearanceStatus:
-          type: string
-          description: 'Values:   * `N` : No  * `F` : Free  * `E` : Export Cleared  * `T` : Transit Cleared  * `I` : Import Cleared  * `H` : Hybrid '
-          enum:
-          - N
-          - F
-          - E
-          - T
-          - I
-          - H
-        customsHighLowValue:
-          type: string
-          description: '(H)igh, (M)id (above 22€ and below 150€), (L)ow.  * `H` : High  * `M` : Medium   * `L` : Low '
-          enum:
-          - H
-          - M
-          - L
-        customsInvoice:
-          type: string
-          description: Invoice number Separator is "|" (a pipe) in case of multiple invoice numbers
-        customsInvoiceDates:
-          type: array
-          description: Invoice dates
-          items:
-            type: string
-            format: date
-        importer:
-          $ref: '#/components/schemas/InternationalImporter'
-        mrn:
-          type: string
-          description: 'MRN of the electronic export declaration Remarks: The "|" is the separator between two MRN.'
-        exporter:
-          $ref: '#/components/schemas/InternationalExporter'
-        numberOfArticles:
-          type: string
-          description: This is the real number of commodities (ImportTarifCode / ExportTarifCode). The number of Interinvoicelines must equal the NumberOfArticles
-        destinationCountryRegistration:
-          type: string
-          description: 'Destination country registration information : Registration number or FDA If destination is DPD UK : Applies to B2B and B2C (Not applicable for C2C) shipments with a goods value under £135 (Excludes shipping cost) and if the Incoterm is not DDP. This is expected to come into force March 19, however no official communication from HMRC yet.'
-        exportReason:
-          type: string
-          description: 'Reason for export  * `s01` : sale  * `s02` : return/replacement  * `s03` : gift '
-          enum:
-          - s01
-          - s02
-          - s03
-        interInvoiceLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/InterInvoiceLine'
-        shipmentContent:
-          type: string
-          description: A detailed description of the overall contents of the consignement (UK->EU export only)
-    colreq.Cod:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/colreq.Amount'
-        collectType:
-          type: string
-          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU) '
-        purpose:
-          type: string
-          description: Intended use
-        bankCode:
-          type: string
-          description: Bank Code
-        bankName:
-          type: string
-          description: Bank Name
-        bankAccountNumber:
-          type: string
-          description: Bank account number
-        bankAccountName:
-          type: string
-          description: Account holder
-        iban:
-          type: string
-          description: International account number
-        bic:
-          type: string
-          description: Bank Code
-      required:
-      - amount
-      - collectType
-    CustomerInfos:
-      type: object
-      properties:
-        customerAccountNumber:
-          type: string
-          description: BU’s Internal Customer’s Account Number
-        customerSubAccountNumber:
-          type: string
-          description: Customer number SUBID
-        customerID:
-          type: string
-          description: BU’s internal Unique Customer ID/Identifier
-        originalCustomerId:
-          type: string
-          description: Original customer ID for Integration Customers in certain DPD Business Units
-    shipment.Cod:
-      type: object
-      properties:
-        amount:
-          $ref: '#/components/schemas/shipment.Amount'
-        collectType:
-          type: string
-          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU)   * Values with uppercase are accepted as well: S0, S1, S2, S3, S9 '
-        purpose:
-          type: string
-          description: Intended use
-        bankCode:
-          type: string
-          description: Bank Code
-        bankName:
-          type: string
-          description: Bank Name
-        bankAccountNumber:
-          type: string
-          description: Bank account number
-        bankAccountName:
-          type: string
-          description: Account holder
-        iban:
-          type: string
-          description: International account number
-        bic:
-          type: string
-          description: Bank Code
-      required:
-      - amount
-    shipment.Error:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMessage:
-          type: string
-        errorOrigin:
-          type: string
-          description: Identifies where the error occurred.
-          enum:
-          - META-API
-          - BU-API
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Debug'
-    Response:
-      type: object
-      properties:
-        collectionId:
-          type: string
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/Debug'
-        parcelId:
-          type: string
-        statusList:
-          type: array
-          items:
-            $ref: '#/components/schemas/Status'
-    shipment.International:
-      type: object
-      properties:
-        parcelType:
-          type: string
-          description: 'Parcel type within the shipment. Different parcel types can''t be mixed into one shipment * `D` : Document  * `P` : Non-Doc '
-        customsAmount:
-          $ref: '#/components/schemas/shipment.Amount'
-        customsAmountEx:
-          $ref: '#/components/schemas/shipment.Amount'
-        customsTerms:
-          type: string
-          description: 'Parcel type within the shipment Different parcel types can''t be mixed into one shipment * `s01` : DAP, not cleared * `s02` : DDP, delivered duty paid (incl. duties and excl. taxes) * `s03` : DDP, delivered duty paid (incl. duties and taxes) * `s05` : ex works (EXW) * `s06` : DAP * `s07` : DAP & DDP enhanced, Duty and taxes were pre-paid by the receiver'' '
-          enum:
-          - s01
-          - s02
-          - s03
-          - s04
-          - s05
-          - s06
-          - s07
-        customsPaper:
-          type: string
-          description: 'Accompanying documents e.g. A | G | B Separator is "|" (a pipe) in case of multiple invoice documents * `A` : commercial invoice * `B` : pro forma invoice * `C` : export declaration * `D` : EUR1 * `E` : EUR2 * `F` : ATR * `G` : delivery note * `H` : third party billing * `I` : T1 document '
-          enum:
-          - A
-          - B
-          - C
-          - D
-          - E
-          - F
-          - G
-          - H
-          - I
-        clearanceStatus:
-          type: string
-          description: 'Values:   * `N` : No  * `F` : Free  * `E` : Export Cleared  * `T` : Transit Cleared  * `I` : Import Cleared  * `H` : Hybrid '
-          enum:
-          - N
-          - F
-          - E
-          - T
-          - I
-          - H
-        customsHighLowValue:
-          type: string
-          description: '(H)igh, (M)id (above 22€ and below 150€), (L)ow.  * `H` : High  * `M` : Medium   * `L` : Low  '
-          enum:
-          - H
-          - M
-          - L
-        customsInvoice:
-          type: string
-          description: Invoice number Separator is "|" (a pipe) in case of multiple invoice numbers
-        customsInvoiceDates:
-          type: array
-          description: Invoice dates
-          items:
-            type: string
-            format: date
-        importer:
-          $ref: '#/components/schemas/shipment.InternationalImporter'
-        mrn:
-          type: string
-          description: 'MRN of the electronic export declaration Remarks: The "|" is the separator between two MRN.'
-        exporter:
-          $ref: '#/components/schemas/shipment.InternationalExporter'
-        numberOfArticles:
-          type: string
-          description: This is the real number of commodities (ImportTarifCode / ExportTarifCode). The number of Interinvoicelines must equal the NumberOfArticles
-        destinationCountryRegistration:
-          type: string
-          description: 'Destination country registration information : Registration number or FDA If destination is DPD UK : Applies to B2B and B2C (Not applicable for C2C) shipments with a goods value under £135 (Excludes shipping cost) and if the Incoterm is not DDP. This is expected to come into force March 19, however no official communication from HMRC yet.'
-        exportReason:
-          type: string
-          description: 'Reason for export  * `s01` : sale  * `s02` : return/replacement  * `s03` : gift '
-          enum:
-          - s01
-          - s02
-          - s03
-        interInvoiceLines:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.InterInvoiceLine'
-        shipmentContent:
-          type: string
-          description: A detailed description of the overall contents of the consignement (UK->EU export only)
-    shipment.Shipment:
-      type: object
-      properties:
-        return:
-          $ref: '#/components/schemas/shipment.ModelReturn'
-        shipmentInfos:
-          $ref: '#/components/schemas/shipment.ShipmentInfos'
-        customsReference:
-          type: string
-          description: Consignment number for the customs point of view.
-        sendingDepot:
-          type: string
-        mpsCompleteDelivery:
-          type: string
-          description: 'Values :   * `s0` - Reserved for the future usage (default)   * `s1` - No complete delivery (MPS incomplete)   * `s2` - Complete delivery (MPS complete). It is mandatory for COD  '
-          enum:
-          - s0
-          - s1
-          - s2
-        mpsCompleteDeliveryLabel:
-          type: string
-          description: Defines if the label for complete delivery is printed for pickup. Default value is false.
-        customerReferenceNumbers:
-          type: array
-          items:
-            type: string
-        customerBillingReference:
-          type: string
-          description: Customer reference for billing or clearing
-        cifcost:
-          $ref: '#/components/schemas/shipment.Cifcost'
-        numberOfParcels:
-          type: string
-          description: Number of parcels per shipment. A 0 value is acceptable in some BUs and will trigger an open multi-piece shipment, with automated or manual consolidation
-        sender:
-          $ref: '#/components/schemas/shipment.Sender'
-        receiver:
-          $ref: '#/components/schemas/shipment.Receiver'
-        international:
-          $ref: '#/components/schemas/shipment.International'
-        person:
-          $ref: '#/components/schemas/shipment.Person'
-        parcel:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Parcel'
-        pickup:
-          $ref: '#/components/schemas/shipment.Pickup'
-        delivery:
-          $ref: '#/components/schemas/shipment.Delivery'
-        payerType:
-          type: string
-          description: '* `S` : Sender * `R` : Receiver * `3` : 3rd party '
-          enum:
-          - S
-          - R
-          - '3'
-        documents:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Document'
-        shippingDate:
-          type: string
-          format: date
-      required:
-      - numberOfParcels
-      - parcel
-      - receiver
-      - sender
-    pickupscheduling.Response:
-      type: object
-      properties:
-        scheduledPickupResponse:
-          type: array
-          items:
-            $ref: '#/components/schemas/pickupscheduling.ScheduledPickupResponse'
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/pickupscheduling.Debug'
     Error:
       type: object
       properties:
@@ -1576,102 +1183,90 @@ components:
           enum:
           - META-API
           - BU-API
-    colreq.CustomerInfos:
+    Dimensions:
       type: object
       properties:
-        customerAccountNumber:
-          type: string
-          description: BU’s Internal Customer’s Account Number
-        customerSubAccountNumber:
-          type: string
-          description: Customer number SUBID
-        customerID:
-          type: string
-          description: BU’s internal Unique Customer ID/Identifier
-    pickupscheduling.Message:
+        length:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        width:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        height:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+    shipment.ShipmentResponse:
       type: object
       properties:
-        messageType:
+        warningMessage:
           type: string
-          description: 'Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` '
-          enum:
-          - EMAIL
-          - PHONE
-          - SMS
-          - APP
-        messageDestination:
-          type: string
-          description: 'Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: "+international country numberphone number" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX'' '
-        messageLanguage:
-          type: string
-          description: 'Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. '
-        senderCompany:
-          type: string
-    Status:
-      type: object
-      properties:
-        code:
-          type: string
-        info:
-          type: string
-        description:
-          type: string
-    shipment.ShipmentInfos:
-      type: object
-      properties:
         shipmentId:
           type: string
-          description: Shipment ID Could be the ID of the first parcel of the list (master ID) or could be another ID specially created for that.
-        shipmentIdCKey:
+        parcelIds:
+          type: array
+          description: List of parcel Ids
+          items:
+            type: string
+        networkShipmentId:
           type: string
-          description: Control character key compute from the shipmentId
-        productCode:
-          type: string
-          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
-        serviceCode:
-          type: string
-          description: Additional local service code, needed only in certain Business Units
-        additionalServiceCode:
-          type: string
-          description: DPD Additional Service required for specific services, describing first and last mile handling
-        dimensions:
-          $ref: '#/components/schemas/shipment.Dimensions'
-        weight:
-          type: string
-          description: Weight in grams units (e.g. 3000 equals 3kg)
-        exWorksDelivery:
-          type: boolean
-          description: Specific field for DPD DE. Specifies if the recipient has to pay the consignment.
-      required:
-      - productCode
-    shipment.InternationalImporter:
+        networkParcelIds:
+          type: array
+          description: List of parcel Ids
+          items:
+            type: string
+        parcelBarcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.ParcelBarcode'
+        label:
+          $ref: '#/components/schemas/shipment.Label'
+        qrcode:
+          $ref: '#/components/schemas/shipment.QrCode'
+        others:
+          type: array
+          description: List of other label
+          items:
+            $ref: '#/components/schemas/shipment.Label'
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.Debug'
+    colreq.Response:
       type: object
       properties:
-        address:
-          $ref: '#/components/schemas/shipment.Address'
-        contact:
-          $ref: '#/components/schemas/shipment.ContactDetails'
-        gln:
+        collectionId:
           type: string
-          description: GLN number (Global location number)
-        vatNumber:
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/colreq.Debug'
+        parcelId:
           type: string
-        customerDefermentNumber:
-          type: string
-          description: Customer deferment number with can be used for duty tax collection
-        eori:
-          type: string
-          description: EORI number, dependency of the customs export regime.
-    colreq.Debug:
+        statusList:
+          type: array
+          items:
+            $ref: '#/components/schemas/colreq.Status'
+    label.Error:
       type: object
       properties:
-        request:
+        errorCode:
           type: string
-        response:
+        errorMessage:
           type: string
-        methodName:
+        errorOrigin:
           type: string
-    shipment.Message:
+          description: Identifies where the error occurred.
+          enum:
+          - META-API
+          - BU-API
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/label.Debug'
+    Message:
       type: object
       properties:
         messageType:
@@ -1698,6 +1293,24 @@ components:
           - s3
         senderCompany:
           type: string
+    colreq.ContactDetails:
+      type: object
+      properties:
+        contactPerson:
+          type: string
+          description: Name of the person to contact
+        phone1:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        phone2:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        fax:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        email:
+          type: string
+          description: Email address
     colreq.Address:
       type: object
       properties:
@@ -1740,17 +1353,7 @@ components:
       - country
       - street
       - zipCode
-    ParcelBarcode:
-      type: object
-      properties:
-        parcel:
-          type: string
-          description: Parcel number.
-        barcode:
-          type: string
-        reference:
-          type: string
-    shipment.Amount:
+    Cifcost:
       type: object
       properties:
         amount:
@@ -1764,428 +1367,68 @@ components:
       required:
       - amount
       - currency
-    Parcel:
+    Cod:
       type: object
       properties:
-        parcelInfos:
-          $ref: '#/components/schemas/ParcelInfos'
-        parcelRank:
+        amount:
+          $ref: '#/components/schemas/Amount'
+        collectType:
           type: string
-          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
-        senderParcelRefs:
-          type: array
-          description: List of sender parcels references
-          items:
-            type: string
-        partnerParcelRefs:
-          type: array
-          description: Partner´s own parcel reference field
-          items:
-            type: string
-        insurance:
-          $ref: '#/components/schemas/Insurance'
-        hazardousLimitedQuantities:
-          type: boolean
-          description: 'Limited quantities of hazardous goods parcel value. '
-        hazardousPackingCode:
+          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU)   * Values with uppercase are accepted as well: S0, S1, S2, S3, S9 '
+        purpose:
           type: string
-          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
-        parcelContent:
+          description: Intended use
+        bankCode:
           type: string
-          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
-        cod:
-          $ref: '#/components/schemas/Cod'
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-        hazardous:
-          type: array
-          items:
-            $ref: '#/components/schemas/Hazardous'
-        reference:
+          description: Bank Code
+        bankName:
           type: string
-          description: Field used only by PL customers to transmit the reference associated with the parcel number.
-    shipment.Sender:
-      type: object
-      properties:
-        customerInfos:
-          $ref: '#/components/schemas/shipment.CustomerInfos'
-        pudoId:
+          description: Bank Name
+        bankAccountNumber:
           type: string
-          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
-        addressId:
+          description: Bank account number
+        bankAccountName:
           type: string
-          description: sender AddressId (for CZ, SK, SPEEDY, BALTICS)
-        address:
-          $ref: '#/components/schemas/shipment.Address'
-        contact:
-          $ref: '#/components/schemas/shipment.ContactDetails'
-        comment:
+          description: Account holder
+        iban:
           type: string
-        gln:
+          description: International account number
+        bic:
           type: string
-          description: GLN number (Global location number)
-        accountOwner:
-          type: string
-          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
-        legalEntity:
-          $ref: '#/components/schemas/shipment.LegalEntity'
-        maskedSender:
-          $ref: '#/components/schemas/shipment.MaskedSender'
-    pickupscheduling.ScheduledPickupResponse:
-      type: object
-      properties:
-        pickupreference:
-          type: string
-        statusCode:
-          type: string
-        statusDescription:
-          type: string
-    Pickup:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        fromTime:
-          type: string
-        toTime:
-          type: string
+          description: Bank Code
       required:
-      - date
-    ShipmentResponse:
-      type: object
-      properties:
-        warningMessage:
-          type: string
-        shipmentId:
-          type: string
-        parcelIds:
-          type: array
-          description: List of parcel Ids
-          items:
-            type: string
-        networkShipmentId:
-          type: string
-        networkParcelIds:
-          type: array
-          description: List of parcel Ids
-          items:
-            type: string
-        parcelBarcodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParcelBarcode'
-        label:
-          $ref: '#/components/schemas/Label'
-        qrcode:
-          $ref: '#/components/schemas/QrCode'
-        others:
-          type: array
-          description: List of other label
-          items:
-            $ref: '#/components/schemas/Label'
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/Debug'
-    shipment.InternationalExporter:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/shipment.Address'
-        contact:
-          $ref: '#/components/schemas/shipment.ContactDetails'
-        eori:
-          type: string
-    label.CustomerInfos:
+      - amount
+    shipment.CustomerInfos:
       type: object
       properties:
         customerAccountNumber:
           type: string
+          description: BU’s Internal Customer’s Account Number
         customerSubAccountNumber:
           type: string
+          description: Customer number SUBID
         customerID:
           type: string
-    PickupSchedule:
+          description: BU’s internal Unique Customer ID/Identifier
+        originalCustomerId:
+          type: string
+          description: Original customer ID for Integration Customers in certain DPD Business Units
+    Response:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/CustomerInfos'
-        shipmentNumbers:
-          type: array
-          description: List of Shipment numbers for the Pickup
-          items:
-            type: string
-        parcelNumbers:
-          type: array
-          description: List of Parcel Numbers for the PickUp
-          items:
-            type: string
-        pickup:
-          $ref: '#/components/schemas/Pickup'
-        numberOfParcels:
-          type: integer
-          format: int32
-          description: Quantity (Number) of Parcels
-        addressId:
+        collectionId:
           type: string
-          description: AddressId
-        pickupAddress:
-          $ref: '#/components/schemas/Address'
-        pickupContact:
-          $ref: '#/components/schemas/ContactDetails'
-        pickupWeight:
-          type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of all the parcels that will picked up
-        parcelMaxWeight:
-          type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of the heaviest parcel
-        parcelMaxDimensions:
-          $ref: '#/components/schemas/Dimensions'
-        comment:
-          type: string
-        references:
-          type: array
-          description: Reference of the pickup request, defined by the customer
-          items:
-            type: string
-        sendingDepot:
-          type: string
-          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-    shipment.ContactDetails:
-      type: object
-      properties:
-        contactPerson:
-          type: string
-          description: Name of the person to contact
-        phone1:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        phone2:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        fax:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        email:
-          type: string
-          description: Email address
-    label.Label:
-      type: object
-      properties:
-        base64Data:
-          type: string
-        mediaType:
-          type: string
-    label.Error:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMessage:
-          type: string
-        errorOrigin:
-          type: string
-          description: Identifies where the error occurred.
-          enum:
-          - META-API
-          - BU-API
         debugList:
           type: array
           items:
-            $ref: '#/components/schemas/label.Debug'
-    colreq.CollectionPoint:
-      type: object
-      properties:
-        customerInfos:
-          $ref: '#/components/schemas/colreq.CustomerInfos'
-        address:
-          $ref: '#/components/schemas/colreq.Address'
-        addressId:
+            $ref: '#/components/schemas/Debug'
+        parcelId:
           type: string
-          description: sender AddressId
-        contact:
-          $ref: '#/components/schemas/colreq.ContactDetails'
-        comment:
-          type: string
-        gln:
-          type: string
-          description: GLN number (Global location number)
-        accountOwner:
-          type: string
-          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
-        legalEntity:
-          $ref: '#/components/schemas/colreq.LegalEntity'
-    Document:
-      type: object
-      properties:
-        documentType:
-          type: string
-        creationDateTime:
-          type: string
-          format: date-time
-    shipment.ShipmentResponse:
-      type: object
-      properties:
-        warningMessage:
-          type: string
-        shipmentId:
-          type: string
-        parcelIds:
-          type: array
-          description: List of parcel Ids
-          items:
-            type: string
-        networkShipmentId:
-          type: string
-        networkParcelIds:
-          type: array
-          description: List of parcel Ids
-          items:
-            type: string
-        parcelBarcodes:
+        statusList:
           type: array
           items:
-            $ref: '#/components/schemas/shipment.ParcelBarcode'
-        label:
-          $ref: '#/components/schemas/shipment.Label'
-        qrcode:
-          $ref: '#/components/schemas/shipment.QrCode'
-        others:
-          type: array
-          description: List of other label
-          items:
-            $ref: '#/components/schemas/shipment.Label'
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Debug'
-    Customer:
-      type: object
-      properties:
-        customerInfos:
-          $ref: '#/components/schemas/CustomerInfos'
-        address:
-          $ref: '#/components/schemas/Address'
-        addressId:
-          type: string
-          description: Customer AddressId
-        contact:
-          $ref: '#/components/schemas/ContactDetails'
-        comment:
-          type: string
-        gln:
-          type: string
-          description: GLN number (Global location number)
-        accountOwner:
-          type: string
-          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
-        legalEntity:
-          $ref: '#/components/schemas/LegalEntity'
-    shipment.Pickup:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        fromTime:
-          type: string
-        toTime:
-          type: string
-      required:
-      - date
-    colreq.Dimensions:
-      type: object
-      properties:
-        length:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        width:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        height:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-    Debug:
-      type: object
-      properties:
-        request:
-          type: string
-        response:
-          type: string
-        methodName:
-          type: string
-    Delivery:
-      type: object
-      properties:
-        dateFrom:
-          type: string
-          format: date
-        dateTo:
-          type: string
-          format: date
-        timeFrom:
-          type: string
-        timeTo:
-          type: string
-        timeSlotTariff:
-          type: string
-    shipment.LegalEntity:
-      type: object
-      properties:
-        businessType:
-          type: string
-          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
-          enum:
-          - P
-          - B
-        eori:
-          type: string
-        vatNumber:
-          type: string
-        taxIdType:
-          type: string
-          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
-          enum:
-          - P
-          - C
-        taxIdValue:
-          type: string
-          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
-        webSite:
-          type: string
-          format: uri
-        FiscalVatRepresentant:
-          type: string
-          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
-    InternationalImporter:
-      type: object
-      properties:
-        address:
-          $ref: '#/components/schemas/Address'
-        contact:
-          $ref: '#/components/schemas/ContactDetails'
-        gln:
-          type: string
-          description: GLN number (Global location number)
-        vatNumber:
-          type: string
-        customerDefermentNumber:
-          type: string
-          description: Customer deferment number with can be used for duty tax collection
-        eori:
-          type: string
-          description: EORI number, dependency of the customs export regime.
-    Hazardous:
+            $ref: '#/components/schemas/Status'
+    shipment.Hazardous:
       type: object
       properties:
         classCode:
@@ -2225,6 +1468,153 @@ components:
         packingCode:
           type: string
           description: Packing code (see PACKINGCODE). Mandatory in case of hazardous parcel
+    pickupscheduling.ScheduledPickupResponse:
+      type: object
+      properties:
+        pickupreference:
+          type: string
+        statusCode:
+          type: string
+        statusDescription:
+          type: string
+    shipment.QrCode:
+      type: object
+      properties:
+        base64Data:
+          type: string
+          description: qr code data base64 encoded
+        media-type:
+          type: string
+          description: format of the label
+        pincode:
+          type: string
+          description: pin code
+    shipment.ModelReturn:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/shipment.CustomerInfos'
+        address:
+          $ref: '#/components/schemas/shipment.Address'
+          description: return Address
+        contact:
+          $ref: '#/components/schemas/shipment.ContactDetails'
+        comment:
+          type: string
+        depot:
+          type: string
+          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
+    MaskedSender:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+    Debug:
+      type: object
+      properties:
+        request:
+          type: string
+        response:
+          type: string
+        methodName:
+          type: string
+    shipment.Sender:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/shipment.CustomerInfos'
+        pudoId:
+          type: string
+          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
+        addressId:
+          type: string
+          description: sender AddressId (for CZ, SK, SPEEDY, BALTICS)
+        address:
+          $ref: '#/components/schemas/shipment.Address'
+        contact:
+          $ref: '#/components/schemas/shipment.ContactDetails'
+        comment:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        accountOwner:
+          type: string
+          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
+        legalEntity:
+          $ref: '#/components/schemas/shipment.LegalEntity'
+        maskedSender:
+          $ref: '#/components/schemas/shipment.MaskedSender'
+    colreq.Dimensions:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        width:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        height:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+    shipment.ShipmentInfos:
+      type: object
+      properties:
+        shipmentId:
+          type: string
+          description: Shipment ID Could be the ID of the first parcel of the list (master ID) or could be another ID specially created for that.
+        shipmentIdCKey:
+          type: string
+          description: Control character key compute from the shipmentId
+        productCode:
+          type: string
+          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
+        serviceCode:
+          type: string
+          description: Additional local service code, needed only in certain Business Units
+        additionalServiceCode:
+          type: string
+          description: DPD Additional Service required for specific services, describing first and last mile handling
+        dimensions:
+          $ref: '#/components/schemas/shipment.Dimensions'
+        weight:
+          type: string
+          description: Weight in grams units (e.g. 3000 equals 3kg)
+        exWorksDelivery:
+          type: boolean
+          description: Specific field for DPD DE. Specifies if the recipient has to pay the consignment.
+      required:
+      - productCode
+    colreq.LegalEntity:
+      type: object
+      properties:
+        businessType:
+          type: string
+          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
+          enum:
+          - P
+          - B
+        eori:
+          type: string
+        vatNumber:
+          type: string
+        taxIdType:
+          type: string
+          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
+          enum:
+          - P
+          - C
+        taxIdValue:
+          type: string
+          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
+        FiscalVatRepresentant:
+          type: string
+          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
     shipment.ParcelInfos:
       type: object
       properties:
@@ -2238,21 +1628,22 @@ components:
           $ref: '#/components/schemas/shipment.Dimensions'
         weight:
           type: string
-    ModelReturn:
+    shipment.Receiver:
       type: object
       properties:
         customerInfos:
-          $ref: '#/components/schemas/CustomerInfos'
+          $ref: '#/components/schemas/shipment.CustomerInfos'
+        pudoId:
+          type: string
+          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
         address:
-          $ref: '#/components/schemas/Address'
-          description: return Address
+          $ref: '#/components/schemas/shipment.Address'
         contact:
-          $ref: '#/components/schemas/ContactDetails'
+          $ref: '#/components/schemas/shipment.ContactDetails'
         comment:
           type: string
-        depot:
-          type: string
-          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
+        legalEntity:
+          $ref: '#/components/schemas/shipment.LegalEntity'
     shipment.MaskedSender:
       type: object
       properties:
@@ -2260,49 +1651,19 @@ components:
           $ref: '#/components/schemas/shipment.Address'
         contact:
           $ref: '#/components/schemas/shipment.ContactDetails'
-    shipment.InterInvoiceLine:
+    shipment.Pickup:
       type: object
       properties:
-        invoicePosition:
+        date:
           type: string
-          description: Line number of the invoice
-        quantityOfItems:
+          format: date
+        fromTime:
           type: string
-          description: Quantity of items per article or invoice line even for low / mid / high value or any type of customer
-        content:
+        toTime:
           type: string
-          description: Content (Depending of the destination system. Could be cut by some system to the first 35 characters)
-        amountOfPosition:
-          type: number
-          format: float
-        manufacturedCountry:
-          type: string
-        netWeight:
-          type: string
-          description: Total weight of the articles in the current line, excluding packaging, in grams.
-        grossWeight:
-          type: string
-          description: Total weight of the articles including packaging in the current line, in grams.
-        customerProductCode:
-          type: string
-          description: Internal Customer product code
-        productDescription:
-          type: string
-          description: Short description of the product
-        fabricComposition:
-          type: string
-          description: Description of fabric composition
-        importTarifCode:
-          type: string
-        exportTarifCode:
-          type: string
-        goodsWebPage:
-          type: string
-          format: uri
-        parcelRank:
-          type: string
-          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
-    Cifcost:
+      required:
+      - date
+    colreq.Amount:
       type: object
       properties:
         amount:
@@ -2316,6 +1677,44 @@ components:
       required:
       - amount
       - currency
+    colreq.CustomerInfos:
+      type: object
+      properties:
+        customerAccountNumber:
+          type: string
+          description: BU’s Internal Customer’s Account Number
+        customerSubAccountNumber:
+          type: string
+          description: Customer number SUBID
+        customerID:
+          type: string
+          description: BU’s internal Unique Customer ID/Identifier
+    Collection:
+      type: object
+      properties:
+        requestId:
+          type: string
+          description: The order of collection request.
+        collectionInfos:
+          $ref: '#/components/schemas/CollectionInfos'
+        customerReferenceNumbers:
+          type: array
+          items:
+            type: string
+        collectionPoint:
+          $ref: '#/components/schemas/CollectionPoint'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        receiver:
+          $ref: '#/components/schemas/Receiver'
+        parcel:
+          $ref: '#/components/schemas/Parcel'
+        pickup:
+          $ref: '#/components/schemas/Pickup'
+      required:
+      - collectionPoint
+      - parcel
+      - receiver
     Address:
       type: object
       properties:
@@ -2407,38 +1806,100 @@ components:
           type: integer
           format: int32
           description: SPEEDY specificity. Point of interest identifier. Used for addresses of type 1 (local address).
-    Cod:
+    CustomerInfos:
       type: object
       properties:
-        amount:
-          $ref: '#/components/schemas/Amount'
-        collectType:
+        customerAccountNumber:
           type: string
-          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU)   * Values with uppercase are accepted as well: S0, S1, S2, S3, S9 '
-        purpose:
+          description: BU’s Internal Customer’s Account Number
+        customerSubAccountNumber:
           type: string
-          description: Intended use
-        bankCode:
+          description: Customer number SUBID
+        customerID:
           type: string
-          description: Bank Code
-        bankName:
+          description: BU’s internal Unique Customer ID/Identifier
+        originalCustomerId:
           type: string
-          description: Bank Name
-        bankAccountNumber:
+          description: Original customer ID for Integration Customers in certain DPD Business Units
+    pickupscheduling.Error:
+      type: object
+      properties:
+        errorCode:
           type: string
-          description: Bank account number
-        bankAccountName:
+        errorMessage:
           type: string
-          description: Account holder
-        iban:
+        errorOrigin:
           type: string
-          description: International account number
-        bic:
+          description: Identifies where the error occurred.
+          enum:
+          - META-API
+          - BU-API
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickupscheduling.Debug'
+    Receiver:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/CustomerInfos'
+        pudoId:
           type: string
-          description: Bank Code
-      required:
-      - amount
-    shipment.Hazardous:
+          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
+        address:
+          $ref: '#/components/schemas/Address'
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+        comment:
+          type: string
+        legalEntity:
+          $ref: '#/components/schemas/LegalEntity'
+    colreq.Error:
+      type: object
+      properties:
+        errorCode:
+          type: string
+        errorMessage:
+          type: string
+        errorOrigin:
+          type: string
+          description: Identifies where the error occurred.
+          enum:
+          - META-API
+          - BU-API
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/colreq.Debug'
+    LegalEntity:
+      type: object
+      properties:
+        businessType:
+          type: string
+          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
+          enum:
+          - P
+          - B
+        eori:
+          type: string
+        vatNumber:
+          type: string
+        taxIdType:
+          type: string
+          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
+          enum:
+          - P
+          - C
+        taxIdValue:
+          type: string
+          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
+        webSite:
+          type: string
+          format: uri
+        FiscalVatRepresentant:
+          type: string
+          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
+    Hazardous:
       type: object
       properties:
         classCode:
@@ -2478,53 +1939,32 @@ components:
         packingCode:
           type: string
           description: Packing code (see PACKINGCODE). Mandatory in case of hazardous parcel
-    Person:
+    shipment.Message:
       type: object
       properties:
-        personalDeliveryType:
+        messageType:
           type: string
-          description: 'Personal delivery type:  * `s1` : department delivery (without personal identification)  * `s2` : personal delivery with personal identification (IDCheck)  * `s3` : personal delivery without personal identification at PUDO (e.g. Direct PUDO delivery)  * `s4` : personal delivery with personal identification at PUDO (e.g. Direct PUDO delivery)  * `s5` : personal delivery with personal identification at PUDO plus ID-Check (e.g. Direct PUDO delivery)  * `s6` : personal delivery with personal identification (ID Check) and recording of the ID. '
+          description: 'Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` '
           enum:
+          - EMAIL
+          - PHONE
+          - SMS
+          - APP
+        messageDestination:
+          type: string
+          description: 'Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: "+international country numberphone number" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX'' '
+        messageLanguage:
+          type: string
+          description: 'Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. '
+        messageDestType:
+          type: string
+          description: 'Destination stakeholder of the notification: * `s0` : Receiver / Consignee (default if not provided) * `s1` : Sender / Consignor * `s2` : Requester * `s3` : Other '
+          enum:
+          - s0
           - s1
           - s2
           - s3
-          - s4
-          - s5
-          - s6
-        personalAuthorizedName:
-          type: string
-        phone1:
-          type: string
-        phone2:
-          type: string
-        personalIdNumber:
-          type: string
-          description: Real consignee's personal identification number.
-        personalDateOfBirth:
-          type: string
-          format: date
-        address:
-          $ref: '#/components/schemas/Address'
-        contact:
-          type: string
-          description: Recipient contact person. Could be different of the consignee's name
-        fax:
-          type: string
-        email:
-          type: string
-        gln:
-          type: string
-          description: GLN number (Global location number)
-        comment:
-          type: string
-    pickupscheduling.Debug:
-      type: object
-      properties:
-        request:
-          type: string
-        response:
-          type: string
-        methodName:
+        senderCompany:
           type: string
     label.LabelRequest:
       type: object
@@ -2537,6 +1977,537 @@ components:
           type: string
       required:
       - shipment
+    colreq.Cod:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/colreq.Amount'
+        collectType:
+          type: string
+          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU) '
+        purpose:
+          type: string
+          description: Intended use
+        bankCode:
+          type: string
+          description: Bank Code
+        bankName:
+          type: string
+          description: Bank Name
+        bankAccountNumber:
+          type: string
+          description: Bank account number
+        bankAccountName:
+          type: string
+          description: Account holder
+        iban:
+          type: string
+          description: International account number
+        bic:
+          type: string
+          description: Bank Code
+      required:
+      - amount
+      - collectType
+    shipment.Delivery:
+      type: object
+      properties:
+        dateFrom:
+          type: string
+          format: date
+        dateTo:
+          type: string
+          format: date
+        timeFrom:
+          type: string
+        timeTo:
+          type: string
+        timeSlotTariff:
+          type: string
+    pickupscheduling.CustomerInfos:
+      type: object
+      properties:
+        customerAccountNumber:
+          type: string
+          description: BU’s Internal Customer’s Account Number
+        customerSubAccountNumber:
+          type: string
+          description: Customer number SUBID
+        customerID:
+          type: string
+          description: BU’s internal Unique Customer ID/Identifier
+    Document:
+      type: object
+      properties:
+        documentType:
+          type: string
+        creationDateTime:
+          type: string
+          format: date-time
+    shipment.Shipment:
+      type: object
+      properties:
+        return:
+          $ref: '#/components/schemas/shipment.ModelReturn'
+        shipmentInfos:
+          $ref: '#/components/schemas/shipment.ShipmentInfos'
+        customsReference:
+          type: string
+          description: Consignment number for the customs point of view.
+        sendingDepot:
+          type: string
+        mpsCompleteDelivery:
+          type: string
+          description: 'Values :   * `s0` - Reserved for the future usage (default)   * `s1` - No complete delivery (MPS incomplete)   * `s2` - Complete delivery (MPS complete). It is mandatory for COD  '
+          enum:
+          - s0
+          - s1
+          - s2
+        mpsCompleteDeliveryLabel:
+          type: string
+          description: Defines if the label for complete delivery is printed for pickup. Default value is false.
+        customerReferenceNumbers:
+          type: array
+          items:
+            type: string
+        customerBillingReference:
+          type: string
+          description: Customer reference for billing or clearing
+        cifcost:
+          $ref: '#/components/schemas/shipment.Cifcost'
+        numberOfParcels:
+          type: string
+          description: Number of parcels per shipment. A 0 value is acceptable in some BUs and will trigger an open multi-piece shipment, with automated or manual consolidation
+        sender:
+          $ref: '#/components/schemas/shipment.Sender'
+        receiver:
+          $ref: '#/components/schemas/shipment.Receiver'
+        international:
+          $ref: '#/components/schemas/shipment.International'
+        person:
+          $ref: '#/components/schemas/shipment.Person'
+        parcel:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.Parcel'
+        pickup:
+          $ref: '#/components/schemas/shipment.Pickup'
+        delivery:
+          $ref: '#/components/schemas/shipment.Delivery'
+        payerType:
+          type: string
+          description: '* `S` : Sender * `R` : Receiver * `3` : 3rd party '
+          enum:
+          - S
+          - R
+          - '3'
+        documents:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.Document'
+        shippingDate:
+          type: string
+          format: date
+      required:
+      - numberOfParcels
+      - parcel
+      - receiver
+      - sender
+    label.Shipment:
+      type: object
+      properties:
+        shipmentId:
+          type: string
+        parcelNumbers:
+          type: array
+          items:
+            type: string
+      required:
+      - parcelNumbers
+    Amount:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: The number of decimal will depend of the currency (it could be from 0 to three digit).
+          example: 48.831
+        currency:
+          type: string
+          description: Currency code (ISO 4217 alpha 3)
+      required:
+      - amount
+      - currency
+    pickupscheduling.Dimensions:
+      type: object
+      properties:
+        length:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        width:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+        height:
+          type: integer
+          format: int32
+          description: Dimmension in cm units
+    Insurance:
+      type: object
+      properties:
+        insuranceAmount:
+          $ref: '#/components/schemas/Amount'
+        insuranceParcelContent:
+          type: string
+          description: Description of parcel for insurance
+    label.LabelResponse:
+      type: object
+      properties:
+        label:
+          $ref: '#/components/schemas/label.Label'
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/label.Debug'
+    shipment.InternationalImporter:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/shipment.Address'
+        contact:
+          $ref: '#/components/schemas/shipment.ContactDetails'
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        vatNumber:
+          type: string
+        customerDefermentNumber:
+          type: string
+          description: Customer deferment number with can be used for duty tax collection
+        eori:
+          type: string
+          description: EORI number, dependency of the customs export regime.
+    Delivery:
+      type: object
+      properties:
+        dateFrom:
+          type: string
+          format: date
+        dateTo:
+          type: string
+          format: date
+        timeFrom:
+          type: string
+        timeTo:
+          type: string
+        timeSlotTariff:
+          type: string
+    shipment.Debug:
+      type: object
+      properties:
+        request:
+          type: string
+        response:
+          type: string
+        methodName:
+          type: string
+    shipment.Cifcost:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: The number of decimal will depend of the currency (it could be from 0 to three digit).
+          example: 48.831
+        currency:
+          type: string
+          description: Currency code (ISO 4217 alpha 3)
+      required:
+      - amount
+      - currency
+    shipment.International:
+      type: object
+      properties:
+        parcelType:
+          type: string
+          description: 'Parcel type within the shipment. Different parcel types can''t be mixed into one shipment * `D` : Document  * `P` : Non-Doc '
+        customsAmount:
+          $ref: '#/components/schemas/shipment.Amount'
+        customsAmountEx:
+          $ref: '#/components/schemas/shipment.Amount'
+        customsTerms:
+          type: string
+          description: 'Parcel type within the shipment Different parcel types can''t be mixed into one shipment * `s01` : DAP, not cleared * `s02` : DDP, delivered duty paid (incl. duties and excl. taxes) * `s03` : DDP, delivered duty paid (incl. duties and taxes) * `s05` : ex works (EXW) * `s06` : DAP * `s07` : DAP & DDP enhanced, Duty and taxes were pre-paid by the receiver'' '
+          enum:
+          - s01
+          - s02
+          - s03
+          - s04
+          - s05
+          - s06
+          - s07
+        customsPaper:
+          type: string
+          description: 'Accompanying documents e.g. A | G | B Separator is "|" (a pipe) in case of multiple invoice documents * `A` : commercial invoice * `B` : pro forma invoice * `C` : export declaration * `D` : EUR1 * `E` : EUR2 * `F` : ATR * `G` : delivery note * `H` : third party billing * `I` : T1 document '
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+        clearanceStatus:
+          type: string
+          description: 'Values:   * `N` : No  * `F` : Free  * `E` : Export Cleared  * `T` : Transit Cleared  * `I` : Import Cleared  * `H` : Hybrid '
+          enum:
+          - N
+          - F
+          - E
+          - T
+          - I
+          - H
+        customsHighLowValue:
+          type: string
+          description: '(H)igh, (M)id (above 22€ and below 150€), (L)ow.  * `H` : High  * `M` : Medium   * `L` : Low  '
+          enum:
+          - H
+          - M
+          - L
+        customsInvoice:
+          type: string
+          description: Invoice number Separator is "|" (a pipe) in case of multiple invoice numbers
+        customsInvoiceDates:
+          type: array
+          description: Invoice dates
+          items:
+            type: string
+            format: date
+        importer:
+          $ref: '#/components/schemas/shipment.InternationalImporter'
+        mrn:
+          type: string
+          description: 'MRN of the electronic export declaration Remarks: The "|" is the separator between two MRN.'
+        exporter:
+          $ref: '#/components/schemas/shipment.InternationalExporter'
+        numberOfArticles:
+          type: string
+          description: This is the real number of commodities (ImportTarifCode / ExportTarifCode). The number of Interinvoicelines must equal the NumberOfArticles
+        destinationCountryRegistration:
+          type: string
+          description: 'Destination country registration information : Registration number or FDA If destination is DPD UK : Applies to B2B and B2C (Not applicable for C2C) shipments with a goods value under £135 (Excludes shipping cost) and if the Incoterm is not DDP. This is expected to come into force March 19, however no official communication from HMRC yet.'
+        exportReason:
+          type: string
+          description: 'Reason for export  * `s01` : sale  * `s02` : return/replacement  * `s03` : gift '
+          enum:
+          - s01
+          - s02
+          - s03
+        interInvoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.InterInvoiceLine'
+        shipmentContent:
+          type: string
+          description: A detailed description of the overall contents of the consignement (UK->EU export only)
+    CollectionPoint:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/CustomerInfos'
+        address:
+          $ref: '#/components/schemas/Address'
+        addressId:
+          type: string
+          description: sender AddressId
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+        comment:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        accountOwner:
+          type: string
+          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
+        legalEntity:
+          $ref: '#/components/schemas/LegalEntity'
+    InterInvoiceLine:
+      type: object
+      properties:
+        invoicePosition:
+          type: string
+          description: Line number of the invoice
+        quantityOfItems:
+          type: string
+          description: Quantity of items per article or invoice line even for low / mid / high value or any type of customer
+        content:
+          type: string
+          description: Content (Depending of the destination system. Could be cut by some system to the first 35 characters)
+        amountOfPosition:
+          type: number
+          format: float
+        manufacturedCountry:
+          type: string
+        netWeight:
+          type: string
+          description: Total weight of the articles in the current line, excluding packaging, in grams.
+        grossWeight:
+          type: string
+          description: Total weight of the articles including packaging in the current line, in grams.
+        customerProductCode:
+          type: string
+          description: Internal Customer product code
+        productDescription:
+          type: string
+          description: Short description of the product
+        fabricComposition:
+          type: string
+          description: Description of fabric composition
+        importTarifCode:
+          type: string
+        exportTarifCode:
+          type: string
+        goodsWebPage:
+          type: string
+          format: uri
+        parcelRank:
+          type: string
+          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
+    colreq.Insurance:
+      type: object
+      properties:
+        insuranceAmount:
+          $ref: '#/components/schemas/colreq.Amount'
+        insuranceParcelContent:
+          type: string
+          description: Description of parcel for insurance
+    shipment.Cod:
+      type: object
+      properties:
+        amount:
+          $ref: '#/components/schemas/shipment.Amount'
+        collectType:
+          type: string
+          description: 'Collection type   * `s0` : cash   * `s1` : crossed cheque   * `s2` : credit card   * `s3` : ...   * `s9` : default (depending of the receiving BU)   * Values with uppercase are accepted as well: S0, S1, S2, S3, S9 '
+        purpose:
+          type: string
+          description: Intended use
+        bankCode:
+          type: string
+          description: Bank Code
+        bankName:
+          type: string
+          description: Bank Name
+        bankAccountNumber:
+          type: string
+          description: Bank account number
+        bankAccountName:
+          type: string
+          description: Account holder
+        iban:
+          type: string
+          description: International account number
+        bic:
+          type: string
+          description: Bank Code
+      required:
+      - amount
+    shipment.Document:
+      type: object
+      properties:
+        documentType:
+          type: string
+        creationDateTime:
+          type: string
+          format: date-time
+    Status:
+      type: object
+      properties:
+        code:
+          type: string
+        info:
+          type: string
+        description:
+          type: string
+    Label:
+      type: object
+      properties:
+        base64Data:
+          type: string
+        media-type:
+          type: string
+        qrcode:
+          type: string
+          description: BALTICS specificity, format always in PNG
+        pincode:
+          type: string
+          description: BALTICS specificity
+    colreq.Receiver:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/colreq.CustomerInfos'
+        pudoId:
+          type: string
+          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
+        address:
+          $ref: '#/components/schemas/colreq.Address'
+        addressId:
+          type: string
+          description: receiver AddressId
+        contact:
+          $ref: '#/components/schemas/colreq.ContactDetails'
+        comment:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        legalEntity:
+          $ref: '#/components/schemas/colreq.LegalEntity'
+    colreq.Customer:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/colreq.CustomerInfos'
+        address:
+          $ref: '#/components/schemas/colreq.Address'
+        addressId:
+          type: string
+          description: Customer AddressId
+        contact:
+          $ref: '#/components/schemas/colreq.ContactDetails'
+        comment:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        accountOwner:
+          type: string
+          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
+        legalEntity:
+          $ref: '#/components/schemas/colreq.LegalEntity'
+    pickupscheduling.ContactDetails:
+      type: object
+      properties:
+        contactPerson:
+          type: string
+          description: Name of the person to contact
+        phone1:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        phone2:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        fax:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        email:
+          type: string
+          description: Email address
     pickupscheduling.Address:
       type: object
       properties:
@@ -2591,22 +2562,73 @@ components:
       - country
       - street
       - zipCode
-    shipment.ModelReturn:
+    label.CustomerInfos:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/shipment.CustomerInfos'
+        customerAccountNumber:
+          type: string
+        customerSubAccountNumber:
+          type: string
+        customerID:
+          type: string
+    ContactDetails:
+      type: object
+      properties:
+        contactPerson:
+          type: string
+          description: Name of the person to contact
+        phone1:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        phone2:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        fax:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        email:
+          type: string
+          description: Email address
+    shipment.Person:
+      type: object
+      properties:
+        personalDeliveryType:
+          type: string
+          description: 'Personal delivery type:  * `s1` : department delivery (without personal identification)  * `s2` : personal delivery with personal identification (IDCheck)  * `s3` : personal delivery without personal identification at PUDO (e.g. Direct PUDO delivery)  * `s4` : personal delivery with personal identification at PUDO (e.g. Direct PUDO delivery)  * `s5` : personal delivery with personal identification at PUDO plus ID-Check (e.g. Direct PUDO delivery)  * `s6` : personal delivery with personal identification (ID Check) and recording of the ID. '
+          enum:
+          - s1
+          - s2
+          - s3
+          - s4
+          - s5
+          - s6
+        personalAuthorizedName:
+          type: string
+        phone1:
+          type: string
+        phone2:
+          type: string
+        personalIdNumber:
+          type: string
+          description: Real consignee's personal identification number.
+        personalDateOfBirth:
+          type: string
+          format: date
         address:
           $ref: '#/components/schemas/shipment.Address'
-          description: return Address
         contact:
-          $ref: '#/components/schemas/shipment.ContactDetails'
+          type: string
+          description: Recipient contact person. Could be different of the consignee's name
+        fax:
+          type: string
+        email:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
         comment:
           type: string
-        depot:
-          type: string
-          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
-    Dimensions:
+    shipment.Dimensions:
       type: object
       properties:
         length:
@@ -2621,73 +2643,189 @@ components:
           type: integer
           format: int32
           description: Dimmension in cm units
-    colreq.Customer:
+    colreq.Debug:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/colreq.CustomerInfos'
-        address:
-          $ref: '#/components/schemas/colreq.Address'
-        addressId:
+        request:
           type: string
-          description: Customer AddressId
+        response:
+          type: string
+        methodName:
+          type: string
+    ShipmentResponse:
+      type: object
+      properties:
+        warningMessage:
+          type: string
+        shipmentId:
+          type: string
+        parcelIds:
+          type: array
+          description: List of parcel Ids
+          items:
+            type: string
+        networkShipmentId:
+          type: string
+        networkParcelIds:
+          type: array
+          description: List of parcel Ids
+          items:
+            type: string
+        parcelBarcodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParcelBarcode'
+        label:
+          $ref: '#/components/schemas/Label'
+        qrcode:
+          $ref: '#/components/schemas/QrCode'
+        others:
+          type: array
+          description: List of other label
+          items:
+            $ref: '#/components/schemas/Label'
+        debugList:
+          type: array
+          items:
+            $ref: '#/components/schemas/Debug'
+    ParcelInfos:
+      type: object
+      properties:
+        parcelNumber:
+          type: string
+          description: Parcel number.
+        parcelNumberCcKey:
+          type: string
+          description: Control character key compute from the parcel number.
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        weight:
+          type: string
+    shipment.Parcel:
+      type: object
+      properties:
+        parcelInfos:
+          $ref: '#/components/schemas/shipment.ParcelInfos'
+        parcelRank:
+          type: string
+          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
+        senderParcelRefs:
+          type: array
+          description: List of sender parcels references
+          items:
+            type: string
+        partnerParcelRefs:
+          type: array
+          description: Partner´s own parcel reference field
+          items:
+            type: string
+        insurance:
+          $ref: '#/components/schemas/shipment.Insurance'
+        hazardousLimitedQuantities:
+          type: boolean
+          description: 'Limited quantities of hazardous goods parcel value. '
+        hazardousPackingCode:
+          type: string
+          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
+        parcelContent:
+          type: string
+          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
+        cod:
+          $ref: '#/components/schemas/shipment.Cod'
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.Message'
+        hazardous:
+          type: array
+          items:
+            $ref: '#/components/schemas/shipment.Hazardous'
+        reference:
+          type: string
+          description: Field used only by PL customers to transmit the reference associated with the parcel number.
+    Person:
+      type: object
+      properties:
+        personalDeliveryType:
+          type: string
+          description: 'Personal delivery type:  * `s1` : department delivery (without personal identification)  * `s2` : personal delivery with personal identification (IDCheck)  * `s3` : personal delivery without personal identification at PUDO (e.g. Direct PUDO delivery)  * `s4` : personal delivery with personal identification at PUDO (e.g. Direct PUDO delivery)  * `s5` : personal delivery with personal identification at PUDO plus ID-Check (e.g. Direct PUDO delivery)  * `s6` : personal delivery with personal identification (ID Check) and recording of the ID. '
+          enum:
+          - s1
+          - s2
+          - s3
+          - s4
+          - s5
+          - s6
+        personalAuthorizedName:
+          type: string
+        phone1:
+          type: string
+        phone2:
+          type: string
+        personalIdNumber:
+          type: string
+          description: Real consignee's personal identification number.
+        personalDateOfBirth:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
         contact:
-          $ref: '#/components/schemas/colreq.ContactDetails'
-        comment:
+          type: string
+          description: Recipient contact person. Could be different of the consignee's name
+        fax:
+          type: string
+        email:
           type: string
         gln:
           type: string
           description: GLN number (Global location number)
-        accountOwner:
+        comment:
           type: string
-          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
-        legalEntity:
-          $ref: '#/components/schemas/colreq.LegalEntity'
-    colreq.Status:
+    shipment.LegalEntity:
       type: object
       properties:
-        code:
+        businessType:
           type: string
-        info:
-          type: string
-        description:
-          type: string
-    Message:
-      type: object
-      properties:
-        messageType:
-          type: string
-          description: 'Notification type * `EMAIL` * `PHONE` * `SMS` * `APP` '
+          description: 'Business Type:   * `P` : PRIVATE   * `B` : BUSINESS '
           enum:
-          - EMAIL
-          - PHONE
-          - SMS
-          - APP
-        messageDestination:
+          - P
+          - B
+        eori:
           type: string
-          description: 'Destination for the notification, e.g. telephone number, email address, etc. … The required data format for the pro active message types SMS, phone and FAX is as follows: "+international country numberphone number" Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX'' '
-        messageLanguage:
+        vatNumber:
           type: string
-          description: 'Language of the proactive notification 2 (ISO 639-1 alpha 2 code, e.g. DE). MSG are maintain per BU. The list of available language is maintain by the BU which send the message.. Default language will be the one in the BU which send the message. '
-        messageDestType:
+        taxIdType:
           type: string
-          description: 'Destination stakeholder of the notification: * `s0` : Receiver / Consignee (default if not provided) * `s1` : Sender / Consignor * `s2` : Requester * `s3` : Other '
+          description: 'Type of document if businessType = B, this field becomes mandatory (dependency of the customs export regime) applicable or not according export customs clearance of origin country if businessType = P, this field is empty. Note - Data in this field to be captured based on the rules of each BU.   * `P` : PASSPORT Number   * `C` : CNPJ (ou CPF) Number (Brésil) '
           enum:
-          - s0
-          - s1
-          - s2
-          - s3
-        senderCompany:
+          - P
+          - C
+        taxIdValue:
           type: string
-    shipment.Document:
+          description: Document information. Data in this field to be captured based on the rules of each BU. Become mandatory if IDType is filled
+        webSite:
+          type: string
+          format: uri
+        FiscalVatRepresentant:
+          type: string
+          description: Fiscal VAT number. This field should be left Blank / Empty and Only populated with the Fiscal VAT number if applicable / known
+    ModelReturn:
       type: object
       properties:
-        documentType:
+        customerInfos:
+          $ref: '#/components/schemas/CustomerInfos'
+        address:
+          $ref: '#/components/schemas/Address'
+          description: return Address
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+        comment:
           type: string
-        creationDateTime:
+        depot:
           type: string
-          format: date-time
-    pickupscheduling.Error:
+          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
+    shipment.Error:
       type: object
       properties:
         errorCode:
@@ -2703,7 +2841,107 @@ components:
         debugList:
           type: array
           items:
-            $ref: '#/components/schemas/pickupscheduling.Debug'
+            $ref: '#/components/schemas/shipment.Debug'
+    Customer:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/CustomerInfos'
+        address:
+          $ref: '#/components/schemas/Address'
+        addressId:
+          type: string
+          description: Customer AddressId
+        contact:
+          $ref: '#/components/schemas/ContactDetails'
+        comment:
+          type: string
+        gln:
+          type: string
+          description: GLN number (Global location number)
+        accountOwner:
+          type: string
+          description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
+        legalEntity:
+          $ref: '#/components/schemas/LegalEntity'
+    PickupSchedule:
+      type: object
+      properties:
+        customerInfos:
+          $ref: '#/components/schemas/CustomerInfos'
+        shipmentNumbers:
+          type: array
+          description: List of Shipment numbers for the Pickup
+          items:
+            type: string
+        parcelNumbers:
+          type: array
+          description: List of Parcel Numbers for the PickUp
+          items:
+            type: string
+        pickup:
+          $ref: '#/components/schemas/Pickup'
+        numberOfParcels:
+          type: integer
+          format: int32
+          description: Quantity (Number) of Parcels
+        addressId:
+          type: string
+          description: AddressId
+        pickupAddress:
+          $ref: '#/components/schemas/Address'
+        pickupContact:
+          $ref: '#/components/schemas/ContactDetails'
+        pickupWeight:
+          type: string
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of all the parcels that will picked up
+        parcelMaxWeight:
+          type: string
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of the heaviest parcel
+        parcelMaxDimensions:
+          $ref: '#/components/schemas/Dimensions'
+        comment:
+          type: string
+        references:
+          type: array
+          description: Reference of the pickup request, defined by the customer
+          items:
+            type: string
+        sendingDepot:
+          type: string
+          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+    ShipmentInfos:
+      type: object
+      properties:
+        shipmentId:
+          type: string
+          description: Shipment ID Could be the ID of the first parcel of the list (master ID) or could be another ID specially created for that.
+        shipmentIdCKey:
+          type: string
+          description: Control character key compute from the shipmentId
+        productCode:
+          type: string
+          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
+        serviceCode:
+          type: string
+          description: Additional local service code, needed only in certain Business Units
+        additionalServiceCode:
+          type: string
+          description: DPD Additional Service required for specific services, describing first and last mile handling
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        weight:
+          type: string
+          description: Weight in grams units (e.g. 3000 equals 3kg)
+        exWorksDelivery:
+          type: boolean
+          description: Specific field for DPD DE. Specifies if the recipient has to pay the consignment.
+      required:
+      - productCode
     Shipment:
       type: object
       properties:
@@ -2773,62 +3011,152 @@ components:
       - parcel
       - receiver
       - sender
-    label.Shipment:
+    International:
       type: object
       properties:
-        shipmentId:
+        parcelType:
           type: string
-        parcelNumbers:
+          description: 'Parcel type within the shipment. Different parcel types can''t be mixed into one shipment * `D` : Document  * `P` : Non-Doc '
+        customsAmount:
+          $ref: '#/components/schemas/Amount'
+        customsAmountEx:
+          $ref: '#/components/schemas/Amount'
+        customsTerms:
+          type: string
+          description: 'Parcel type within the shipment Different parcel types can''t be mixed into one shipment * `s01` : DAP, not cleared * `s02` : DDP, delivered duty paid (incl. duties and excl. taxes) * `s03` : DDP, delivered duty paid (incl. duties and taxes) * `s05` : ex works (EXW) * `s06` : DAP * `s07` : DAP & DDP enhanced, Duty and taxes were pre-paid by the receiver'' '
+          enum:
+          - s01
+          - s02
+          - s03
+          - s04
+          - s05
+          - s06
+          - s07
+        customsPaper:
+          type: string
+          description: 'Accompanying documents e.g. A | G | B Separator is "|" (a pipe) in case of multiple invoice documents * `A` : commercial invoice * `B` : pro forma invoice * `C` : export declaration * `D` : EUR1 * `E` : EUR2 * `F` : ATR * `G` : delivery note * `H` : third party billing * `I` : T1 document '
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+        clearanceStatus:
+          type: string
+          description: 'Values:   * `N` : No  * `F` : Free  * `E` : Export Cleared  * `T` : Transit Cleared  * `I` : Import Cleared  * `H` : Hybrid '
+          enum:
+          - N
+          - F
+          - E
+          - T
+          - I
+          - H
+        customsHighLowValue:
+          type: string
+          description: '(H)igh, (M)id (above 22€ and below 150€), (L)ow.  * `H` : High  * `M` : Medium   * `L` : Low '
+          enum:
+          - H
+          - M
+          - L
+        customsInvoice:
+          type: string
+          description: Invoice number Separator is "|" (a pipe) in case of multiple invoice numbers
+        customsInvoiceDates:
           type: array
+          description: Invoice dates
           items:
             type: string
-      required:
-      - parcelNumbers
-    shipment.CustomerInfos:
-      type: object
-      properties:
-        customerAccountNumber:
+            format: date
+        importer:
+          $ref: '#/components/schemas/InternationalImporter'
+        mrn:
           type: string
-          description: BU’s Internal Customer’s Account Number
-        customerSubAccountNumber:
+          description: 'MRN of the electronic export declaration Remarks: The "|" is the separator between two MRN.'
+        exporter:
+          $ref: '#/components/schemas/InternationalExporter'
+        numberOfArticles:
           type: string
-          description: Customer number SUBID
-        customerID:
+          description: This is the real number of commodities (ImportTarifCode / ExportTarifCode). The number of Interinvoicelines must equal the NumberOfArticles
+        destinationCountryRegistration:
           type: string
-          description: BU’s internal Unique Customer ID/Identifier
-        originalCustomerId:
+          description: 'Destination country registration information : Registration number or FDA If destination is DPD UK : Applies to B2B and B2C (Not applicable for C2C) shipments with a goods value under £135 (Excludes shipping cost) and if the Incoterm is not DDP. This is expected to come into force March 19, however no official communication from HMRC yet.'
+        exportReason:
           type: string
-          description: Original customer ID for Integration Customers in certain DPD Business Units
-    colreq.Error:
-      type: object
-      properties:
-        errorCode:
-          type: string
-        errorMessage:
-          type: string
-        errorOrigin:
-          type: string
-          description: Identifies where the error occurred.
+          description: 'Reason for export  * `s01` : sale  * `s02` : return/replacement  * `s03` : gift '
           enum:
-          - META-API
-          - BU-API
+          - s01
+          - s02
+          - s03
+        interInvoiceLines:
+          type: array
+          items:
+            $ref: '#/components/schemas/InterInvoiceLine'
+        shipmentContent:
+          type: string
+          description: A detailed description of the overall contents of the consignement (UK->EU export only)
+    shipment.InternationalExporter:
+      type: object
+      properties:
+        address:
+          $ref: '#/components/schemas/shipment.Address'
+        contact:
+          $ref: '#/components/schemas/shipment.ContactDetails'
+        eori:
+          type: string
+    pickupscheduling.Response:
+      type: object
+      properties:
+        scheduledPickupResponse:
+          type: array
+          items:
+            $ref: '#/components/schemas/pickupscheduling.ScheduledPickupResponse'
         debugList:
           type: array
           items:
-            $ref: '#/components/schemas/colreq.Debug'
-    ParcelInfos:
+            $ref: '#/components/schemas/pickupscheduling.Debug'
+    shipment.ContactDetails:
       type: object
       properties:
-        parcelNumber:
+        contactPerson:
           type: string
-          description: Parcel number.
-        parcelNumberCcKey:
+          description: Name of the person to contact
+        phone1:
           type: string
-          description: Control character key compute from the parcel number.
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-        weight:
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        phone2:
           type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        fax:
+          type: string
+          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
+        email:
+          type: string
+          description: Email address
+    colreq.Status:
+      type: object
+      properties:
+        code:
+          type: string
+        info:
+          type: string
+        description:
+          type: string
+    Pickup:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        fromTime:
+          type: string
+        toTime:
+          type: string
+      required:
+      - date
     colreq.Pickup:
       type: object
       properties:
@@ -2848,152 +3176,32 @@ components:
           description: comment for Pickup
       required:
       - date
-    pickupscheduling.PickupSchedule:
+    colreq.CollectionInfos:
       type: object
       properties:
-        customerInfos:
-          $ref: '#/components/schemas/pickupscheduling.CustomerInfos'
-        shipmentNumbers:
-          type: array
-          description: List of Shipment numbers for the Pickup
-          items:
-            type: string
-        parcelNumbers:
-          type: array
-          description: List of Parcel Numbers for the PickUp
-          items:
-            type: string
-        pickup:
-          $ref: '#/components/schemas/pickupscheduling.Pickup'
-        numberOfParcels:
-          type: integer
-          format: int32
-          description: Quantity (Number) of Parcels
-        addressId:
+        serviceCode:
           type: string
-          description: AddressId
-        pickupAddress:
-          $ref: '#/components/schemas/pickupscheduling.Address'
-        pickupContact:
-          $ref: '#/components/schemas/pickupscheduling.ContactDetails'
-        pickupWeight:
+          description: 'SEUR specificity. Possible values: 1, 31'
+        dimensions:
+          $ref: '#/components/schemas/colreq.Dimensions'
+        weight:
           type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of all the parcels that will picked up
-        parcelMaxWeight:
-          type: string
-          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg) of the heaviest parcel
-        parcelMaxDimensions:
-          $ref: '#/components/schemas/pickupscheduling.Dimensions'
-        comment:
-          type: string
-        references:
-          type: array
-          description: Reference of the pickup request, defined by the customer
-          items:
-            type: string
-        sendingDepot:
-          type: string
-          description: GeoRouting depot code 7 digits - BU code 3 digits + 4 | specificy for BRT - fill with the ID given by your representative
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/pickupscheduling.Message'
-    shipment.QrCode:
-      type: object
-      properties:
-        base64Data:
-          type: string
-          description: qr code data base64 encoded
-        media-type:
-          type: string
-          description: format of the label
-        pincode:
-          type: string
-          description: pin code
-    ShipmentInfos:
-      type: object
-      properties:
-        shipmentId:
-          type: string
-          description: Shipment ID Could be the ID of the first parcel of the list (master ID) or could be another ID specially created for that.
-        shipmentIdCKey:
-          type: string
-          description: Control character key compute from the shipmentId
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg)
         productCode:
           type: string
           description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
-        serviceCode:
-          type: string
-          description: Additional local service code, needed only in certain Business Units
-        additionalServiceCode:
-          type: string
-          description: DPD Additional Service required for specific services, describing first and last mile handling
-        dimensions:
-          $ref: '#/components/schemas/Dimensions'
-        weight:
-          type: string
-          description: Weight in grams units (e.g. 3000 equals 3kg)
-        exWorksDelivery:
-          type: boolean
-          description: Specific field for DPD DE. Specifies if the recipient has to pay the consignment.
-      required:
-      - productCode
-    ContactDetails:
-      type: object
-      properties:
-        contactPerson:
-          type: string
-          description: Name of the person to contact
-        phone1:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        phone2:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        fax:
-          type: string
-          description: 'Telephone/Fax number formatted. Has to be encoded in one of the following ways: * XXXXXXXX * +intcodeXXXXXXXX * 00intcodeXXXXXXXX where:  * XXXXXXXX is numeric and means the phone/fax number * intcode is the numeric country code with a length from 1 to 4. Without international code, the phone number has to be understood as a domestic one.'' '
-        email:
-          type: string
-          description: Email address
-    shipment.Insurance:
-      type: object
-      properties:
-        insuranceAmount:
-          $ref: '#/components/schemas/shipment.Amount'
-        insuranceParcelContent:
-          type: string
-          description: Description of parcel for insurance
-    colreq.Response:
-      type: object
-      properties:
-        collectionId:
-          type: string
-        debugList:
-          type: array
-          items:
-            $ref: '#/components/schemas/colreq.Debug'
-        parcelId:
-          type: string
-        statusList:
-          type: array
-          items:
-            $ref: '#/components/schemas/colreq.Status'
-    Sender:
+    colreq.CollectionPoint:
       type: object
       properties:
         customerInfos:
-          $ref: '#/components/schemas/CustomerInfos'
-        pudoId:
-          type: string
-          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
+          $ref: '#/components/schemas/colreq.CustomerInfos'
+        address:
+          $ref: '#/components/schemas/colreq.Address'
         addressId:
           type: string
-          description: sender AddressId (for CZ, SK, SPEEDY, BALTICS)
-        address:
-          $ref: '#/components/schemas/Address'
+          description: sender AddressId
         contact:
-          $ref: '#/components/schemas/ContactDetails'
+          $ref: '#/components/schemas/colreq.ContactDetails'
         comment:
           type: string
         gln:
@@ -3003,229 +3211,21 @@ components:
           type: string
           description: Define the owner of the customer account customer. This owner is responsible to bill the parcel.
         legalEntity:
-          $ref: '#/components/schemas/LegalEntity'
-        maskedSender:
-          $ref: '#/components/schemas/MaskedSender'
-    Collection:
+          $ref: '#/components/schemas/colreq.LegalEntity'
+    CollectionInfos:
       type: object
       properties:
-        requestId:
+        serviceCode:
           type: string
-          description: The order of collection request.
-        collectionInfos:
-          $ref: '#/components/schemas/CollectionInfos'
-        customerReferenceNumbers:
-          type: array
-          items:
-            type: string
-        collectionPoint:
-          $ref: '#/components/schemas/CollectionPoint'
-        customer:
-          $ref: '#/components/schemas/Customer'
-        receiver:
-          $ref: '#/components/schemas/Receiver'
-        parcel:
-          $ref: '#/components/schemas/Parcel'
-        pickup:
-          $ref: '#/components/schemas/Pickup'
-      required:
-      - collectionPoint
-      - parcel
-      - receiver
-    colreq.Parcel:
-      type: object
-      properties:
-        parcelInfos:
-          $ref: '#/components/schemas/colreq.ParcelInfos'
-        parcelRank:
+          description: 'SEUR specificity. Possible values: 1, 31'
+        dimensions:
+          $ref: '#/components/schemas/Dimensions'
+        weight:
           type: string
-          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
-        senderParcelRefs:
-          type: array
-          description: List of sender parcels references
-          items:
-            type: string
-        partnerParcelRefs:
-          type: array
-          description: Partner´s own parcel reference field
-          items:
-            type: string
-        insurance:
-          $ref: '#/components/schemas/colreq.Insurance'
-        hazardousLimitedQuantities:
-          type: boolean
-          description: 'Limited quantities of hazardous goods parcel value. '
-        hazardousPackingCode:
+          description: Weight in grams units without decimal delimiter (e.g. 3000 equals 3kg)
+        productCode:
           type: string
-          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
-        parcelContent:
-          type: string
-          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
-        cod:
-          $ref: '#/components/schemas/colreq.Cod'
-    Label:
-      type: object
-      properties:
-        base64Data:
-          type: string
-        media-type:
-          type: string
-        qrcode:
-          type: string
-          description: BALTICS specificity, format always in PNG
-        pincode:
-          type: string
-          description: BALTICS specificity
-    InterInvoiceLine:
-      type: object
-      properties:
-        invoicePosition:
-          type: string
-          description: Line number of the invoice
-        quantityOfItems:
-          type: string
-          description: Quantity of items per article or invoice line even for low / mid / high value or any type of customer
-        content:
-          type: string
-          description: Content (Depending of the destination system. Could be cut by some system to the first 35 characters)
-        amountOfPosition:
-          type: number
-          format: float
-        manufacturedCountry:
-          type: string
-        netWeight:
-          type: string
-          description: Total weight of the articles in the current line, excluding packaging, in grams.
-        grossWeight:
-          type: string
-          description: Total weight of the articles including packaging in the current line, in grams.
-        customerProductCode:
-          type: string
-          description: Internal Customer product code
-        productDescription:
-          type: string
-          description: Short description of the product
-        fabricComposition:
-          type: string
-          description: Description of fabric composition
-        importTarifCode:
-          type: string
-        exportTarifCode:
-          type: string
-        goodsWebPage:
-          type: string
-          format: uri
-        parcelRank:
-          type: string
-          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
-    shipment.Dimensions:
-      type: object
-      properties:
-        length:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        width:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-        height:
-          type: integer
-          format: int32
-          description: Dimmension in cm units
-    colreq.Collection:
-      type: object
-      properties:
-        requestId:
-          type: string
-          description: The order of collection request.
-        collectionInfos:
-          $ref: '#/components/schemas/colreq.CollectionInfos'
-        customerReferenceNumbers:
-          type: array
-          items:
-            type: string
-        collectionPoint:
-          $ref: '#/components/schemas/colreq.CollectionPoint'
-        customer:
-          $ref: '#/components/schemas/colreq.Customer'
-        receiver:
-          $ref: '#/components/schemas/colreq.Receiver'
-        parcel:
-          $ref: '#/components/schemas/colreq.Parcel'
-        pickup:
-          $ref: '#/components/schemas/colreq.Pickup'
-      required:
-      - collectionPoint
-      - parcel
-      - receiver
-    shipment.Parcel:
-      type: object
-      properties:
-        parcelInfos:
-          $ref: '#/components/schemas/shipment.ParcelInfos'
-        parcelRank:
-          type: string
-          description: Rank of the parcel within a multi-piece shipment. Set to one for the masterpiece of the shipment or for a single piece. Default = Blank
-        senderParcelRefs:
-          type: array
-          description: List of sender parcels references
-          items:
-            type: string
-        partnerParcelRefs:
-          type: array
-          description: Partner´s own parcel reference field
-          items:
-            type: string
-        insurance:
-          $ref: '#/components/schemas/shipment.Insurance'
-        hazardousLimitedQuantities:
-          type: boolean
-          description: 'Limited quantities of hazardous goods parcel value. '
-        hazardousPackingCode:
-          type: string
-          description: 'Packing code * `0A` Thin sheet packing * `0A1` Thin sheet packing with non removable head * `0A2` Thin sheet packing with removable head * `1A` Steel barrel * `1A1` Steel barrel with non removable head * `1A2` Steel barrel with removable head * `1B` Aluminum barrel * `1B1` Aluminum barrel with non removable head * `1B2` Aluminum barrel with removable head * `1H` Plastics barrel * `1H1` Plastics barrel with non removable head * `1H2` Plastics barrel with removable head * `3A` Steel canister * `3A1` Steel canister with non removable head * `3A2` Steel canister with removable head * `3B` Aluminum canister * `3B1`  Aluminum canister with non removable head * `3B2` Aluminum canister with removable head * `3H` Plastics canister * `3H1` Plastics canister with non removable head * `3H2` Plastics canister with removable head * `4A` Steel crates * `4B` Aluminum crate * `4D` Plywood crate * `4G` Cardboard crate * `4H` Plastics crate * `4H1` Plastics crate-plastics expanded * `4H2` Plastics crate-plastics solid * `5H` Plastics bags * `5M` Paper bags * `6H` Combination packing '
-        parcelContent:
-          type: string
-          description: Content (Depending of the destination systems. Could be cut by some system to the first 35 characters) The language recommended in this field is English
-        cod:
-          $ref: '#/components/schemas/shipment.Cod'
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Message'
-        hazardous:
-          type: array
-          items:
-            $ref: '#/components/schemas/shipment.Hazardous'
-        reference:
-          type: string
-          description: Field used only by PL customers to transmit the reference associated with the parcel number.
-    shipment.Debug:
-      type: object
-      properties:
-        request:
-          type: string
-        response:
-          type: string
-        methodName:
-          type: string
-    shipment.Receiver:
-      type: object
-      properties:
-        customerInfos:
-          $ref: '#/components/schemas/shipment.CustomerInfos'
-        pudoId:
-          type: string
-          description: 'ID number of PUDO point (parcel shop, post office, customer network point, etc., .) This field must use the GeoPost standard PUDO definition (Mandatory for the Cross Border delivery) e.g: CC12345 with: CC: Country Code compliant with ISO 3166-1: 2 Alpha Numerical Characters 12345: PUDO Number'' '
-        address:
-          $ref: '#/components/schemas/shipment.Address'
-        contact:
-          $ref: '#/components/schemas/shipment.ContactDetails'
-        comment:
-          type: string
-        legalEntity:
-          $ref: '#/components/schemas/shipment.LegalEntity'
+          description: DPD Product used for the shipment ("101" for DPD CLASSIC, ...)
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,0 +1,1074 @@
+openapi: 3.2.0
+info:
+  title: DPDServices Courier Order Tag API
+  description: '# DPDServices
+
+
+    The purpose of this document is to describe the functionality and utilization of Web Service interfaces for the use of DPD clients. The solution provided offers a universal (independent of the client''s system) tool for transmitting information between client systems and DPD. The following Web Service methods are available:
+
+
+    - Validation of shipment data and assignment of waybill numbers
+
+    - Generation of waybill labels
+
+    - Generation of receipt protocols and data notification
+
+    - Courier booking
+
+    - Postal code lookup
+
+    - Courier availability check
+
+    - Validation of return shipment data with predefined waybill numbers and notification
+
+
+    Each Web Service method call is authorized by a login and password and marked with one of three error-handling policies:
+
+
+    - Termination of processing upon encountering the first error
+
+    - Ignoring shipments with incorrect data
+
+    - Termination of processing upon encountering the first error and cancellation of processed shipments before the error occurred. (This option is available only in some Web Service methods)
+
+
+    A client integrated with DPD Poland through this solution can be assured of the compliance of prepared shipments with the current standard, which implies an improvement in the efficiency and reliability of services offered by our courier company. ## Environments
+
+
+    **Production environment:**
+
+    Production services are available at: https://dpdservices.dpd.com.pl
+
+
+    **Demo environment:**
+
+    Demo services are available at: https://dpdservicesdemo.dpd.com.pl
+
+
+    To access the DEMO environment, you will need the following login credentials:
+
+
+    - **Login:** test
+
+    - **Password:** thetu4Ee
+
+    - **Master FID:** 1495
+
+
+    ## Authentication
+
+
+    All endpoints require of **Basic Authentication** and the **x-dpd-fid: {{masterfid}}** header:
+
+
+    -->
+
+
+    ## Configuration of Login and Password
+
+
+    The complete configuration of a user account authorized to use the web service is carried out in DPD Poland''s systems after prior agreements with the client. # Available Services
+
+
+    Within the scope of generating a waybill, it''s possible to include services that modify various aspects related to parcel delivery. Depending on whether the parcel will be delivered domestically or internationally, the list of services will differ. Some services require specific conditions that must be met to be used. Validation of certain services may also exclude their simultaneous use. ### Services
+
+
+    | Service Code | Service | Domestic / International | Notes |
+
+    |-------------------------|---------------------------------------------------|--------------------------|-----------------------------------|
+
+    | B2C | B2C | `domestic` | Required Attributes:
+
+    `VALUE` - e.g. ''10:00-13:00'' |
+
+    | CARRY_IN | Carry in | `domestic` | |
+
+    | COD * | Cash on delivery | `domestic`
+
+    `international` | Currencies - only PLN, EUR, RON, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | CUD | Return shipment | `domestic` | |
+
+    | DECLARED_VALUE | Declared value | `domestic`
+
+    `international` | Shipment insurance. Currencies - only PLN, CHF, EUR, NOK, SEK, USD, GBP, HUF, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | DIGITAL_LABEL ** | Digital label service | `domestic` | Only for single-package shipments |
+
+    | DPD_EXPRESS | Air transport | `international` | |
+
+    | DPD_FOOD | Food transportation service | `domestic` | Only for specified postal codes
+
+    Required Attributes:
+
+    `LIMIT_DATE` - product''s expiration date (ISO-8601 format), which must not be less than 2 business days e.g. ''2039-12-31'' |
+
+    | DPD_LQ * | ADR transportation service | `domestic`
+
+    `international` | Dangerous shipment: ADR weight required |
+
+    | DPD_NEXT_DAY | Delivery on next day | `domestic` | |
+
+    | DPD_PICKUP | Parcel delivery service to the PUDO point | `domestic`
+
+    `international` | Only for specified postal codes
+
+    Required Attributes:
+
+    `PUDO` - e.g.'
+  version: 5.27.0
+  x-logo:
+    url: /redoc-ui/DPD_logo.svg
+servers:
+- url: https://dpdservices.dpd.com.pl
+  description: Generated server url
+security:
+- basicAuth: []
+tags:
+- name: courierOrderTag
+  x-displayName: Courier Booking
+paths:
+  /public/courierorder/v1/courierOrderAvailability:
+    get:
+      tags:
+      - courierOrderTag
+      summary: Check courier availability
+      description: 'Checks courier availability. The API allows you to check whether a courier can be ordered to a given address.
+
+
+        This method accepts the following input parameters:
+
+
+        - Country code in ISO 3166-1 alpha-2 format
+
+        - Postal code
+
+
+        On the DPD system side, the following operation is performed:
+
+
+        - Check the availability of a courier in a given location.
+
+
+        The method returns:
+
+
+        - Information about courier availability or error messages related to the parameters.'
+      operationId: getCourierOrderAvailability
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      - name: countryCode
+        in: query
+        description: Two letter country code
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+        example: PL
+      - name: zipCode
+        in: query
+        description: Postal code
+        required: true
+        schema:
+          type: string
+        example: '06400'
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCourierOrderAvailabilityResponse'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      x-codeSamples:
+      - lang: curl
+        label: GET
+        source: https://dpdservices.dpd.com.pl/public/courierorder/v1/courierOrderAvailability?countryCode=PL&zipCode=06400
+  /public/courierorder/v1/packagesPickupCall:
+    post:
+      tags:
+      - courierOrderTag
+      summary: Create courier order
+      description: 'Creates courier order. Generates pickup call id.
+
+
+        This method performs one of three operations selected by the user:
+
+
+        - **INSERT Operation**: Add a new courier order.
+
+        - **UPDATE Operation**: Modify an existing order.
+
+        - **CANCEL Operation**: Delete an existing order.
+
+
+        The method takes the following input parameters:
+
+
+        **INSERT Operation**:
+
+
+        - Simplified data about parcels and shipments, including:
+
+        - Payer''s information (payer number, cost center, name)
+
+        - Shipper''s information (name, first name, phone)
+
+        - Sender''s information (name, first name, address, city, postal code, phone)
+
+        - Details about parcel/shipment parameters (details in the web service interface description for ordering a courier)
+
+        - Preferred pickup date and time
+
+
+        **UPDATE Operation**:
+
+
+        - Order number, checksum, and strategy for handling a closed order
+
+        - Simplified data about parcels and shipments, including:
+
+        - Payer''s information (payer number, cost center, name)
+
+        - Shipper''s information (name, first name, phone)
+
+        - Sender''s information (name, first name, address, city, postal code, phone)
+
+        - Details about parcel/shipment parameters (details in the web service interface description for ordering a courier)
+
+        - Preferred pickup date and time
+
+
+        **CANCEL Operation**:
+
+
+        - Data related to the CANCEL operation: order number and checksum
+
+
+        On the DPD system side, the following operations are performed:
+
+
+        - Validation of the correctness of the transmitted data
+
+        - Receipt of information about the receipt/modification/deletion of an order in the DPD systems
+
+
+        The method returns:
+
+
+        - System confirmation of the successful/failed acceptance/modification/deletion of the order
+
+        - Order number for INSERT/UPDATE operations
+
+        - Checksum for INSERT/UPDATE operations'
+      operationId: packagesPickupCallInsert
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackagesPickupCallCreateRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackagesPickupCallCreateResponse'
+    delete:
+      tags:
+      - courierOrderTag
+      summary: Cancel courier order
+      description: Cancels courier order.
+      operationId: packagesPickupCallDelete
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      - name: orderNumber
+        in: query
+        description: Order number for cancelling
+        required: true
+        schema:
+          type: string
+        example: 2022042121
+      - name: checkSum
+        in: query
+        description: Order checksum returned during order creation. In future it can be more unique value like UUID
+        required: true
+        schema:
+          maxLength: 36
+          minLength: 8
+          type: string
+        example: 80222911
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackagesPickupCallUpdateResponse'
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      x-codeSamples:
+      - lang: curl
+        label: DELETE
+        source: https://dpdservices.dpd.com.pl/public/courierorder/v1/packagesPickupCall?orderNumber=2022042121&checkSum=80222911
+    patch:
+      tags:
+      - courierOrderTag
+      summary: Update courier order
+      description: Updates courier order.
+      operationId: packagesPickupCallUpdate
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PackagesPickupCallUpdateRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PackagesPickupCallUpdateResponse'
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+components:
+  schemas:
+    UpdateMode:
+      type: string
+      description: 'Update mode. Allowed values:
+
+        - DONT_CREATE_NEW_IF_CLOSED - If the updated order is already closed, no new one will be created
+
+        - CREATE_NEW_IF_CLOSED - If the updated order is already closed, a new one will be created
+
+        '
+      example: CREATE_NEW_IF_CLOSED
+      enum:
+      - DONT_CREATE_NEW_IF_CLOSED
+      - CREATE_NEW_IF_CLOSED
+    UpdateSender:
+      required:
+      - address
+      - fullName
+      - name
+      - phone
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender name
+          example: Sender name
+        fullName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender full name
+          example: Sender full name
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender address
+          example: ul. Mineralna 5
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Sender city
+          example: Warszawa
+        phone:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Sender phone number
+          example: '801400373'
+      description: Sender
+    UpdatePackagesForCollection:
+      required:
+      - packagesParams
+      - payer
+      - sender
+      type: object
+      properties:
+        payer:
+          $ref: '#/components/schemas/UpdatePayer'
+        sender:
+          $ref: '#/components/schemas/UpdateSender'
+        packagesParams:
+          $ref: '#/components/schemas/PackagesParams'
+      description: Packages details for collection
+    SecurityErrorEnum:
+      type: string
+      description: 'Allowed values:
+
+        - MISSING_PERMISSION - The user does not have sufficient permissions
+
+        '
+      enum:
+      - MISSING_PERMISSION
+    Pallet:
+      required:
+      - count
+      - maxHeight
+      - maxWeight
+      - weight
+      type: object
+      properties:
+        count:
+          type: integer
+          description: Pallet count
+          format: int32
+          example: 0
+        weight:
+          type: number
+          description: Total pallet weight
+          example: 1
+        maxWeight:
+          maximum: 700
+          type: number
+          description: Max pallet weight
+          example: 1
+        maxHeight:
+          maximum: 180
+          type: number
+          description: Max pallet height
+          example: 1
+      description: Pallet parameters
+    PackagesPickupCallUpdateResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        checkSum:
+          type: string
+          description: Checksum. Currently value is numeric. But in future checksum will be strengthened to much more unique value, i.e. UUID
+          example: '12345678'
+        orderNumber:
+          type: string
+          description: Order number
+        status:
+          $ref: '#/components/schemas/StatusInfo'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    Error401:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SecurityErrorEnum'
+    OrderType:
+      type: string
+      description: 'Order type. Allowed values:
+
+        - DOMESTIC - Domestic order
+
+        - INTERNATIONAL_EXPRESS - International order, classic services on roads
+
+        - INTERNATIONAL_AIR - International order. Express service by planes
+
+        '
+      example: DOMESTIC
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL_EXPRESS
+      - INTERNATIONAL_AIR
+    Errors:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          description: Error list
+          items:
+            $ref: '#/components/schemas/Error'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    GetCourierOrderAvailabilityStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - OK. Found courier availability range
+
+        - RANGE_NOT_FOUND - Not found courier availability range
+
+        - POSTAL_CODE_NOT_FOUND - Postal code not found
+
+        - WRONG_POSTAL_PATTERN - Incorrect postal code pattern
+
+        - COUNTRY_CODE_NOT_FOUND - Country code not found
+
+        - UNKNOWN_ERROR - Unknown error
+
+        - DISABLED_API - Disabled API
+
+        '
+      enum:
+      - OK
+      - RANGE_NOT_FOUND
+      - POSTAL_CODE_NOT_FOUND
+      - WRONG_POSTAL_PATTERN
+      - COUNTRY_CODE_NOT_FOUND
+      - UNKNOWN_ERROR
+      - DISABLED_API
+    PackagesPickupCallUpdateRequest:
+      required:
+      - checkSum
+      - orderNumber
+      - packagesForCollection
+      - pickupDate
+      - pickupTimeFrom
+      - pickupTimeTo
+      - updateMode
+      - waybillsReady
+      type: object
+      properties:
+        orderNumber:
+          type: string
+          description: Order number returned during order creation
+          example: '2022042121'
+        checkSum:
+          maximum: 36
+          minimum: 8
+          maxLength: 36
+          minLength: 8
+          type: string
+          description: Order checksum returned during order creation. In future it can be more unique value like UUID
+          example: '80222911'
+        updateMode:
+          $ref: '#/components/schemas/UpdateMode'
+        pickupDate:
+          type: string
+          description: Pickup date. Date cannot be in the past. ISO date yyyy-MM-dd
+          format: date
+          example: '2022-10-13'
+        pickupTimeFrom:
+          maxLength: 5
+          minLength: 5
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])
+          type: string
+          description: Pickup time from
+          example: '12:00'
+        pickupTimeTo:
+          maxLength: 5
+          minLength: 5
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])
+          type: string
+          description: Pickup time to
+          example: '16:00'
+        waybillsReady:
+          type: boolean
+          description: Waybills are ready
+          example: true
+        packagesForCollection:
+          $ref: '#/components/schemas/UpdatePackagesForCollection'
+    PickupErrorDetail:
+      type: string
+      description: 'Allowed values:
+
+        - INCORRECT_VALUE - incorrect value
+
+        - NOT_FOUND - not found
+
+        - INCORRECT_PICKUP_TIME - incorrect pickup time
+
+        - INCORRECT_CHECKSUM - incorrect checksum
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        - VALIDATION - validation
+
+        - ORDER_NUMBER_ERROR - order number error
+
+        - ORDER_CLOSED_STATUS - order closed status
+
+        - INCORRECT_STATUS - incorrect status
+
+        '
+      enum:
+      - INCORRECT_VALUE
+      - NOT_FOUND
+      - INCORRECT_PICKUP_TIME
+      - INCORRECT_CHECKSUM
+      - SERVICE_UNAVAILABLE
+      - VALIDATION
+      - ORDER_NUMBER_ERROR
+      - ORDER_CLOSED_STATUS
+      - INCORRECT_STATUS
+    PackagesForCollection:
+      required:
+      - orderer
+      - packagesParams
+      - payer
+      - sender
+      type: object
+      properties:
+        payer:
+          $ref: '#/components/schemas/Payer'
+        orderer:
+          $ref: '#/components/schemas/Orderer'
+        sender:
+          $ref: '#/components/schemas/Sender'
+        packagesParams:
+          $ref: '#/components/schemas/PackagesParams'
+      description: Packages details for collection
+    PackagesPickupCallCreateResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        checkSum:
+          type: string
+          description: Checksum. Currently value is numeric. But in future checksum will be strengthened to much more unique value, i.e. UUID
+          example: '12345678'
+        orderNumber:
+          type: string
+          description: Created order number
+        status:
+          $ref: '#/components/schemas/StatusInfo'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PickupCallParcel:
+      required:
+      - count
+      - maxDepth
+      - maxHeight
+      - maxWeight
+      - maxWidth
+      - weight
+      type: object
+      properties:
+        count:
+          maximum: 999999
+          minimum: 0
+          type: integer
+          description: Parcel count
+          format: int32
+          example: 0
+        weight:
+          maximum: 999999
+          type: number
+          description: Total parcel weight
+          example: 1
+        maxWeight:
+          maximum: 50
+          type: number
+          description: Parcel max weight
+          example: 1
+        maxHeight:
+          maximum: 300
+          type: number
+          description: Parcel max height
+          example: 1
+        maxWidth:
+          maximum: 300
+          type: number
+          description: Parcel max width
+          example: 1
+        maxDepth:
+          maximum: 300
+          type: number
+          description: Parcel max depth
+          example: 1
+      description: Parcel parameters
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PickupErrorDetail'
+        description:
+          type: string
+          description: Error description
+        fields:
+          type: string
+          description: Field with error
+      description: Errors list
+    UpdatePayer:
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Payer name
+          example: Payer name
+      description: Payer
+    RangesResponse:
+      type: object
+      properties:
+        offset:
+          type: integer
+          description: Offset
+          format: int32
+        range:
+          type: string
+          description: Courier availability hours
+    PackagesParams:
+      required:
+      - doxCount
+      type: object
+      properties:
+        doxCount:
+          maximum: 9999
+          type: integer
+          description: Number of envelopes
+          format: int32
+          example: 0
+        parcel:
+          $ref: '#/components/schemas/PickupCallParcel'
+        pallet:
+          $ref: '#/components/schemas/Pallet'
+      description: Packages params
+    Sender:
+      required:
+      - address
+      - city
+      - fullName
+      - name
+      - phone
+      - postalCode
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender name
+          example: Sender name
+        fullName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender full name
+          example: Sender full name
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Sender address
+          example: ul. Mineralna 5
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Sender city
+          example: Warszawa
+        postalCode:
+          maxLength: 5
+          minLength: 4
+          type: string
+          description: Sender postal code
+          example: '02274'
+        phone:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Sender phone number
+          example: '801400373'
+      description: Sender
+    Payer:
+      required:
+      - number
+      type: object
+      properties:
+        number:
+          type: integer
+          description: Payer number
+          format: int32
+          example: 67588
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Payer name
+          example: Payer name
+        costCenter:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Optional payer cost center
+          example: Payer cost center
+      description: Payer
+    Orderer:
+      required:
+      - fullName
+      - name
+      - phone
+      type: object
+      properties:
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Orderer name
+          example: Orderer name
+        fullName:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Orderer full name
+          example: Orderer full name
+        phone:
+          maxLength: 20
+          minLength: 0
+          type: string
+          description: Orderer phone
+          example: '555666777'
+      description: Orderer
+    PackagesPickupCallCreateRequest:
+      required:
+      - orderType
+      - packagesForCollection
+      - pickupDate
+      - pickupTimeFrom
+      - pickupTimeTo
+      - waybillsReady
+      type: object
+      properties:
+        pickupDate:
+          type: string
+          description: Pickup date. Date cannot be in the past. ISO date yyyy-MM-dd
+          format: date
+          example: '2022-10-13'
+        pickupTimeFrom:
+          maxLength: 5
+          minLength: 5
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])
+          type: string
+          description: Pickup time from
+          example: '12:00'
+        pickupTimeTo:
+          maxLength: 5
+          minLength: 5
+          pattern: ^(2[0-3]|[01]?[0-9]):([0-5]?[0-9])
+          type: string
+          description: Pickup time to
+          example: '16:00'
+        orderType:
+          $ref: '#/components/schemas/OrderType'
+        waybillsReady:
+          type: boolean
+          description: Are waybills prepared
+          example: true
+        orderNumber:
+          maxLength: 14
+          minLength: 14
+          type: string
+          description: Order number in format AD1 + 11 digits
+          example: AD112345678900
+        packagesForCollection:
+          $ref: '#/components/schemas/PackagesForCollection'
+    StatusInfo:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PackagesPickupCallStatus'
+        errorDetails:
+          type: array
+          description: Errors list
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+      description: Pickup call update order status
+    GetCourierOrderAvailabilityResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GetCourierOrderAvailabilityStatus'
+        ranges:
+          type: array
+          items:
+            $ref: '#/components/schemas/RangesResponse'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PackagesPickupCallStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - correct order change
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - disabled API
+
+        - DISALLOWED_FID - disallowed fid
+
+        - VALIDATION_ERROR - validation error
+
+        - NOT_FOUND - not found
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        '
+      enum:
+      - OK
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - DISALLOWED_FID
+      - VALIDATION_ERROR
+      - NOT_FOUND
+      - SERVICE_UNAVAILABLE
+    Error:
+      required:
+      - code
+      - rejectedValue
+      - userMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code with the error category (group)
+        subCode:
+          type: string
+          description: Error code
+        userMessage:
+          type: string
+          description: Error code description
+          example: Receiver postal code is required
+        rejectedValue:
+          type: string
+          description: Invalid value
+        field:
+          type: string
+          description: Full path of the field that contains the error
+          example: receiver.postalCode
+      description: Error list
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-tagGroups:
+- name: API's
+  tags:
+  - postalCodeTag
+  - packagesParcelsTag
+  - labelsProtocolsTag
+  - courierOrderTag
+  - returnParcelTag
+  - dropOffPinTag

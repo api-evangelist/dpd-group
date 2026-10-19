@@ -456,3 +456,63 @@ apis:
   properties:
   - type: WSDL
     url: wsdl/dpd-pl-package-obj-services.wsdl
+- aid: dpd-group:dpd-group-courierordertag-api
+  name: DPD Group Courier Order Tag API
+  description: The courierOrderTag API from DPD Group — 2 operation(s) for courierordertag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - courierOrderTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-courierordertag-api-openapi.yml
+- aid: dpd-group:dpd-group-dropoffpintag-api
+  name: DPD Group Drop Off Pin Tag API
+  description: The dropOffPinTag API from DPD Group — 1 operation(s) for dropoffpintag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - dropOffPinTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-dropoffpintag-api-openapi.yml
+- aid: dpd-group:dpd-group-labelsprotocolstag-api
+  name: DPD Group Labels Protocols Tag API
+  description: The labelsProtocolsTag API from DPD Group — 2 operation(s) for labelsprotocolstag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - labelsProtocolsTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-labelsprotocolstag-api-openapi.yml
+- aid: dpd-group:dpd-group-packagesparcelstag-api
+  name: DPD Group Packages Parcels Tag API
+  description: The packagesParcelsTag API from DPD Group — 4 operation(s) for packagesparcelstag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - packagesParcelsTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-packagesparcelstag-api-openapi.yml
+- aid: dpd-group:dpd-group-postalcodetag-api
+  name: DPD Group Postal Code Tag API
+  description: The postalCodeTag API from DPD Group — 1 operation(s) for postalcodetag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - postalCodeTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-postalcodetag-api-openapi.yml
+- aid: dpd-group:dpd-group-returnparceltag-api
+  name: DPD Group Return Parcel Tag API
+  description: The returnParcelTag API from DPD Group — 3 operation(s) for returnparceltag.
+  humanURL: https://geoapi.dpd.cz/v1
+  baseURL: https://geoapi.dpd.cz/v1
+  tags:
+  - returnParcelTag
+  properties:
+  - type: OpenAPI
+    url: openapi/dpd-group-returnparceltag-api-openapi.yml

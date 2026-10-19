@@ -1,0 +1,522 @@
+openapi: 3.2.0
+info:
+  title: DPDServices Drop Off Pin Tag API
+  description: '# DPDServices
+
+
+    The purpose of this document is to describe the functionality and utilization of Web Service interfaces for the use of DPD clients. The solution provided offers a universal (independent of the client''s system) tool for transmitting information between client systems and DPD. The following Web Service methods are available:
+
+
+    - Validation of shipment data and assignment of waybill numbers
+
+    - Generation of waybill labels
+
+    - Generation of receipt protocols and data notification
+
+    - Courier booking
+
+    - Postal code lookup
+
+    - Courier availability check
+
+    - Validation of return shipment data with predefined waybill numbers and notification
+
+
+    Each Web Service method call is authorized by a login and password and marked with one of three error-handling policies:
+
+
+    - Termination of processing upon encountering the first error
+
+    - Ignoring shipments with incorrect data
+
+    - Termination of processing upon encountering the first error and cancellation of processed shipments before the error occurred. (This option is available only in some Web Service methods)
+
+
+    A client integrated with DPD Poland through this solution can be assured of the compliance of prepared shipments with the current standard, which implies an improvement in the efficiency and reliability of services offered by our courier company. ## Environments
+
+
+    **Production environment:**
+
+    Production services are available at: https://dpdservices.dpd.com.pl
+
+
+    **Demo environment:**
+
+    Demo services are available at: https://dpdservicesdemo.dpd.com.pl
+
+
+    To access the DEMO environment, you will need the following login credentials:
+
+
+    - **Login:** test
+
+    - **Password:** thetu4Ee
+
+    - **Master FID:** 1495
+
+
+    ## Authentication
+
+
+    All endpoints require of **Basic Authentication** and the **x-dpd-fid: {{masterfid}}** header:
+
+
+    -->
+
+
+    ## Configuration of Login and Password
+
+
+    The complete configuration of a user account authorized to use the web service is carried out in DPD Poland''s systems after prior agreements with the client. # Available Services
+
+
+    Within the scope of generating a waybill, it''s possible to include services that modify various aspects related to parcel delivery. Depending on whether the parcel will be delivered domestically or internationally, the list of services will differ. Some services require specific conditions that must be met to be used. Validation of certain services may also exclude their simultaneous use. ### Services
+
+
+    | Service Code | Service | Domestic / International | Notes |
+
+    |-------------------------|---------------------------------------------------|--------------------------|-----------------------------------|
+
+    | B2C | B2C | `domestic` | Required Attributes:
+
+    `VALUE` - e.g. ''10:00-13:00'' |
+
+    | CARRY_IN | Carry in | `domestic` | |
+
+    | COD * | Cash on delivery | `domestic`
+
+    `international` | Currencies - only PLN, EUR, RON, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | CUD | Return shipment | `domestic` | |
+
+    | DECLARED_VALUE | Declared value | `domestic`
+
+    `international` | Shipment insurance. Currencies - only PLN, CHF, EUR, NOK, SEK, USD, GBP, HUF, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | DIGITAL_LABEL ** | Digital label service | `domestic` | Only for single-package shipments |
+
+    | DPD_EXPRESS | Air transport | `international` | |
+
+    | DPD_FOOD | Food transportation service | `domestic` | Only for specified postal codes
+
+    Required Attributes:
+
+    `LIMIT_DATE` - product''s expiration date (ISO-8601 format), which must not be less than 2 business days e.g. ''2039-12-31'' |
+
+    | DPD_LQ * | ADR transportation service | `domestic`
+
+    `international` | Dangerous shipment: ADR weight required |
+
+    | DPD_NEXT_DAY | Delivery on next day | `domestic` | |
+
+    | DPD_PICKUP | Parcel delivery service to the PUDO point | `domestic`
+
+    `international` | Only for specified postal codes
+
+    Required Attributes:
+
+    `PUDO` - e.g.'
+  version: 5.27.0
+  x-logo:
+    url: /redoc-ui/DPD_logo.svg
+servers:
+- url: https://dpdservices.dpd.com.pl
+  description: Generated server url
+security:
+- basicAuth: []
+tags:
+- name: dropOffPinTag
+  x-displayName: Pin Generation
+paths:
+  /public/shipment/v1/generateDropOffPin:
+    post:
+      tags:
+      - dropOffPinTag
+      summary: Generate drop off pin
+      description: 'Generates Pins. Advises parcels.
+
+
+        The method accepts the following input parameters:
+
+
+        A list of shipments to be processed
+
+        Generation policy (error handling)
+
+        The following operations are performed on the DPD system side:
+
+
+        Generate Pin using sessionId, waybill or reference provided
+
+        Pin can be generated based on one of the following criteria:
+
+
+        Session ID: Identifies parcels within a session
+
+        Package reference: Customer reference number associated with package
+
+        Parcel waybill: Unique identifier for individual parcel
+
+        Parcel reference: Customer reference number associated with parcel
+
+        The method returns:
+
+
+        A session with a list of shipments and parcels with assigned shipping numbers, customer reference numbers and validation statuses
+
+        Generated Pins'
+      operationId: generateDropOffPin
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateDropOffPinRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateDropOffPinResponse'
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+components:
+  schemas:
+    PinPackageResponse:
+      required:
+      - parcels
+      - statusInfo
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Reference
+        statusInfo:
+          $ref: '#/components/schemas/PinStatusInfo'
+        parcels:
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/PinParcelResponse'
+      description: Packages
+    GenerateDropOffPinRequest:
+      required:
+      - pinSearchParams
+      type: object
+      properties:
+        pinSearchParams:
+          $ref: '#/components/schemas/PinSearchParams'
+    Errors:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          description: Error list
+          items:
+            $ref: '#/components/schemas/Error'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    SecurityErrorEnum:
+      type: string
+      description: 'Allowed values:
+
+        - MISSING_PERMISSION - The user does not have sufficient permissions
+
+        '
+      enum:
+      - MISSING_PERMISSION
+    GenerateDropOffPinStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - label successfully printed.
+
+        - NOT_FOUND - not found.
+
+        - NOT_PROCESSED - not processed.
+
+        - UNKNOWN_ERROR - unknown error.
+
+        - DISABLED_API - API is disabled.
+
+        - ERROR_NO_FID_PERMISSION - missing permissions for FID.
+
+        - INCORRECT_DATA - incorrect data.
+
+        - DISALLOWED_FID - fid is disallowed.
+
+        '
+      enum:
+      - OK
+      - NOT_FOUND
+      - NOT_PROCESSED
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - ERROR_NO_FID_PERMISSION
+      - INCORRECT_DATA
+      - DISALLOWED_FID
+    PinSession:
+      required:
+      - type
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        packages:
+          maxItems: 30
+          minItems: 0
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/PinPackage'
+        type:
+          $ref: '#/components/schemas/PinSessionType'
+      description: Session
+    PinParcel:
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Waybill
+      description: Parcels
+    PinSessionType:
+      type: string
+      description: 'Allowed values:
+
+        - DOMESTIC - Session for domestic packages
+
+        - INTERNATIONAL - Session for international packages
+
+        '
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+    PinSearchParams:
+      required:
+      - policy
+      - session
+      type: object
+      properties:
+        policy:
+          $ref: '#/components/schemas/PinGenerationPolicy'
+        validityPeriod:
+          maximum: 30
+          type: integer
+          description: Validity period of pin in days. Default is set by DPD and is currently 14 days
+          format: int32
+          example: 7
+          default: 14
+        session:
+          $ref: '#/components/schemas/PinSession'
+      description: Search parameters
+    PinGenerationPolicy:
+      type: string
+      description: 'Method of generating drop off pin. Possible values:
+
+        - STOP_ON_FIRST_ERROR - generating drop off pin for parcels is interrupted in the case of the first encountered error. Drop off pins generated up to the first error will be returned.
+
+        - IGNORE_ERRORS - no drop off pin generation interruption in case of validation error
+
+        '
+      enum:
+      - STOP_ON_FIRST_ERROR
+      - IGNORE_ERRORS
+    PinParcelResponse:
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Reference. Identifier passed from client. Must be unique between requests.
+        waybill:
+          type: string
+          description: Waybill
+        statusInfo:
+          $ref: '#/components/schemas/PinStatusInfo'
+        dropOffPin:
+          type: string
+          description: DropOffPin
+      description: Parcels
+    PinPackage:
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Reference - identifier passed by client
+        parcels:
+          maxItems: 100
+          minItems: 0
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/PinParcel'
+      description: Packages
+    PinGenerationStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - Successfully printed
+
+        - NOT_FOUND - Packages and parcels not found
+
+        - NOT_PROCESSED - Not processed
+
+        - INCORRECT_PKGS_FOR_SESSION_TYPE - Incorrect packages for session type
+
+        - PARCEL_LIMIT_EXCEEDED - Parcel limit exceeded
+
+        - ACCESS_DENIED_FOR_FID - Access denied for FID
+
+        - UNKNOWN_ERROR - Unknown error
+
+        - ALREADY_ADVICED - Waybill already adviced
+
+        - ADVICE_ERROR - Advice error
+
+        '
+      enum:
+      - OK
+      - NOT_FOUND
+      - NOT_PROCESSED
+      - INCORRECT_PKGS_FOR_SESSION_TYPE
+      - PARCEL_LIMIT_EXCEEDED
+      - ACCESS_DENIED_FOR_FID
+      - UNKNOWN_ERROR
+      - ALREADY_ADVICED
+      - ADVICE_ERROR
+    PinSessionResponse:
+      required:
+      - statusInfo
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        statusInfo:
+          $ref: '#/components/schemas/PinStatusInfo'
+        packages:
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/PinPackageResponse'
+      description: Generate drop off pin session
+    Error401:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SecurityErrorEnum'
+    GenerateDropOffPinResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GenerateDropOffPinStatus'
+        session:
+          $ref: '#/components/schemas/PinSessionResponse'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PinStatusInfo:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PinGenerationStatus'
+        description:
+          type: string
+          description: Error description if occurred
+      description: Status info
+    Error:
+      required:
+      - code
+      - rejectedValue
+      - userMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code with the error category (group)
+        subCode:
+          type: string
+          description: Error code
+        userMessage:
+          type: string
+          description: Error code description
+          example: Receiver postal code is required
+        rejectedValue:
+          type: string
+          description: Invalid value
+        field:
+          type: string
+          description: Full path of the field that contains the error
+          example: receiver.postalCode
+      description: Error list
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-tagGroups:
+- name: API's
+  tags:
+  - postalCodeTag
+  - packagesParcelsTag
+  - labelsProtocolsTag
+  - courierOrderTag
+  - returnParcelTag
+  - dropOffPinTag

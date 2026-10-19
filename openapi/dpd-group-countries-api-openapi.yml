@@ -4,7 +4,43 @@ info:
     email: info@dpd.cz
     name: DPD CZ
     url: https://www.dpd.com/cz/cs/
-  description: This documentations describes what the GeoAPI is and how to use it properly.
+  description: 'This documentations describes what the GeoAPI is and how to use it properly.
+
+
+    **What is GeoAPI**
+
+
+    The GeoAPI allows DPD customers to manage (CRUD) their shipments and shipment related data.
+
+
+    The main purpose of the API is to provide the customer the means for:
+
+
+    - Creating and managing new shipments
+
+    - Ordering pickups for parcels
+
+    - Printing parcel labels
+
+    - Listing all available shipping services
+
+    - Validating shipping routes
+
+
+    It also provides methods for listing your pickup addresses and the details of individual parcels.
+
+
+    Each user is assigned a user account under which he is able to track multiple customer DSWs (customer numbers).
+
+    You as a customer can use a single GeoAPI account to send shipments under multiple DPD customer numbers.
+
+
+    **V2 documentation**
+
+
+    Note that some of the endpoints have a new version 2 available.
+
+    For complete V2 documentation, please visit /v2/swagger.'
   title: DPD Geo Countries API
   version: 1.0.0
 servers:
@@ -43,72 +79,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    CountryAlpha3:
-      description: Country ISO Alpha-3 code
-      maxLength: 3
-      minLength: 3
-      type: string
-    Error_description:
-      oneOf:
-      - type: string
-      - type: number
-      - additionalProperties: true
-        description: 'Object providing detailed information specific to the encountered error.
-
-
-          This may vary across different error responses.
-
-          '
-        type: object
-    Error:
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        description:
-          $ref: '#/components/schemas/Error_description'
-      required:
-      - code
-      - message
-      type: object
-    Currency:
-      description: Currency in the ISO 4217 format
-      example: CZK
-      maxLength: 3
-      minLength: 3
-      type: string
-    CountryNumeric:
-      description: Country ISO numeric code
-      example: '203'
-      maxLength: 3
-      minLength: 3
-      type: string
-    Country:
-      properties:
-        localizedName:
-          description: Localized country name (e.g. in Czech)
-          type: string
-        numericCode:
-          $ref: '#/components/schemas/CountryNumeric'
-        alpha2Code:
-          $ref: '#/components/schemas/CountryAlpha2'
-        alpha3Code:
-          $ref: '#/components/schemas/CountryAlpha3'
-        codInfo:
-          $ref: '#/components/schemas/Country_codInfo'
-      required:
-      - alpha2Code
-      - alpha3Code
-      - codInfo
-      - localizedName
-      - numericCode
-      type: object
-    CountryAlpha2:
-      description: Country ISO Alpha-2 code
-      maxLength: 2
-      minLength: 2
-      type: string
     Country_codInfo:
       description: Info about COD (Cash On Delivery) services for a country
       properties:
@@ -130,6 +100,72 @@ components:
 
             '
           type: number
+      type: object
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    Country:
+      properties:
+        localizedName:
+          description: Localized country name (e.g. in Czech)
+          type: string
+        numericCode:
+          $ref: '#/components/schemas/CountryNumeric'
+        alpha2Code:
+          $ref: '#/components/schemas/CountryAlpha2'
+        alpha3Code:
+          $ref: '#/components/schemas/CountryAlpha3'
+        codInfo:
+          $ref: '#/components/schemas/Country_codInfo'
+      required:
+      - alpha2Code
+      - alpha3Code
+      - codInfo
+      - localizedName
+      - numericCode
+      type: object
+    Currency:
+      description: Currency in the ISO 4217 format
+      example: CZK
+      maxLength: 3
+      minLength: 3
+      type: string
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
       type: object
   securitySchemes:
     ApiKeyAuth:

@@ -4,7 +4,43 @@ info:
     email: info@dpd.cz
     name: DPD CZ
     url: https://www.dpd.com/cz/cs/
-  description: This documentations describes what the GeoAPI is and how to use it properly.
+  description: 'This documentations describes what the GeoAPI is and how to use it properly.
+
+
+    **What is GeoAPI**
+
+
+    The GeoAPI allows DPD customers to manage (CRUD) their shipments and shipment related data.
+
+
+    The main purpose of the API is to provide the customer the means for:
+
+
+    - Creating and managing new shipments
+
+    - Ordering pickups for parcels
+
+    - Printing parcel labels
+
+    - Listing all available shipping services
+
+    - Validating shipping routes
+
+
+    It also provides methods for listing your pickup addresses and the details of individual parcels.
+
+
+    Each user is assigned a user account under which he is able to track multiple customer DSWs (customer numbers).
+
+    You as a customer can use a single GeoAPI account to send shipments under multiple DPD customer numbers.
+
+
+    **V2 documentation**
+
+
+    Note that some of the endpoints have a new version 2 available.
+
+    For complete V2 documentation, please visit /v2/swagger.'
   title: DPD Geo Pickup Orders API
   version: 1.0.0
 servers:
@@ -172,6 +208,239 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Address:
+      properties:
+        street:
+          $ref: '#/components/schemas/Street_1'
+        postalCode:
+          $ref: '#/components/schemas/PostalCode'
+        city:
+          $ref: '#/components/schemas/City_1'
+        houseNumber:
+          $ref: '#/components/schemas/HouseNumber'
+        country:
+          $ref: '#/components/schemas/CountryIdent'
+      required:
+      - city
+      - country
+      - postalCode
+      - street
+      type: object
+    ParcelIdent_oneOf:
+      properties:
+        parcelNumber:
+          $ref: '#/components/schemas/ParcelNo'
+      required:
+      - parcelNumber
+      type: object
+    ParcelId:
+      description: 'The internal GeoAPI parcel ID
+
+
+        You would only use this if there is no other way to identify the parcel.
+
+        '
+      example: 138
+      type: number
+    ArbitraryAddressPickupOrderSpecs_arbitraryAddress:
+      properties:
+        info:
+          $ref: '#/components/schemas/SubjectInfo'
+        address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - address
+      - info
+      type: object
+    CustomerIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CustomerIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerIdent_oneOf_1'
+    CountryAlpha2:
+      description: Country ISO Alpha-2 code
+      maxLength: 2
+      minLength: 2
+      type: string
+    SubjectName:
+      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    PickupOrder:
+      properties:
+        id:
+          $ref: '#/components/schemas/PickupOrderID'
+        specs:
+          $ref: '#/components/schemas/PickupOrder_specs'
+        statusCode:
+          $ref: '#/components/schemas/StatusCode'
+        statusText:
+          $ref: '#/components/schemas/StatusText'
+      required:
+      - id
+      - specs
+      - statusCode
+      - statusText
+    PickupOrder_specs:
+      oneOf:
+      - $ref: '#/components/schemas/AddressPickupOrderSpecs'
+      - $ref: '#/components/schemas/CollectionPickupOrderResponse'
+      - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
+    PostalCode:
+      example: '40001'
+      maxLength: 7
+      minLength: 3
+      type: string
+    NewPickupOrder:
+      allOf:
+      - title: New pickup order specification
+      - oneOf:
+        - $ref: '#/components/schemas/AddressPickupOrderSpecs'
+        - $ref: '#/components/schemas/ParcelPickupOrderSpecs'
+        - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
+    CountryIdent:
+      oneOf:
+      - $ref: '#/components/schemas/CountryIdent_oneOf'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
+      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
+    CustomerAddressId:
+      description: Internal GeoAPI ID
+      type: number
+    StatusCode:
+      description: 'Returns the current state of pickup order.
+
+        - Created is a default state
+
+        '
+      enum:
+      - New
+      - Created
+      - ToCancel
+      - Canceled
+      type: string
+    SubjectNameSecondary:
+      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: John Doe
+      maxLength: 35
+      type: string
+    CourierNote:
+      description: "This is a note for the courier.  \nYou can leave some additional information for the courier using this property.\n"
+      example: Call before arrival
+      maxLength: 200
+      type: string
+    City_1:
+      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
+      example: Praha 8
+      maxLength: 35
+      type: string
+    CountryIdent_oneOf_1:
+      properties:
+        isoAlpha2:
+          $ref: '#/components/schemas/CountryAlpha2'
+      required:
+      - isoAlpha2
+      type: object
+    CountryNumeric:
+      description: Country ISO numeric code
+      example: '203'
+      maxLength: 3
+      minLength: 3
+      type: string
+    Date:
+      description: Represented in the YYYY-MM-DD (ISO 8601) format
+      maxLength: 10
+      minLength: 10
+      type: string
+    CountryAlpha3:
+      description: Country ISO Alpha-3 code
+      maxLength: 3
+      minLength: 3
+      type: string
+    SubjectInfo_contact:
+      properties:
+        person:
+          example: John Doe
+          minLength: 2
+          type: string
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+        email:
+          $ref: '#/components/schemas/Email'
+      type: object
+    ArbitraryAddressPickupOrderSpecs:
+      description: 'The pickup is ordered to an arbitrary address.
+
+
+        The courier can/will pick up all parcels for which you have printed labels at the location.
+
+        '
+      properties:
+        customer:
+          $ref: '#/components/schemas/CustomerIdent'
+        arbitraryAddress:
+          $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs_arbitraryAddress'
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - arbitraryAddress
+      - customer
+      title: ArbitraryAddress
+    CustomerDSW:
+      description: "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n"
+      maxLength: 12
+      minLength: 11
+      type: string
+    SubjectInfo:
+      properties:
+        name1:
+          $ref: '#/components/schemas/SubjectName'
+        name2:
+          $ref: '#/components/schemas/SubjectNameSecondary'
+        contact:
+          $ref: '#/components/schemas/SubjectInfo_contact'
+      required:
+      - name1
+      title: Subject information
+      type: object
+    CountryIdent_oneOf_2:
+      properties:
+        isoNumeric:
+          $ref: '#/components/schemas/CountryNumeric'
+      required:
+      - isoNumeric
+      type: object
+    Street_1:
+      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
+      example: Example Street 368/23
+      maxLength: 35
+      type: string
+    CustomerIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerID'
+      required:
+      - id
+      type: object
+    CustomerAddressIdent:
+      description: Used to uniquely identify a customer address in the API
+      oneOf:
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf'
+      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf_1'
+    ParcelNo:
+      description: "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n"
+      example: '13815045502659'
+      maxLength: 14
+      minLength: 14
+      type: string
+    CustomerIdent_oneOf:
+      properties:
+        dsw:
+          $ref: '#/components/schemas/CustomerDSW'
+      required:
+      - dsw
+      type: object
     _pickup_orders__pickupOrderId__delete_200_response:
       properties:
         pickupId:
@@ -179,6 +448,88 @@ components:
       required:
       - pickupId
       type: object
+    StatusText:
+      description: 'Detailed information about the status of the pickup order.
+
+        - `New` = The pickup has been ordered by the customer. We are now waiting for its creation in the DPD systems.
+
+        - `Created` = The pickup order has been created in the DPD systems
+
+        - `ToCancel` = A cancel request for the pickup order has been received and sent for processing
+
+        - `Canceled` = The pickup order has been successfully canceled
+
+        '
+      maxLength: 200
+      type: string
+    CustomerID:
+      description: 'The internal GeoAPI customer ID
+
+
+        You would only use this if there is no other way to identify the customer.
+
+        '
+      type: number
+    ParcelIdent_oneOf_1:
+      properties:
+        id:
+          $ref: '#/components/schemas/ParcelId'
+      required:
+      - id
+      type: object
+    CountryIdent_oneOf:
+      properties:
+        isoAlpha3:
+          $ref: '#/components/schemas/CountryAlpha3'
+      required:
+      - isoAlpha3
+      type: object
+    CustomerAddressIt4emId:
+      description: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
+      type: number
+    CustomerAddressIdent_oneOf:
+      properties:
+        id:
+          $ref: '#/components/schemas/CustomerAddressId'
+      required:
+      - id
+      type: object
+    ParcelPickupOrderSpecs:
+      description: 'The pickup is ordered for a specific collection parcel(s).
+
+
+        The labels are printed by the DPD.
+
+        '
+      properties:
+        parcel:
+          $ref: '#/components/schemas/ParcelIdent'
+        date:
+          $ref: '#/components/schemas/Date'
+        note:
+          $ref: '#/components/schemas/CourierNote'
+      required:
+      - parcel
+      title: Parcel
+    ParcelIdent:
+      oneOf:
+      - $ref: '#/components/schemas/ParcelIdent_oneOf'
+      - $ref: '#/components/schemas/ParcelIdent_oneOf_1'
+    Error_description:
+      oneOf:
+      - type: string
+      - type: number
+      - additionalProperties: true
+        description: 'Object providing detailed information specific to the encountered error.
+
+
+          This may vary across different error responses.
+
+          '
+        type: object
+    PickupOrderID:
+      description: "This ID is used in the API to uniquely identify a pickup order.\n\nThe user is able to order a pickup for a shipment on one of the customer addresses.  \nDPD will pick the shipment up on the address specified by the user and transfer it to the DPD depot for further processing.  \nThe user is also able to order a regular pickup, in that case the user is usually not using this API to create new shipments.\n"
+      type: number
     CustomerAddressIdent_oneOf_1:
       properties:
         it4emId:
@@ -203,48 +554,27 @@ components:
       required:
       - customerAddress
       title: Address
-    PostalCode:
-      example: '40001'
-      maxLength: 7
-      minLength: 3
+    Email:
       type: string
-    CountryNumeric:
-      description: Country ISO numeric code
-      example: '203'
-      maxLength: 3
-      minLength: 3
+    HouseNumber:
       type: string
-    CustomerAddressIt4emId:
-      description: This ID is used DPD wide to uniquely identify a customer address (alternative to GeoAPI specific Customer Address ID)
-      type: number
-    CustomerIdent_oneOf_1:
-      properties:
-        id:
-          $ref: '#/components/schemas/CustomerID'
-      required:
-      - id
-      type: object
-    SubjectInfo_contact:
-      properties:
-        person:
-          example: John Doe
-          minLength: 2
-          type: string
-        phone:
-          $ref: '#/components/schemas/PhoneNumber'
-        email:
-          $ref: '#/components/schemas/Email'
-      type: object
     PhoneNumber:
       description: Can be with or without the international prefix
       example: 123 456 789
       maxLength: 31
       type: string
-    CustomerDSW:
-      description: "The customer unique global identification number used across multiple DPD services.\n\nA single user account can have multiple customers.  \nThis allows for a single user account to manage multiple branches via this API.\n"
-      maxLength: 12
-      minLength: 11
-      type: string
+    Error:
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        description:
+          $ref: '#/components/schemas/Error_description'
+      required:
+      - code
+      - message
+      type: object
     CollectionPickupOrderResponse:
       description: 'The created collection pickup order.
 
@@ -264,300 +594,6 @@ components:
       required:
       - parcels
       title: Collection
-    Date:
-      description: Represented in the YYYY-MM-DD (ISO 8601) format
-      maxLength: 10
-      minLength: 10
-      type: string
-    CourierNote:
-      description: "This is a note for the courier.  \nYou can leave some additional information for the courier using this property.\n"
-      example: Call before arrival
-      maxLength: 200
-      type: string
-    ParcelNo:
-      description: "Each shipment can have multiple (physical) parcels.  \nThis number is used to identify and reference an individual parcel in the shipment.  \nEach parcel has its own label.\n"
-      example: '13815045502659'
-      maxLength: 14
-      minLength: 14
-      type: string
-    Email:
-      type: string
-    StatusCode:
-      description: 'Returns the current state of pickup order.
-
-        - Created is a default state
-
-        '
-      enum:
-      - New
-      - Created
-      - ToCancel
-      - Canceled
-      type: string
-    CustomerIdent_oneOf:
-      properties:
-        dsw:
-          $ref: '#/components/schemas/CustomerDSW'
-      required:
-      - dsw
-      type: object
-    ArbitraryAddressPickupOrderSpecs_arbitraryAddress:
-      properties:
-        info:
-          $ref: '#/components/schemas/SubjectInfo'
-        address:
-          $ref: '#/components/schemas/Address'
-      required:
-      - address
-      - info
-      type: object
-    SubjectNameSecondary:
-      description: "You can use this property if you need to add some additional information about the receiver/sender.\nOr if the information about the receiver/sender are better expressed in separate fields\n\nFor example, you can specify the name of the company here, or the name of the person who is sending/receiving for the shipment.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
-      example: John Doe
-      maxLength: 35
-      type: string
-    CustomerAddressIdent:
-      description: Used to uniquely identify a customer address in the API
-      oneOf:
-      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf'
-      - $ref: '#/components/schemas/CustomerAddressIdent_oneOf_1'
-    ArbitraryAddressPickupOrderSpecs:
-      description: 'The pickup is ordered to an arbitrary address.
-
-
-        The courier can/will pick up all parcels for which you have printed labels at the location.
-
-        '
-      properties:
-        customer:
-          $ref: '#/components/schemas/CustomerIdent'
-        arbitraryAddress:
-          $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs_arbitraryAddress'
-        date:
-          $ref: '#/components/schemas/Date'
-        note:
-          $ref: '#/components/schemas/CourierNote'
-      required:
-      - arbitraryAddress
-      - customer
-      title: ArbitraryAddress
-    PickupOrder_specs:
-      oneOf:
-      - $ref: '#/components/schemas/AddressPickupOrderSpecs'
-      - $ref: '#/components/schemas/CollectionPickupOrderResponse'
-      - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
-    CustomerAddressIdent_oneOf:
-      properties:
-        id:
-          $ref: '#/components/schemas/CustomerAddressId'
-      required:
-      - id
-      type: object
-    CustomerAddressId:
-      description: Internal GeoAPI ID
-      type: number
-    CountryIdent_oneOf_1:
-      properties:
-        isoAlpha2:
-          $ref: '#/components/schemas/CountryAlpha2'
-      required:
-      - isoAlpha2
-      type: object
-    ParcelPickupOrderSpecs:
-      description: 'The pickup is ordered for a specific collection parcel(s).
-
-
-        The labels are printed by the DPD.
-
-        '
-      properties:
-        parcel:
-          $ref: '#/components/schemas/ParcelIdent'
-        date:
-          $ref: '#/components/schemas/Date'
-        note:
-          $ref: '#/components/schemas/CourierNote'
-      required:
-      - parcel
-      title: Parcel
-    ParcelIdent_oneOf_1:
-      properties:
-        id:
-          $ref: '#/components/schemas/ParcelId'
-      required:
-      - id
-      type: object
-    CustomerID:
-      description: 'The internal GeoAPI customer ID
-
-
-        You would only use this if there is no other way to identify the customer.
-
-        '
-      type: number
-    NewPickupOrder:
-      allOf:
-      - title: New pickup order specification
-      - oneOf:
-        - $ref: '#/components/schemas/AddressPickupOrderSpecs'
-        - $ref: '#/components/schemas/ParcelPickupOrderSpecs'
-        - $ref: '#/components/schemas/ArbitraryAddressPickupOrderSpecs'
-    Error:
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        description:
-          $ref: '#/components/schemas/Error_description'
-      required:
-      - code
-      - message
-      type: object
-    SubjectName:
-      description: "The name of the sender/receiver.\n\nUsually this is the full name of the receiver/sender.\nYou can also specify the name of the receiving/sending company (e.g) \n\nIt is up to you to specify all required information, for the delivery to be successfully completed.\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
-      example: John Doe
-      maxLength: 35
-      type: string
-    CountryIdent_oneOf:
-      properties:
-        isoAlpha3:
-          $ref: '#/components/schemas/CountryAlpha3'
-      required:
-      - isoAlpha3
-      type: object
-    ParcelIdent:
-      oneOf:
-      - $ref: '#/components/schemas/ParcelIdent_oneOf'
-      - $ref: '#/components/schemas/ParcelIdent_oneOf_1'
-    HouseNumber:
-      type: string
-    Street_1:
-      description: "Including the descriptive number\n\nWARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF 31 characters for receiver and 28 characters for sender\n  - ZPL/EPL 31 characters for receiver and 19 characters for sender\n"
-      example: Example Street 368/23
-      maxLength: 35
-      type: string
-    Error_description:
-      oneOf:
-      - type: string
-      - type: number
-      - additionalProperties: true
-        description: 'Object providing detailed information specific to the encountered error.
-
-
-          This may vary across different error responses.
-
-          '
-        type: object
-    CountryAlpha3:
-      description: Country ISO Alpha-3 code
-      maxLength: 3
-      minLength: 3
-      type: string
-    CustomerIdent:
-      oneOf:
-      - $ref: '#/components/schemas/CustomerIdent_oneOf'
-      - $ref: '#/components/schemas/CustomerIdent_oneOf_1'
-    CountryIdent_oneOf_2:
-      properties:
-        isoNumeric:
-          $ref: '#/components/schemas/CountryNumeric'
-      required:
-      - isoNumeric
-      type: object
-    PickupOrder:
-      properties:
-        id:
-          $ref: '#/components/schemas/PickupOrderID'
-        specs:
-          $ref: '#/components/schemas/PickupOrder_specs'
-        statusCode:
-          $ref: '#/components/schemas/StatusCode'
-        statusText:
-          $ref: '#/components/schemas/StatusText'
-      required:
-      - id
-      - specs
-      - statusCode
-      - statusText
-    StatusText:
-      description: 'Detailed information about the status of the pickup order.
-
-        - `New` = The pickup has been ordered by the customer. We are now waiting for its creation in the DPD systems.
-
-        - `Created` = The pickup order has been created in the DPD systems
-
-        - `ToCancel` = A cancel request for the pickup order has been received and sent for processing
-
-        - `Canceled` = The pickup order has been successfully canceled
-
-        '
-      maxLength: 200
-      type: string
-    ParcelIdent_oneOf:
-      properties:
-        parcelNumber:
-          $ref: '#/components/schemas/ParcelNo'
-      required:
-      - parcelNumber
-      type: object
-    Address:
-      properties:
-        street:
-          $ref: '#/components/schemas/Street_1'
-        postalCode:
-          $ref: '#/components/schemas/PostalCode'
-        city:
-          $ref: '#/components/schemas/City_1'
-        houseNumber:
-          $ref: '#/components/schemas/HouseNumber'
-        country:
-          $ref: '#/components/schemas/CountryIdent'
-      required:
-      - city
-      - country
-      - postalCode
-      - street
-      type: object
-    PickupOrderID:
-      description: "This ID is used in the API to uniquely identify a pickup order.\n\nThe user is able to order a pickup for a shipment on one of the customer addresses.  \nDPD will pick the shipment up on the address specified by the user and transfer it to the DPD depot for further processing.  \nThe user is also able to order a regular pickup, in that case the user is usually not using this API to create new shipments.\n"
-      type: number
-    ParcelId:
-      description: 'The internal GeoAPI parcel ID
-
-
-        You would only use this if there is no other way to identify the parcel.
-
-        '
-      example: 138
-      type: number
-    City_1:
-      description: "WARNING: Depending on type of the label, this field will be shortened to fit the label.\n  - PDF/EPL 31 characters for receiver and 28 characters for sender\n  - ZPL 31 characters for receiver and 19 characters for sender\n"
-      example: Praha 8
-      maxLength: 35
-      type: string
-    CountryIdent:
-      oneOf:
-      - $ref: '#/components/schemas/CountryIdent_oneOf'
-      - $ref: '#/components/schemas/CountryIdent_oneOf_1'
-      - $ref: '#/components/schemas/CountryIdent_oneOf_2'
-    SubjectInfo:
-      properties:
-        name1:
-          $ref: '#/components/schemas/SubjectName'
-        name2:
-          $ref: '#/components/schemas/SubjectNameSecondary'
-        contact:
-          $ref: '#/components/schemas/SubjectInfo_contact'
-      required:
-      - name1
-      title: Subject information
-      type: object
-    CountryAlpha2:
-      description: Country ISO Alpha-2 code
-      maxLength: 2
-      minLength: 2
-      type: string
   securitySchemes:
     ApiKeyAuth:
       description: "Every account will receive its unique API key.  \nThis key is used to uniquely identify your account."

@@ -1,0 +1,999 @@
+openapi: 3.2.0
+info:
+  title: DPDServices Labels Protocols Tag API
+  description: '# DPDServices
+
+
+    The purpose of this document is to describe the functionality and utilization of Web Service interfaces for the use of DPD clients. The solution provided offers a universal (independent of the client''s system) tool for transmitting information between client systems and DPD. The following Web Service methods are available:
+
+
+    - Validation of shipment data and assignment of waybill numbers
+
+    - Generation of waybill labels
+
+    - Generation of receipt protocols and data notification
+
+    - Courier booking
+
+    - Postal code lookup
+
+    - Courier availability check
+
+    - Validation of return shipment data with predefined waybill numbers and notification
+
+
+    Each Web Service method call is authorized by a login and password and marked with one of three error-handling policies:
+
+
+    - Termination of processing upon encountering the first error
+
+    - Ignoring shipments with incorrect data
+
+    - Termination of processing upon encountering the first error and cancellation of processed shipments before the error occurred. (This option is available only in some Web Service methods)
+
+
+    A client integrated with DPD Poland through this solution can be assured of the compliance of prepared shipments with the current standard, which implies an improvement in the efficiency and reliability of services offered by our courier company. ## Environments
+
+
+    **Production environment:**
+
+    Production services are available at: https://dpdservices.dpd.com.pl
+
+
+    **Demo environment:**
+
+    Demo services are available at: https://dpdservicesdemo.dpd.com.pl
+
+
+    To access the DEMO environment, you will need the following login credentials:
+
+
+    - **Login:** test
+
+    - **Password:** thetu4Ee
+
+    - **Master FID:** 1495
+
+
+    ## Authentication
+
+
+    All endpoints require of **Basic Authentication** and the **x-dpd-fid: {{masterfid}}** header:
+
+
+    -->
+
+
+    ## Configuration of Login and Password
+
+
+    The complete configuration of a user account authorized to use the web service is carried out in DPD Poland''s systems after prior agreements with the client. # Available Services
+
+
+    Within the scope of generating a waybill, it''s possible to include services that modify various aspects related to parcel delivery. Depending on whether the parcel will be delivered domestically or internationally, the list of services will differ. Some services require specific conditions that must be met to be used. Validation of certain services may also exclude their simultaneous use. ### Services
+
+
+    | Service Code | Service | Domestic / International | Notes |
+
+    |-------------------------|---------------------------------------------------|--------------------------|-----------------------------------|
+
+    | B2C | B2C | `domestic` | Required Attributes:
+
+    `VALUE` - e.g. ''10:00-13:00'' |
+
+    | CARRY_IN | Carry in | `domestic` | |
+
+    | COD * | Cash on delivery | `domestic`
+
+    `international` | Currencies - only PLN, EUR, RON, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | CUD | Return shipment | `domestic` | |
+
+    | DECLARED_VALUE | Declared value | `domestic`
+
+    `international` | Shipment insurance. Currencies - only PLN, CHF, EUR, NOK, SEK, USD, GBP, HUF, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | DIGITAL_LABEL ** | Digital label service | `domestic` | Only for single-package shipments |
+
+    | DPD_EXPRESS | Air transport | `international` | |
+
+    | DPD_FOOD | Food transportation service | `domestic` | Only for specified postal codes
+
+    Required Attributes:
+
+    `LIMIT_DATE` - product''s expiration date (ISO-8601 format), which must not be less than 2 business days e.g. ''2039-12-31'' |
+
+    | DPD_LQ * | ADR transportation service | `domestic`
+
+    `international` | Dangerous shipment: ADR weight required |
+
+    | DPD_NEXT_DAY | Delivery on next day | `domestic` | |
+
+    | DPD_PICKUP | Parcel delivery service to the PUDO point | `domestic`
+
+    `international` | Only for specified postal codes
+
+    Required Attributes:
+
+    `PUDO` - e.g.'
+  version: 5.27.0
+  x-logo:
+    url: /redoc-ui/DPD_logo.svg
+servers:
+- url: https://dpdservices.dpd.com.pl
+  description: Generated server url
+security:
+- basicAuth: []
+tags:
+- name: labelsProtocolsTag
+  x-displayName: Labels And Protocols
+paths:
+  /public/shipment/v1/generateSpedLabels:
+    post:
+      tags:
+      - labelsProtocolsTag
+      summary: Generate label
+      description: 'Generates label. Advises parcels.
+
+
+        The method accepts the following input parameters:
+
+        - A list of shipments to be processed
+
+        - Generation policy (error handling)
+
+        - The format in which the labels are to be generated
+
+        - The page format in which the labels are to be generated
+
+        - Label type: regular or extended
+
+
+        The following operations are performed on the DPD system side:
+
+        - Generate labels in the desired format using sessionId, waybill or reference provided
+
+
+        Labels can be generated based on one of the following criteria:
+
+        - Session ID: Identifies parcels within a session
+
+        - Package reference: Customer reference number associated with package
+
+        - Parcel waybill: Unique identifier for individual parcel
+
+        - Parcel reference: Customer reference number associated with parcel
+
+
+        The method returns:
+
+        - A session with a list of shipments and parcels with assigned shipping numbers, customer reference numbers and validation statuses
+
+        - Generated labels in the desired format'
+      operationId: generateSpedLabels
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateSpedLabelsRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateSpedLabelsResponse'
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+  /public/shipment/v1/generateProtocol:
+    post:
+      tags:
+      - labelsProtocolsTag
+      summary: Generate protocol
+      description: 'Generates protocol
+
+
+        The method accepts the following input parameters:
+
+        - A list of shipments and packages to be processed. Shipment group with packets can be specified in four ways: Session ID, Package Reference, Parcel Reference, Parcel Waybill
+
+        - Generation policy (error handling)
+
+        - The format in which the protocol is to be generated
+
+
+        The following operations are performed on the DPD system side:
+
+        - Generate protocol in the desired format
+
+
+        The method returns:
+
+        - A session with a list of shipments and parcels with assigned shipping numbers, customer reference numbers and validation statuses
+
+        - Generated protocol in the desired format'
+      operationId: generateProtocol
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GenerateProtocolRequest'
+        required: true
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateProtocolResponse'
+components:
+  schemas:
+    SecurityErrorEnum:
+      type: string
+      description: 'Allowed values:
+
+        - MISSING_PERMISSION - The user does not have sufficient permissions
+
+        '
+      enum:
+      - MISSING_PERMISSION
+    OutputDocFormat:
+      type: string
+      description: 'Allowed values:
+
+        - PDF - pdf
+
+        - EPL - epl
+
+        - ZPL - zpl
+
+        - XML - xml
+
+        '
+      enum:
+      - PDF
+      - EPL
+      - ZPL
+      - XML
+    ProtocolSession:
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        packages:
+          maximum: 500
+          maxItems: 500
+          minItems: 0
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/ProtocolLabelPackage'
+        type:
+          $ref: '#/components/schemas/ProtocolSessionType'
+      description: Session
+    ProtocolSessionResponse:
+      required:
+      - statusInfo
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        statusInfo:
+          $ref: '#/components/schemas/ProtocolStatusInfo'
+        packages:
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/ProtocolPackageResponse'
+      description: Session
+    ProtocolLabelParcel:
+      maximum: 500
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Parcel waybill
+      description: Parcels
+    ProtocolPickupAddress:
+      required:
+      - fid
+      type: object
+      properties:
+        fid:
+          type: integer
+          description: Fid
+          format: int32
+          example: 1234
+        company:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Company name
+          example: DPD Polska Sp. z o.o.
+        name:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Name
+          example: Jan Kowalski
+        address:
+          maxLength: 100
+          minLength: 0
+          type: string
+          description: Address
+        city:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: City
+          example: Warszawa
+        countryCode:
+          maxLength: 2
+          minLength: 2
+          type: string
+          description: Two character country code in ISO ALPHA-2 format
+          example: PL
+        postalCode:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: Postal code
+          example: '01354'
+        phone:
+          type: string
+          description: Phone
+          example: '48732121245'
+        email:
+          type: string
+          description: Email
+          example: dpd@dpd.com.pl
+      description: Pickup address
+    Error401:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SecurityErrorEnum'
+    ParcelResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          description: Status
+        reference:
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Parcel waybill
+      description: Parcels
+    ProtocolStatusInfo:
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/ProtocolPrintStatus'
+        description:
+          type: string
+          description: Error description if occurred
+      description: Status info
+    ProtocolOutputDocFormat:
+      type: string
+      description: 'Allowed values:
+
+        - PDF - pdf
+
+        - EPL - el
+
+        - ZPL - zpl
+
+        - XML - XML with data on protocol
+
+        '
+      enum:
+      - PDF
+      - EPL
+      - ZPL
+      - XML
+    ProtocolLabelSearchParams:
+      required:
+      - policy
+      - session
+      type: object
+      properties:
+        policy:
+          $ref: '#/components/schemas/ProtocolGenerationPolicy'
+        session:
+          $ref: '#/components/schemas/ProtocolSession'
+        pickupAddress:
+          $ref: '#/components/schemas/ProtocolPickupAddress'
+      description: Parameters for searching packages, parcels, print sessions
+    Errors:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          description: Error list
+          items:
+            $ref: '#/components/schemas/Error'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    SessionType:
+      type: string
+      description: 'Allowed values:
+
+        - DOMESTIC - Session for domestic packages
+
+        - INTERNATIONAL - Session for international packages
+
+        '
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+    GenerateSpedLabelsRequest:
+      required:
+      - format
+      - labelSearchParams
+      - outputDocFormat
+      - outputType
+      type: object
+      properties:
+        labelSearchParams:
+          $ref: '#/components/schemas/LabelSearchParams'
+        outputDocFormat:
+          $ref: '#/components/schemas/OutputDocFormat'
+        format:
+          $ref: '#/components/schemas/LabelFormat'
+        outputType:
+          $ref: '#/components/schemas/OutputLabelType'
+        variant:
+          $ref: '#/components/schemas/LabelVariant'
+    GenerateProtocolStatus:
+      type: string
+      description: 'Allowed value:
+
+        - OK - Correct protocol generation
+
+        - INCORRECT_DATA - incorrect data
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - Disabled API
+
+        '
+      enum:
+      - OK
+      - INCORRECT_DATA
+      - UNKNOWN_ERROR
+      - DISABLED_API
+    LabelVariant:
+      type: string
+      description: 'Label variant. Allowed values:
+
+        - STANDARD - standard
+
+        - APOLLO - apollo
+
+        - RUCH - ruch
+
+        '
+      enum:
+      - STANDARD
+      - APOLLO
+      - RUCH
+      - HIGH_RES
+    PickupErrorDetail:
+      type: string
+      description: 'Allowed values:
+
+        - INCORRECT_VALUE - incorrect value
+
+        - NOT_FOUND - not found
+
+        - INCORRECT_PICKUP_TIME - incorrect pickup time
+
+        - INCORRECT_CHECKSUM - incorrect checksum
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        - VALIDATION - validation
+
+        - ORDER_NUMBER_ERROR - order number error
+
+        - ORDER_CLOSED_STATUS - order closed status
+
+        - INCORRECT_STATUS - incorrect status
+
+        '
+      enum:
+      - INCORRECT_VALUE
+      - NOT_FOUND
+      - INCORRECT_PICKUP_TIME
+      - INCORRECT_CHECKSUM
+      - SERVICE_UNAVAILABLE
+      - VALIDATION
+      - ORDER_NUMBER_ERROR
+      - ORDER_CLOSED_STATUS
+      - INCORRECT_STATUS
+    ProtocolPrintStatus:
+      type: string
+      description: 'Protocol generation status. Allowed values:
+
+        - OK - Correct protocol generation
+
+        - INCORRECT_PICKUP_ADDRESS_FID - Incorrect pickup address FID
+
+        - INCORRECT_PICKUP_ADDRESS_COMPANY - Incorrect pickup address company
+
+        - INCORRECT_SESSION_TYPE - Incorrect session type
+
+        - NOT_FOUND - Not found
+
+        - NOT_PROCESSED - Not processed
+
+        - ACCESS_DENIED_FOR_FID - Access denied for FID
+
+        - UNKNOWN_ERROR - Unknown error
+
+        - PARCEL_LIMIT_EXCEEDED - exceeded parcel limit
+
+        '
+      enum:
+      - OK
+      - INCORRECT_PICKUP_ADDRESS_FID
+      - INCORRECT_PICKUP_ADDRESS_COMPANY
+      - INCORRECT_SESSION_TYPE
+      - NOT_FOUND
+      - NOT_PROCESSED
+      - ACCESS_DENIED_FOR_FID
+      - UNKNOWN_ERROR
+      - PARCEL_LIMIT_EXCEEDED
+    LabelFormat:
+      type: string
+      description: 'Allowed values:
+
+        - A4 - A4
+
+        - LBL_PRINTER - lbl printer
+
+        '
+      enum:
+      - A4
+      - LBL_PRINTER
+    GenerateSpedLabelsResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GenerateSpedLabelsStatus'
+        documentData:
+          type: string
+          description: Base64 encoded byte array with label content
+          format: byte
+        session:
+          $ref: '#/components/schemas/SessionResponse'
+        documentId:
+          type: string
+          description: Printed document id
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    ProtocolGenerationPolicy:
+      type: string
+      description: 'Method of protocol generation. Possible values:
+
+        - STOP_ON_FIRST_ERROR - generating of protocols is interrupted in the case of the first encountered error. Protocols created up to the first error will be returned.
+
+        - IGNORE_ERRORS - no protocol generation interruption in case of validation error
+
+        '
+      enum:
+      - STOP_ON_FIRST_ERROR
+      - IGNORE_ERRORS
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          $ref: '#/components/schemas/PickupErrorDetail'
+        description:
+          type: string
+          description: Error description
+        fields:
+          type: string
+          description: Field with error
+      description: Errors list
+    GenerateSpedLabelsStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - label successfully printed
+
+        - NOT_FOUND - not found
+
+        - NOT_PROCESSED - not processed
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - API is disabled
+
+        '
+      enum:
+      - OK
+      - NOT_FOUND
+      - NOT_PROCESSED
+      - UNKNOWN_ERROR
+      - DISABLED_API
+    LabelPackage:
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Reference - identifier passed by client
+        parcels:
+          maxItems: 100
+          minItems: 0
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/LabelParcel'
+      description: Packages
+    ProtocolLabelPackage:
+      maximum: 500
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Package reference
+        parcels:
+          maximum: 500
+          maxItems: 500
+          minItems: 0
+          type: array
+          description: Parcels
+          items:
+            $ref: '#/components/schemas/ProtocolLabelParcel'
+      description: Packages
+    PackageResponse:
+      required:
+      - parcels
+      - statusInfo
+      type: object
+      properties:
+        statusInfo:
+          $ref: '#/components/schemas/StatusInfo'
+        parcels:
+          type: array
+          description: Printed parcels
+          items:
+            $ref: '#/components/schemas/ParcelResponse'
+      description: Packages
+    Session:
+      required:
+      - type
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        packages:
+          maxItems: 30
+          minItems: 0
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/LabelPackage'
+        type:
+          $ref: '#/components/schemas/SessionType'
+      description: Session
+    SessionResponse:
+      required:
+      - statusInfo
+      type: object
+      properties:
+        sessionId:
+          type: integer
+          description: Session id
+          format: int64
+        statusInfo:
+          $ref: '#/components/schemas/StatusInfo'
+        packages:
+          type: array
+          description: Packages
+          items:
+            $ref: '#/components/schemas/PackageResponse'
+      description: Session
+    LabelSearchParams:
+      required:
+      - policy
+      - session
+      type: object
+      properties:
+        policy:
+          $ref: '#/components/schemas/LabelGenerationPolicy'
+        session:
+          $ref: '#/components/schemas/Session'
+        documentId:
+          type: string
+          description: Document id
+      description: Search parameters
+    GenerateProtocolRequest:
+      required:
+      - outputDocFormat
+      - protocolSearchParams
+      type: object
+      properties:
+        protocolSearchParams:
+          $ref: '#/components/schemas/ProtocolLabelSearchParams'
+        outputDocFormat:
+          $ref: '#/components/schemas/ProtocolOutputDocFormat'
+    ProtocolPackageResponse:
+      required:
+      - parcels
+      - statusInfo
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Package reference
+        statusInfo:
+          $ref: '#/components/schemas/ProtocolStatusInfo'
+        parcels:
+          type: array
+          description: Protocols for parcels
+          items:
+            $ref: '#/components/schemas/ProtocolParcelResponse'
+      description: Packages
+    LabelParcel:
+      type: object
+      properties:
+        reference:
+          maxLength: 50
+          minLength: 0
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Waybill
+      description: Parcels
+    StatusInfo:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PackagesPickupCallStatus'
+        errorDetails:
+          type: array
+          description: Errors list
+          items:
+            $ref: '#/components/schemas/ErrorDetails'
+      description: Pickup call update order status
+    OutputLabelType:
+      type: string
+      description: 'Allowed values:
+
+        - BIC3 - BIC3
+
+        - EXTENDED - Extended
+
+        - RETURN - Return*
+
+
+
+        *Available only for international returns
+
+        '
+      enum:
+      - BIC3
+      - EXTENDED
+      - RETURN
+    ProtocolParcelResponse:
+      type: object
+      properties:
+        reference:
+          type: string
+          description: Parcel reference
+        waybill:
+          type: string
+          description: Parcel waybill
+        statusInfo:
+          $ref: '#/components/schemas/ProtocolStatusInfo'
+      description: Protocols for parcels
+    ProtocolSessionType:
+      type: string
+      description: 'Allowed values:
+
+        - DOMESTIC - Session for domestic packages
+
+        - INTERNATIONAL - Session for international packages
+
+        - INTERNATIONAL_RETURN_PUDO - Session for international returns
+
+        - DOMESTIC_RETURN_PUDO - Session for domestic returns
+
+        '
+      enum:
+      - DOMESTIC
+      - INTERNATIONAL
+      - INTERNATIONAL_RETURN_PUDO
+      - DOMESTIC_RETURN_PUDO
+    LabelGenerationPolicy:
+      type: string
+      description: 'Allowed values:
+
+        - STOP_ON_FIRST_ERROR - generating of labels is interrupted in the case of the first encountered error. Advised packages up to the first error will be returned.
+
+        - IGNORE_ERRORS - no label generation interruption in case of validation error
+
+        '
+      enum:
+      - STOP_ON_FIRST_ERROR
+      - IGNORE_ERRORS
+    PackagesPickupCallStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - correct order change
+
+        - UNKNOWN_ERROR - unknown error
+
+        - DISABLED_API - disabled API
+
+        - DISALLOWED_FID - disallowed fid
+
+        - VALIDATION_ERROR - validation error
+
+        - NOT_FOUND - not found
+
+        - SERVICE_UNAVAILABLE - service unavailable
+
+        '
+      enum:
+      - OK
+      - UNKNOWN_ERROR
+      - DISABLED_API
+      - DISALLOWED_FID
+      - VALIDATION_ERROR
+      - NOT_FOUND
+      - SERVICE_UNAVAILABLE
+    Error:
+      required:
+      - code
+      - rejectedValue
+      - userMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code with the error category (group)
+        subCode:
+          type: string
+          description: Error code
+        userMessage:
+          type: string
+          description: Error code description
+          example: Receiver postal code is required
+        rejectedValue:
+          type: string
+          description: Invalid value
+        field:
+          type: string
+          description: Full path of the field that contains the error
+          example: receiver.postalCode
+      description: Error list
+    GenerateProtocolResponse:
+      required:
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/GenerateProtocolStatus'
+        documentData:
+          type: string
+          description: Base64 encoded byte array with protocol content
+          format: byte
+        session:
+          $ref: '#/components/schemas/ProtocolSessionResponse'
+        documentId:
+          type: string
+          description: Printed protocol id
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-tagGroups:
+- name: API's
+  tags:
+  - postalCodeTag
+  - packagesParcelsTag
+  - labelsProtocolsTag
+  - courierOrderTag
+  - returnParcelTag
+  - dropOffPinTag

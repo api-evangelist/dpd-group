@@ -1,0 +1,331 @@
+openapi: 3.2.0
+info:
+  title: DPDServices Postal Code Tag API
+  description: '# DPDServices
+
+
+    The purpose of this document is to describe the functionality and utilization of Web Service interfaces for the use of DPD clients. The solution provided offers a universal (independent of the client''s system) tool for transmitting information between client systems and DPD. The following Web Service methods are available:
+
+
+    - Validation of shipment data and assignment of waybill numbers
+
+    - Generation of waybill labels
+
+    - Generation of receipt protocols and data notification
+
+    - Courier booking
+
+    - Postal code lookup
+
+    - Courier availability check
+
+    - Validation of return shipment data with predefined waybill numbers and notification
+
+
+    Each Web Service method call is authorized by a login and password and marked with one of three error-handling policies:
+
+
+    - Termination of processing upon encountering the first error
+
+    - Ignoring shipments with incorrect data
+
+    - Termination of processing upon encountering the first error and cancellation of processed shipments before the error occurred. (This option is available only in some Web Service methods)
+
+
+    A client integrated with DPD Poland through this solution can be assured of the compliance of prepared shipments with the current standard, which implies an improvement in the efficiency and reliability of services offered by our courier company. ## Environments
+
+
+    **Production environment:**
+
+    Production services are available at: https://dpdservices.dpd.com.pl
+
+
+    **Demo environment:**
+
+    Demo services are available at: https://dpdservicesdemo.dpd.com.pl
+
+
+    To access the DEMO environment, you will need the following login credentials:
+
+
+    - **Login:** test
+
+    - **Password:** thetu4Ee
+
+    - **Master FID:** 1495
+
+
+    ## Authentication
+
+
+    All endpoints require of **Basic Authentication** and the **x-dpd-fid: {{masterfid}}** header:
+
+
+    -->
+
+
+    ## Configuration of Login and Password
+
+
+    The complete configuration of a user account authorized to use the web service is carried out in DPD Poland''s systems after prior agreements with the client. # Available Services
+
+
+    Within the scope of generating a waybill, it''s possible to include services that modify various aspects related to parcel delivery. Depending on whether the parcel will be delivered domestically or internationally, the list of services will differ. Some services require specific conditions that must be met to be used. Validation of certain services may also exclude their simultaneous use. ### Services
+
+
+    | Service Code | Service | Domestic / International | Notes |
+
+    |-------------------------|---------------------------------------------------|--------------------------|-----------------------------------|
+
+    | B2C | B2C | `domestic` | Required Attributes:
+
+    `VALUE` - e.g. ''10:00-13:00'' |
+
+    | CARRY_IN | Carry in | `domestic` | |
+
+    | COD * | Cash on delivery | `domestic`
+
+    `international` | Currencies - only PLN, EUR, RON, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | CUD | Return shipment | `domestic` | |
+
+    | DECLARED_VALUE | Declared value | `domestic`
+
+    `international` | Shipment insurance. Currencies - only PLN, CHF, EUR, NOK, SEK, USD, GBP, HUF, CZK
+
+    Required Attributes:
+
+    `AMOUNT` - e.g. ''39.99''
+
+    `CURRENCY` - e.g. ''PLN'' |
+
+    | DIGITAL_LABEL ** | Digital label service | `domestic` | Only for single-package shipments |
+
+    | DPD_EXPRESS | Air transport | `international` | |
+
+    | DPD_FOOD | Food transportation service | `domestic` | Only for specified postal codes
+
+    Required Attributes:
+
+    `LIMIT_DATE` - product''s expiration date (ISO-8601 format), which must not be less than 2 business days e.g. ''2039-12-31'' |
+
+    | DPD_LQ * | ADR transportation service | `domestic`
+
+    `international` | Dangerous shipment: ADR weight required |
+
+    | DPD_NEXT_DAY | Delivery on next day | `domestic` | |
+
+    | DPD_PICKUP | Parcel delivery service to the PUDO point | `domestic`
+
+    `international` | Only for specified postal codes
+
+    Required Attributes:
+
+    `PUDO` - e.g.'
+  version: 5.27.0
+  x-logo:
+    url: /redoc-ui/DPD_logo.svg
+servers:
+- url: https://dpdservices.dpd.com.pl
+  description: Generated server url
+security:
+- basicAuth: []
+tags:
+- name: postalCodeTag
+  x-displayName: Postal Code Lookup
+paths:
+  /public/routing/v1/postalCode:
+    get:
+      tags:
+      - postalCodeTag
+      summary: Search postal code
+      description: 'Searches postal code. The API allows you to check whether a package can be sent to a given address.
+
+        It''s a good idea to check the zip code before trying to create a package.
+
+
+        This method accepts the following input parameters:
+
+
+        - Postal code and country code
+
+
+        On the DPD system side, the following operation is performed:
+
+
+        - Check the correctness and existence of the postal code in the specified country.
+
+
+        The method returns:
+
+
+        - Information about the validity of the provided postal code or an explanation of why the given postal code is not valid.'
+      operationId: findPostalCode
+      parameters:
+      - name: x-dpd-fid
+        in: header
+        description: Client's payer number.
+        required: true
+        schema:
+          type: integer
+          format: int32
+        example: 1000
+      - name: countryCode
+        in: query
+        description: Two letter country code
+        required: true
+        schema:
+          maxLength: 2
+          minLength: 2
+          type: string
+        example: PL
+      - name: zipCode
+        in: query
+        description: Postal code
+        required: true
+        schema:
+          maxLength: 10
+          minLength: 4
+          type: string
+        example: '06400'
+      responses:
+        '403':
+          description: Forbidden API request
+        '415':
+          description: Bad content-type
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PostalCodeResponse'
+        '500':
+          description: Unknown error.
+        '400':
+          description: Bad API invocation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Errors'
+        '401':
+          description: Unauthorized API request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      x-codeSamples:
+      - lang: curl
+        label: GET
+        source: https://dpdservices.dpd.com.pl/public/routing/v1/postalCode?countryCode=PL&zipCode=06400
+components:
+  schemas:
+    Errors:
+      required:
+      - errors
+      type: object
+      properties:
+        errors:
+          maxItems: 2147483647
+          minItems: 1
+          type: array
+          description: Error list
+          items:
+            $ref: '#/components/schemas/Error'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    PostalCodeResponse:
+      required:
+      - status
+      - traceId
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/PostalCodeStatus'
+        traceId:
+          type: string
+          description: Request tracking ID. By providing it, you improve the analysis of problems related to the request.
+          example: 3489d641-324f-4e46-9bf0-66a9af7218ab
+    SecurityErrorEnum:
+      type: string
+      description: 'Allowed values:
+
+        - MISSING_PERMISSION - The user does not have sufficient permissions
+
+        '
+      enum:
+      - MISSING_PERMISSION
+    Error401:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/SecurityErrorEnum'
+    PostalCodeStatus:
+      type: string
+      description: 'Allowed values:
+
+        - OK - OK. Found postal code
+
+        - COUNTRY_CODE_NOT_FOUND - Country code not found
+
+        - POSTAL_CODE_NOT_FOUND - Postal code not found
+
+        - WRONG_POSTAL_CODE_PATTERN - Incorrect postal code pattern
+
+        - UNKNOWN_ERROR - Unknown error
+
+        - DISABLED_API - Disabled API
+
+        '
+      enum:
+      - OK
+      - COUNTRY_CODE_NOT_FOUND
+      - POSTAL_CODE_NOT_FOUND
+      - WRONG_POSTAL_CODE_PATTERN
+      - UNKNOWN_ERROR
+      - DISABLED_API
+    Error:
+      required:
+      - code
+      - rejectedValue
+      - userMessage
+      type: object
+      properties:
+        code:
+          type: string
+          description: Code with the error category (group)
+        subCode:
+          type: string
+          description: Error code
+        userMessage:
+          type: string
+          description: Error code description
+          example: Receiver postal code is required
+        rejectedValue:
+          type: string
+          description: Invalid value
+        field:
+          type: string
+          description: Full path of the field that contains the error
+          example: receiver.postalCode
+      description: Error list
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+x-tagGroups:
+- name: API's
+  tags:
+  - postalCodeTag
+  - packagesParcelsTag
+  - labelsProtocolsTag
+  - courierOrderTag
+  - returnParcelTag
+  - dropOffPinTag

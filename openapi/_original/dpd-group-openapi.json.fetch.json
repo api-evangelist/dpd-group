@@ -1,0 +1,12 @@
+{
+ "url": "https://dpdservices.dpd.com.pl/api-docs",
+ "final": "https://dpdservices.dpd.com.pl/api-docs",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 153498,
+ "sha256": "bd0fd2fb64686020a7d3ab66585562f5527474ed508199f914498da9fe3a1cc3",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}
