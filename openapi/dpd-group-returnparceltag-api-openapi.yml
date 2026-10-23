@@ -1334,3 +1334,9 @@ x-tagGroups:
   - courierOrderTag
   - returnParcelTag
   - dropOffPinTag
+x-provenance:
+  method: harvested
+  publisher: DPD Group
+  source: https://dpdservices.dpd.com.pl/api-docs
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
