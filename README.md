@@ -1,4 +1,4 @@
-# dpd-group
+# DPD Group
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -63,3 +63,168 @@
 >
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
+
+DPD Group (part of Geopost) is a European parcel delivery network. Its business units publish shipping APIs including the DPD Group META-API Shipment REST API, the DPD Czech Republic GeoAPI, and SOAP web services from DPD Germany, DPD Belgium/Luxembourg and DPD Poland for shipment creation, labels, tracking, pickups and parcel shop lookup.
+
+**Areas:** Logistics · Parcel · Shipping · Tracking · Carrier
+
+## DPD Group on APIs.io
+
+Everything profiled for DPD Group is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/dpd-group/](https://apis.io/providers/dpd-group/)** — or go straight to one of the APIs or properties below.
+
+### APIs (21)
+
+- [DPD Geo Countries API](https://apis.io/apis/dpd-group/geoapi-countries/) — Lists countries supported by DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Customers API](https://apis.io/apis/dpd-group/geoapi-customers/) — Retrieves customer and address data for the authenticated DPD CZ account. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Me API](https://apis.io/apis/dpd-group/geoapi-me/) — Returns details about the authenticated GeoAPI user. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Parcels API](https://apis.io/apis/dpd-group/geoapi-parcels/) — Retrieves parcel details, tracking and labels from DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Pickup Orders API](https://apis.io/apis/dpd-group/geoapi-pickup-orders/) — Creates and manages pickup orders with DPD CZ. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Shipments API](https://apis.io/apis/dpd-group/geoapi-shipments/) — Creates shipments in DPD CZ GeoAPI. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD Geo Shipping Services API](https://apis.io/apis/dpd-group/geoapi-shipping-services/) — Lists DPD CZ shipping services available to the account. Part of DPD Czech Republic GeoAPI (v1).
+- [DPD META-API Shipment](https://apis.io/apis/dpd-group/meta-api-shipping/) — DPD Group META-API for creating shipments, generating labels and managing parcels across DPD Group business units.
+- [DPD Belgium/Luxembourg endofdayservicev10 SOAP Service](https://apis.io/apis/dpd-group/dpd-belux-endofdayservicev10/) — DPD Belgium/Luxembourg SOAP web service (endofdayservicev10) for DPD shipping, tracking and parcel shop data.
+- [DPD Belgium/Luxembourg loginservicev21 SOAP Service](https://apis.io/apis/dpd-group/dpd-belux-loginservicev21/) — DPD Belgium/Luxembourg SOAP web service (loginservicev21) for DPD shipping, tracking and parcel shop data.
+- [DPD Belgium/Luxembourg parcellifecycleservicev20 SOAP Service](https://apis.io/apis/dpd-group/dpd-belux-parcellifecycleservicev20/) — DPD Belgium/Luxembourg SOAP web service (parcellifecycleservicev20) for DPD shipping, tracking and parcel shop data.
+- [DPD Belgium/Luxembourg parcelshopfinderservicev50 SOAP Service](https://apis.io/apis/dpd-group/dpd-belux-parcelshopfinderservicev50/) — DPD Belgium/Luxembourg SOAP web service (parcelshopfinderservicev50) for DPD shipping, tracking and parcel shop data.
+- [DPD Belgium/Luxembourg shipmentservicev34 SOAP Service](https://apis.io/apis/dpd-group/dpd-belux-shipmentservicev34/) — DPD Belgium/Luxembourg SOAP web service (shipmentservicev34) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany depotdataservice-v1_0 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-depotdataservice-v1_0/) — DPD Germany SOAP web service (depotdataservice-v1_0) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany loginservice-v2_0 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-loginservice-v2_0/) — DPD Germany SOAP web service (loginservice-v2_0) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany parcellifecycleservice-v2_0 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-parcellifecycleservice-v2_0/) — DPD Germany SOAP web service (parcellifecycleservice-v2_0) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany parcelshopfinderservice-v5_0 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-parcelshopfinderservice-v5_0/) — DPD Germany SOAP web service (parcelshopfinderservice-v5_0) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany shipmentservice-v3_2 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-shipmentservice-v3_2/) — DPD Germany SOAP web service (shipmentservice-v3_2) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany shipmentservice-v4_4 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-shipmentservice-v4_4/) — DPD Germany SOAP web service (shipmentservice-v4_4) for DPD shipping, tracking and parcel shop data.
+- [DPD Germany shipmentservice-v4_5 SOAP Service](https://apis.io/apis/dpd-group/dpd-de-shipmentservice-v4_5/) — DPD Germany SOAP web service (shipmentservice-v4_5) for DPD shipping, tracking and parcel shop data.
+- [DPD Poland package-obj-services SOAP Service](https://apis.io/apis/dpd-group/dpd-pl-package-obj-services/) — DPD Poland SOAP web service (package-obj-services) for DPD shipping, tracking and parcel shop data.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [dpd-group-mcp.yml](https://apis.io/servers/dpd-group/dpd-group-mcp-yml/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Dpd Group Agentic Access](https://apis.io/agentic-access/dpd-group/dpd-group-agentic-access/)
+
+#### JSON Schema (23)
+
+The data models the API reads and writes.
+
+- [Country](https://apis.io/schemas/dpd-group/dpd-group-country/)
+- [Customer](https://apis.io/schemas/dpd-group/dpd-group-customer/)
+- [CustomerAddress](https://apis.io/schemas/dpd-group/dpd-group-customer-address/)
+- [DropoffCodes](https://apis.io/schemas/dpd-group/dpd-group-dropoff-codes/)
+- [LabelBinary](https://apis.io/schemas/dpd-group/dpd-group-label-binary/)
+- [LabelScript](https://apis.io/schemas/dpd-group/dpd-group-label-script/)
+- [Me](https://apis.io/schemas/dpd-group/dpd-group-me/)
+- [NewPickupOrder](https://apis.io/schemas/dpd-group/dpd-group-new-pickup-order/)
+- [New Shipment](https://apis.io/schemas/dpd-group/dpd-group-new-shipment/)
+- [Parcel](https://apis.io/schemas/dpd-group/dpd-group-parcel/)
+- [_parcels_labels_post_request](https://apis.io/schemas/dpd-group/dpd-group-parcels-labels-post-request/)
+- [PickupOrder](https://apis.io/schemas/dpd-group/dpd-group-pickup-order/)
+- [_pickup_orders__pickupOrderId__delete_200_response](https://apis.io/schemas/dpd-group/dpd-group-pickup-orders-pickup-order-id-delete-200-response/)
+- [PickupSchedule](https://apis.io/schemas/dpd-group/dpd-group-pickup-schedule/)
+- [pickupscheduling.PickupSchedule](https://apis.io/schemas/dpd-group/dpd-group-pickupscheduling-pickup-schedule/)
+- [Shipment](https://apis.io/schemas/dpd-group/dpd-group-shipment/)
+- [ShipmentResponse](https://apis.io/schemas/dpd-group/dpd-group-shipment-response/)
+- [shipment.Shipment](https://apis.io/schemas/dpd-group/dpd-group-shipment-shipment/)
+- [shipment.ShipmentResponse](https://apis.io/schemas/dpd-group/dpd-group-shipment-shipment-response/)
+- [ShippingServiceList](https://apis.io/schemas/dpd-group/dpd-group-shipping-service-list/)
+- [SuccessfulTrackingResult](https://apis.io/schemas/dpd-group/dpd-group-successful-tracking-result/)
+- [TrackingResult](https://apis.io/schemas/dpd-group/dpd-group-tracking-result/)
+- [TrackingResultItem](https://apis.io/schemas/dpd-group/dpd-group-tracking-result-item/)
+
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Dpd Group Context](https://apis.io/jsonld/dpd-group/dpd-group-context/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [DPD GeoAPI](https://apis.io/collections/dpd-group/open-dpd-cz-geoapi-v1/)
+- [DPD GeoAPI](https://apis.io/collections/dpd-group/open-dpd-cz-geoapi-v2/)
+- [META-API Shipment](https://apis.io/collections/dpd-group/open-dpd-group-meta-api-shipping/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [DPD Group API Rules](https://apis.io/rules/dpd-group/dpd-group-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Dpd Group Authentication](https://apis.io/security/dpd-group/dpd-group-authentication/)
+- [Dpd Group Domain Security](https://apis.io/security/dpd-group/dpd-group-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.dpd.com)
+- [Documentation](https://nst-preprod.dpsin.dpdgroup.com/api/docs/)
+- [Terms of service](https://www.geopost.com/en/legal-and-copyright-notice-disclaimer-dispute-settlement/)
+- [Privacy policy](https://www.geopost.com/en/data-privacy-policy/)
+
+## API Evangelist rating
+
+**Kin Score 36.7** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 67.9 |
+| Contract quality | 66.5 |
+| Contract governance | 22.0 |
+| Operational transparency | 0.0 |
+| Developer ergonomics | 35.2 |
+| Access clarity | 21.1 |
+
+**Agent readiness 30.1** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | yes |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 20.8** — Telecommunications
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/dpd-group/](https://apis.io/providers/dpd-group/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for DPD Group: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/dpd-group/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
